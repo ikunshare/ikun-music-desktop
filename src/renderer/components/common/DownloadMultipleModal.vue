@@ -72,6 +72,7 @@ export default {
         { value: 'flac', label: this.$t('download__lossless') + ' - FLAC' },
         { value: 'hires', label: this.$t('download__lossless') + ' - FLAC Hires' },
         { value: 'atmos', label: this.$t('download__lossless') + ' - Atmos' },
+        { value: 'atmos_plus', label: this.$t('download__lossless') + ' - Atmos 2.0' },
         { value: 'master', label: this.$t('download__lossless') + ' - Master' },
       ],
     }

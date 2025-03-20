@@ -42,7 +42,7 @@ declare namespace LX {
 
   type OnlineSource = 'kw' | 'kg' | 'tx' | 'wy' | 'mg'
   type Source = OnlineSource | 'local'
-  type Quality = '128k' | '320k' | 'flac' | 'hires' | 'atmos' | 'master' | '192k'
+  type Quality = '128k' | '320k' | 'flac' | 'hires' | 'atmos' | 'atmos_plus' | 'master' | '192k'
 
   type QualityList = Partial<Record<LX.Source, LX.Quality[]>>
 

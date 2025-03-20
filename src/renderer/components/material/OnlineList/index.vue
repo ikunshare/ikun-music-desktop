@@ -35,6 +35,7 @@
                 <div class="list-item-cell auto name">
                   <span class="select name" :aria-label="item.name">{{ item.name }}</span>
                   <span v-if="item.meta._qualitys.master" class="no-select badge badge-theme-primary">{{ $t('tag__lossless_master') }}</span>
+                  <span v-else-if="item.meta._qualitys.atmos_plus" class="no-select badge badge-theme-primary">{{ $t('tag__lossless_atmos_plus') }}</span>
                   <span v-else-if="item.meta._qualitys.atmos" class="no-select badge badge-theme-primary">{{ $t('tag__lossless_atmos') }}</span>
                   <span v-else-if="item.meta._qualitys.hires" class="no-select badge badge-theme-primary">{{ $t('tag__lossless_hires') }}</span>
                   <span v-else-if="item.meta._qualitys.flac" class="no-select badge badge-theme-primary">{{ $t('tag__lossless') }}</span>
@@ -65,6 +66,7 @@
                 <div class="list-item-cell auto name">
                   <span class="select name" :aria-label="item.name">{{ item.name }}</span>
                   <span v-if="item.meta._qualitys.master" class="no-select badge badge-theme-primary">{{ $t('tag__lossless_master') }}</span>
+                  <span v-else-if="item.meta._qualitys.atmos_plus" class="no-select badge badge-theme-primary">{{ $t('tag__lossless_atmos_plus') }}</span>
                   <span v-else-if="item.meta._qualitys.atmos" class="no-select badge badge-theme-primary">{{ $t('tag__lossless_atmos') }}</span>
                   <span v-else-if="item.meta._qualitys.hires" class="no-select badge badge-theme-primary">{{ $t('tag__lossless_hires') }}</span>
                   <span v-else-if="item.meta._qualitys.flac" class="no-select badge badge-theme-primary">{{ $t('tag__lossless') }}</span>

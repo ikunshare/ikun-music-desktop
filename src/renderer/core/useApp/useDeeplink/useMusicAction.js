@@ -1,7 +1,6 @@
 import { markRaw } from '@common/utils/vueTools'
 import { useRouter } from '@common/utils/vueRouter'
 import { decodeName } from '@renderer/utils'
-// import { allList, defaultList, loveList, userLists } from '@renderer/store/list'
 import { playMusicInfo, isShowPlayerDetail } from '@renderer/store/player/state'
 import { setShowPlayerDetail, addTempPlayList } from '@renderer/store/player/action'
 
@@ -159,7 +158,6 @@ const usePlayMusic = () => {
     if (isPlaying) playNext()
   }
 }
-
 
 const useSearchPlayMusic = () => {
   const verifyInfo = (info) => {

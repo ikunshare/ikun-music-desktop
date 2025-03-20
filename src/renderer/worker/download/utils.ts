@@ -32,6 +32,7 @@ export const getExt = (type: string): LX.Download.FileExt => {
   switch (type) {
     case 'flac':
     case 'master':
+    case 'atmos_plus':
     case 'atmos':
     case 'hires':
       return 'flac'

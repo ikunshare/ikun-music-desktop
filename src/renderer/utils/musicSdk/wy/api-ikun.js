@@ -19,6 +19,7 @@ const api_ikun = {
         default: return Promise.reject(new Error(requestMsg.fail))
       }
     })
+    console.log(requestObj)
     return requestObj
   },
 }

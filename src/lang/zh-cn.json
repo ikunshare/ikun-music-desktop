@@ -654,6 +654,7 @@
   "tag__lossless": "SQ",
   "tag__lossless_hires": "Hires",
   "tag__lossless_atmos": "Atmos",
+  "tag__lossless_atmos_plus": "Atmos2.0",
   "tag__lossless_master": "Master",
   "theme_add": "添加主题",
   "theme_auto": "道法自然",
@@ -744,6 +745,7 @@
   "setting_play_quality_320k": "320K 高音",
   "setting_play_quality_flac": "FLAC 无损",
   "setting_play_quality_hires": "Hires 无损24-Bit",
-  "setting_play_quality_atmos": "全景声",
+  "setting_play_quality_atmos": "臻品全景声2.0",
+  "setting_play_quality_atmos_plus": "臻品全景声2.0",
   "setting_play_quality_master": "臻品母带"
 }

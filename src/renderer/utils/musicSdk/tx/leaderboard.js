@@ -145,6 +145,13 @@ export default {
           size,
         }
       }
+      if (item.file.size_new[2] !== 0) {
+        let size = sizeFormate(item.file.size_new[2])
+        types.push({ type: 'atmos_plus', size })
+        _types.atmos_plus = {
+          size,
+        }
+      }
       if (item.file.size_new[0] !== 0) {
         let size = sizeFormate(item.file.size_new[0])
         types.push({ type: 'master', size })

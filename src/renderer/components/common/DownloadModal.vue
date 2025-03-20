@@ -99,6 +99,8 @@ export default {
       switch (quality) {
         case 'master':
           return this.$t('download__lossless') + ' Master'
+        case 'atmos_plus':
+          return this.$t('download__lossless') + ' Atmos 2.0'
         case 'atmos':
           return this.$t('download__lossless') + ' Atmos'
         case 'hires':

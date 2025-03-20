@@ -654,6 +654,7 @@
   "tag__lossless": "SQ",
   "tag__lossless_hires": "Hires",
   "tag__lossless_atmos": "Atmos",
+  "tag__lossless_atmos_plus": "Atmos2.0",
   "tag__lossless_master": "Master",
   "theme_add": "Add theme",
   "theme_auto": "Auto",
@@ -745,5 +746,6 @@
   "setting_play_quality_flac": "FLAC",
   "setting_play_quality_hires": "24-Bit Hires",
   "setting_play_quality_atmos": "Atmos",
+  "setting_play_quality_atmos_plus": "Atmos+",
   "setting_play_quality_master": "Master"
 }

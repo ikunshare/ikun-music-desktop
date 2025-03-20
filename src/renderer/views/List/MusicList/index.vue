@@ -46,6 +46,8 @@
             <span class="select name" :aria-label="item.name">{{ item.name }}</span>
             <span v-if="item.source != 'local' && item.meta._qualitys.master" class="no-select badge badge-theme-primary">{{
               $t('tag__lossless_master') }}</span>
+                          <span v-else-if="item.source != 'local' && item.meta._qualitys.atmos_plus" class="no-select badge badge-theme-primary">{{
+              $t('tag__lossless_atmos_plus') }}</span>
             <span v-else-if="item.source != 'local' && item.meta._qualitys.atmos" class="no-select badge badge-theme-primary">{{
               $t('tag__lossless_atmos') }}</span>
             <span v-else-if="item.source != 'local' && item.meta._qualitys.hires" class="no-select badge badge-theme-primary">{{

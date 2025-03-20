@@ -1,5 +1,3 @@
-// Support qualitys: 128k 320k flac wav
-
 const sources: Array<{
   id: string
   name: string
@@ -11,9 +9,9 @@ const sources: Array<{
     name: 'ikun音源',
     disabled: false,
     supportQualitys: {
-      kw: ['128k', '320k', 'flac', 'hires', 'master'],
+      kw: ['128k', '320k', 'flac', 'hires', 'atmos', 'atmos_plus', 'master'],
       kg: ['128k', '320k', 'flac', 'hires', 'atmos', 'master'],
-      tx: ['128k', '320k', 'flac', 'hires', 'atmos', 'master'],
+      tx: ['128k', '320k', 'flac', 'hires', 'atmos', 'atmos_plus', 'master'],
       wy: ['128k', '320k', 'flac', 'hires', 'atmos', 'master'],
       mg: ['128k', '320k', 'flac', 'hires'],
     },
