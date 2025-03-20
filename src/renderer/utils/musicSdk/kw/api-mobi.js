@@ -9,7 +9,7 @@ const kw_quality_format = {
   '128k': { e: '128kmp3', f: 'mp3' },
   '320k': { e: '320kmp3', f: 'mp3' },
   flac: { e: '2000kflac', f: 'flac' },
-  flac24bit: { e: '4000kflac', f: 'flac' },
+  hires: { e: '4000kflac', f: 'flac' },
 }
 
 const api_mobi = {
