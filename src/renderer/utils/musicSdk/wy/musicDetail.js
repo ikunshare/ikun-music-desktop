@@ -18,8 +18,6 @@ export default {
     songs.forEach((item, index) => {
       const { types, _types } = getMusicQualityInfo(item.id)
 
-      types.reverse()
-
       if (item.pc) {
         list.push({
           singer: item.pc.ar ?? '',

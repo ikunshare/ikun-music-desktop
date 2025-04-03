@@ -1,6 +1,6 @@
 import needle from 'needle'
 // import progress from 'request-progress'
-import { debugRequest } from './env'
+// import { debugRequest } from './env'
 import { requestMsg } from './message'
 import { bHh } from './musicSdk/options'
 import { deflateRaw } from 'zlib'
@@ -59,8 +59,6 @@ const request = (url, options, callback) => {
 const defaultHeaders = {
   'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36',
 }
-// var proxyUrl = "http://" + user + ":" + password + "@" + host + ":" + port;
-// var proxiedRequest = request.defaults({'proxy': proxyUrl});
 
 /**
  * promise 形式的请求方法
@@ -81,11 +79,10 @@ const buildHttpPromose = (url, options) => {
   }
   obj.promise = new Promise((resolve, reject) => {
     obj.cancelFn = reject
-    debugRequest && console.log(`\n---send request------${url}------------`)
+    console.log(`\n---send request------${url}------------`)
     fetchData(url, options.method, options, (err, resp, body) => {
-      // options.isShowProgress && window.api.hideProgress()
-      debugRequest && console.log(`\n---response------${url}------------`)
-      debugRequest && console.log(body)
+      console.log(`\n---response------${url}------------`)
+      console.log(body)
       obj.requestObj = null
       obj.cancelFn = null
       if (err) return reject(err)
@@ -153,13 +150,13 @@ export const http = (url, options, cb) => {
   // 默认选项
   if (options.method == null) options.method = 'get'
 
-  debugRequest && console.log(`\n---send request------${url}------------`)
+  console.log(`\n---send request------${url}------------`)
   return fetchData(url, options.method, options, (err, resp, body) => {
     // options.isShowProgress && window.api.hideProgress()
-    debugRequest && console.log(`\n---response------${url}------------`)
-    debugRequest && console.log(body)
+    console.log(`\n---response------${url}------------`)
+    console.log(body)
     if (err) {
-      debugRequest && console.log(JSON.stringify(err))
+      console.log(JSON.stringify(err))
     }
     cb(err, resp, body)
   })
@@ -182,13 +179,13 @@ export const httpGet = (url, options, callback) => {
   //   modal: true,
   // })
 
-  debugRequest && console.log(`\n---send request-------${url}------------`)
+  console.log(`\n---send request-------${url}------------`)
   return fetchData(url, 'get', options, function(err, resp, body) {
     // options.isShowProgress && window.api.hideProgress()
-    debugRequest && console.log(`\n---response------${url}------------`)
-    debugRequest && console.log(body)
+    console.log(`\n---response------${url}------------`)
+    console.log(body)
     if (err) {
-      debugRequest && console.log(JSON.stringify(err))
+      console.log(JSON.stringify(err))
     }
     callback(err, resp, body)
   })
@@ -213,13 +210,13 @@ export const httpPost = (url, data, options, callback) => {
   // })
   options.data = data
 
-  debugRequest && console.log(`\n---send request-------${url}------------`)
+  console.log(`\n---send request-------${url}------------`)
   return fetchData(url, 'post', options, function(err, resp, body) {
     // options.isShowProgress && window.api.hideProgress()
-    debugRequest && console.log(`\n---response------${url}------------`)
-    debugRequest && console.log(body)
+    console.log(`\n---response------${url}------------`)
+    console.log(body)
     if (err) {
-      debugRequest && console.log(JSON.stringify(err))
+      console.log(JSON.stringify(err))
     }
     callback(err, resp, body)
   })
@@ -250,13 +247,13 @@ export const http_jsonp = (url, options, callback) => {
   //   modal: true,
   // })
 
-  debugRequest && console.log(`\n---send request-------${url}------------`)
+  console.log(`\n---send request-------${url}------------`)
   return fetchData(url, 'get', options, function(err, resp, body) {
     // options.isShowProgress && window.api.hideProgress()
-    debugRequest && console.log(`\n---response------${url}------------`)
-    debugRequest && console.log(body)
+    console.log(`\n---response------${url}------------`)
+    console.log(body)
     if (err) {
-      debugRequest && console.log(JSON.stringify(err))
+      console.log(JSON.stringify(err))
     } else {
       body = JSON.parse(body.replace(new RegExp(`^${jsonpCallback}\\(({.*})\\)$`), '$1'))
     }

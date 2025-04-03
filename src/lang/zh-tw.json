@@ -626,6 +626,7 @@
   "source_tx": "企鵝音樂",
   "source_wy": "網易音樂",
   "source_xm": "蝦米音樂",
+  "source_local": "LOCAL",
   "sync__auth_code_input_tip": "請輸入連線碼",
   "sync__auth_code_title": "需要輸入連線碼",
   "sync__dislike_merge_tip_desc": "合併兩邊清單內容並去重",

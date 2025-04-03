@@ -626,6 +626,7 @@
   "source_tx": "QQ",
   "source_wy": "网易",
   "source_xm": "虾米",
+  "source_local": "LOCAL",
   "sync__auth_code_input_tip": "请输入连接码",
   "sync__auth_code_title": "需要输入连接码",
   "sync__dislike_merge_tip_desc": "合并两边列表内容并去重",

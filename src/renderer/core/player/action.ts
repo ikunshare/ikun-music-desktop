@@ -369,6 +369,7 @@ export const playNext = async(isAutoToggle = false): Promise<void> => {
 
   if (playMusicInfo.musicInfo == null) {
     handleToggleStop()
+    console.log(playMusicInfo.musicInfo)
     console.log('musicInfo empty')
     return
   }

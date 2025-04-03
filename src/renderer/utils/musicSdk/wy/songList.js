@@ -1,9 +1,9 @@
 import { weapi, linuxapi } from './utils/crypto'
 import { httpFetch } from '../../request'
-import { formatPlayTime, dateFormat, formatPlayCount } from '../../index'
+import { /* formatPlayTime, */ dateFormat, formatPlayCount } from '../../index'
 import musicDetailApi from './musicDetail'
 import { eapiRequest } from './utils/index'
-import { formatSingerName } from '../utils'
+// import { formatSingerName } from '../utils'
 
 export default {
   _requestObj_tags: null,
@@ -81,18 +81,14 @@ export default {
     let limit = 1000
     let rangeStart = (page - 1) * limit
     let list
-    if (body.playlist.trackIds.length == body.privileges.length) {
-      list = this.filterListDetail(body)
-    } else {
-      try {
-        list = (await musicDetailApi.getList(body.playlist.trackIds.slice(rangeStart, limit * page).map(trackId => trackId.id))).list
-      } catch (err) {
-        console.log(err)
-        if (err.message == 'try max num') {
-          throw err
-        } else {
-          return this.getListDetail(id, page, ++tryNum)
-        }
+    try {
+      list = (await musicDetailApi.getList(body.playlist.trackIds.slice(rangeStart, limit * page).map(trackId => trackId.id))).list
+    } catch (err) {
+      console.log(err)
+      if (err.message == 'try max num') {
+        throw err
+      } else {
+        return this.getListDetail(id, page, ++tryNum)
       }
     }
     return {
@@ -110,48 +106,49 @@ export default {
       },
     }
   },
-  filterListDetail({ playlist: { tracks } }) {
-    const list = []
-    tracks.forEach((item) => {
-      const types = []
-      const _types = {}
 
-      if (item.pc) {
-        list.push({
-          singer: item.pc.ar ?? '',
-          name: item.pc.sn ?? '',
-          albumName: item.pc.alb ?? '',
-          albumId: item.al?.id,
-          source: 'wy',
-          interval: formatPlayTime(item.dt / 1000),
-          songmid: item.id,
-          img: item.al?.picUrl ?? '',
-          lrc: null,
-          otherSource: null,
-          types,
-          _types,
-          typeUrl: {},
-        })
-      } else {
-        list.push({
-          singer: formatSingerName(item.ar, 'name'),
-          name: item.name ?? '',
-          albumName: item.al?.name,
-          albumId: item.al?.id,
-          source: 'wy',
-          interval: formatPlayTime(item.dt / 1000),
-          songmid: item.id,
-          img: item.al?.picUrl,
-          lrc: null,
-          otherSource: null,
-          types,
-          _types,
-          typeUrl: {},
-        })
-      }
-    })
-    return list
-  },
+  // filterListDetail({ playlist: { tracks } }) {
+  //   const list = []
+  //   tracks.forEach((item) => {
+  //     const types = []
+  //     const _types = {}
+
+  //     if (item.pc) {
+  //       list.push({
+  //         singer: item.pc.ar ?? '',
+  //         name: item.pc.sn ?? '',
+  //         albumName: item.pc.alb ?? '',
+  //         albumId: item.al?.id,
+  //         source: 'wy',
+  //         interval: formatPlayTime(item.dt / 1000),
+  //         songmid: item.id,
+  //         img: item.al?.picUrl ?? '',
+  //         lrc: null,
+  //         otherSource: null,
+  //         types,
+  //         _types,
+  //         typeUrl: {},
+  //       })
+  //     } else {
+  //       list.push({
+  //         singer: formatSingerName(item.ar, 'name'),
+  //         name: item.name ?? '',
+  //         albumName: item.al?.name,
+  //         albumId: item.al?.id,
+  //         source: 'wy',
+  //         interval: formatPlayTime(item.dt / 1000),
+  //         songmid: item.id,
+  //         img: item.al?.picUrl,
+  //         lrc: null,
+  //         otherSource: null,
+  //         types,
+  //         _types,
+  //         typeUrl: {},
+  //       })
+  //     }
+  //   })
+  //   return list
+  // },
 
   getList(sortId, tagId, page, tryNum = 0) {
     if (tryNum > 2) return Promise.reject(new Error('try max num'))

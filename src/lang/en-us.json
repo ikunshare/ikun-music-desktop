@@ -626,6 +626,7 @@
   "source_tx": "Tencent",
   "source_wy": "NetEase",
   "source_xm": "Xiami",
+  "source_local": "LOCAL",
   "sync__auth_code_input_tip": "Please enter the connection code",
   "sync__auth_code_title": "Need to enter the connection code",
   "sync__dislike_merge_tip_desc": "Merge the content of the two lists and remove the duplicates.",

@@ -24,7 +24,7 @@ export default ({
     sourceDetail: true,
     import: true,
     export: true,
-    sync: false,
+    sync: true,
     remove: true,
   })
   const t = useI18n()
