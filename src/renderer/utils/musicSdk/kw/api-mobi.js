@@ -2,7 +2,6 @@ import { httpFetch } from '../../request'
 import { requestMsg } from '../../message'
 import { timeout } from '../options'
 import { dnsLookup } from '../utils'
-import { base64_encrypt } from './des'
 
 
 const kw_quality_format = {
@@ -15,26 +14,21 @@ const kw_quality_format = {
 const api_mobi = {
   getMusicUrl(songInfo, type) {
     const rawData = {
-      corp: 'kuwo',
-      Source: 'kwplayerhd_ar_5.0.0.0_B_nuoweida_vh_test.apk',
-      type: 'convert_url_with_sign',
-      br: `${kw_quality_format[type].e}`,
-      format: `${kw_quality_format[type].f}`,
+      f: 'web',
       rid: parseInt(songInfo.songmid),
-      surl: 1,
+      br: kw_quality_format[type].e,
+      source: 'jiakong',
+      type: 'convert_url_with_sign',
+      surl: '1',
     }
     const queryString = Object.entries(rawData)
       .map(([k, v]) => `${k}=${v}`)
       .join('&')
     console.log(queryString)
-    const encrypted = base64_encrypt(
-      `Url :http://anymatch.kuwo.cn/mobi.s?${queryString}`,
-    )
-    const requestObj = httpFetch(`https://nmsublist.kuwo.cn/mobi.s?f=kuwo&q=${encrypted}`, {
+    const requestObj = httpFetch(`https://nmsublist.kuwo.cn/mobi.s?${queryString}`, {
       method: 'get',
       headers: {
         'User-Agent': 'okhttp/3.10.0',
-        'X-Real-IP': '192.168.0.1',
       },
       timeout,
       lookup: dnsLookup,
