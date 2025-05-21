@@ -17,7 +17,6 @@ div(:class="$style.header")
         use(xlink:href="#icon-window-close")
 </template>
 
-
 <script setup>
 import { ref, onMounted, onBeforeUnmount, useCssModule } from '@common/utils/vueTools'
 import { isFullscreen } from '@renderer/store'
@@ -39,7 +38,6 @@ const handle_mouseleave = () => {
   dom_btns.value.classList.remove(cssModule.hover)
 }
 
-
 onMounted(() => {
   window.app_event.on('focus', handle_focus)
   dom_btns.value.addEventListener('mouseenter', handle_mouseenter)
@@ -51,7 +49,6 @@ onBeforeUnmount(() => {
   dom_btns.value.removeEventListener('mouseleave', handle_mouseleave)
 })
 
-
 const hide = () => {
   dom_btns.value?.classList.remove(cssModule.hover)
   setShowPlayerDetail(false)
@@ -62,22 +59,20 @@ const fullscreenExit = () => {
     isFullscreen.value = fullscreen
   })
 }
-
-
 </script>
-
 
 <style lang="less" module>
 @import '@renderer/assets/styles/layout.less';
 
-@control-btn-width: @height-toolbar * .26;
+@control-btn-width: @height-toolbar * 0.26;
 
 :global(.fullscreen) {
   .header {
     -webkit-app-region: no-drag;
     align-self: flex-start;
     .controBtn {
-      .close, .min {
+      .close,
+      .min {
         display: none;
       }
       .fullscreenExit {
@@ -120,11 +115,11 @@ const fullscreenExit = () => {
     padding: 0 @control-btn-width;
     left: 0;
     flex-direction: row-reverse;
-    height: @height-toolbar * .7;
+    height: @height-toolbar * 0.7;
     transition: opacity @transition-normal;
-    opacity: .5;
+    opacity: 0.5;
     &.hover {
-      opacity: .8;
+      opacity: 0.8;
       .controBtnIcon {
         opacity: 1;
       }
@@ -142,7 +137,8 @@ const fullscreenExit = () => {
       &.hide {
         background-color: var(--color-btn-hide);
       }
-      &.min, &.fullscreenExit {
+      &.min,
+      &.fullscreenExit {
         background-color: var(--color-btn-min);
       }
       // &.max {
@@ -159,5 +155,4 @@ const fullscreenExit = () => {
     transition: opacity 0.2s ease-in-out;
   }
 }
-
 </style>

@@ -1,5 +1,7 @@
-
-export const getNow = typeof performance == 'object' && window.performance.now ? window.performance.now.bind(window.performance) : Date.now.bind(Date)
+export const getNow =
+  typeof performance == 'object' && window.performance.now
+    ? window.performance.now.bind(window.performance)
+    : Date.now.bind(Date)
 
 export class TimeoutTools {
   constructor(thresholdTime = 80) {
@@ -20,10 +22,10 @@ export class TimeoutTools {
       if (diff > 0) {
         if (diff < this.thresholdTime) return this.run()
         // console.log('run timeout', diff, diff - this.thresholdTime)
-        return this.timeoutId = window.setTimeout(() => {
+        return (this.timeoutId = window.setTimeout(() => {
           this.timeoutId = null
           this.run()
-        }, diff - this.thresholdTime)
+        }, diff - this.thresholdTime))
       }
 
       // console.log('diff', diff)
@@ -50,4 +52,3 @@ export class TimeoutTools {
     }
   }
 }
-

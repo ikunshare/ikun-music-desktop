@@ -11,8 +11,7 @@ class MetaDataBlock {
     this.removed = true
   }
 
-  parse(buffer) {
-  }
+  parse(buffer) {}
 
   toString() {
     let str = '[MetaDataBlock]'

@@ -2,19 +2,38 @@
   <div :class="$style.contnet">
     <div class="player__sound_effect_title" :class="$style.header">
       <h3>{{ $t('player__sound_effect_biquad_filter') }}</h3>
-      <base-btn min @click="handleReset">{{ $t('player__sound_effect_biquad_filter_reset_btn') }}</base-btn>
+      <base-btn min @click="handleReset">{{
+        $t('player__sound_effect_biquad_filter_reset_btn')
+      }}</base-btn>
     </div>
     <div :class="$style.eqList">
       <div v-for="(v, i) in freqs" :key="v" :class="$style.eqItem">
         <span :class="$style.label">{{ labels[i] }}</span>
-        <base-slider-bar :class="$style.slider" :value="appSetting[`player.soundEffect.biquadFilter.hz${v}`]" :min="-15" :max="15" @change="handleUpdate(v, $event)" />
-        <span :class="$style.value">{{ appSetting[`player.soundEffect.biquadFilter.hz${v}`] }}db</span>
+        <base-slider-bar
+          :class="$style.slider"
+          :value="appSetting[`player.soundEffect.biquadFilter.hz${v}`]"
+          :min="-15"
+          :max="15"
+          @change="handleUpdate(v, $event)"
+        />
+        <span :class="$style.value"
+          >{{ appSetting[`player.soundEffect.biquadFilter.hz${v}`] }}db</span
+        >
       </div>
     </div>
     <div :class="$style.saveList">
       <!-- <base-btn min @click="handleSetPreset(item)">{{ $t(`player__sound_effect_biquad_filter_preset_slow`) }}</base-btn> -->
-      <base-btn v-for="item in freqsPreset" :key="item.name" min @click="handleSetPreset(item)">{{ $t(`player__sound_effect_biquad_filter_preset_${item.name}`) }}</base-btn>
-      <base-btn v-for="item in userPresetList" :key="item.id" min @click="handleSetPreset(item)" @contextmenu="handleRemovePreset(item.id)">{{ item.name }}</base-btn>
+      <base-btn v-for="item in freqsPreset" :key="item.name" min @click="handleSetPreset(item)">{{
+        $t(`player__sound_effect_biquad_filter_preset_${item.name}`)
+      }}</base-btn>
+      <base-btn
+        v-for="item in userPresetList"
+        :key="item.id"
+        min
+        @click="handleSetPreset(item)"
+        @contextmenu="handleRemovePreset(item.id)"
+        >{{ item.name }}</base-btn
+      >
       <AddEQPresetBtn v-if="userPresetList.length < 31" />
     </div>
     <!-- <div :class="$style.footer">
@@ -30,11 +49,11 @@ import { appSetting, saveMediaDeviceId, updateSetting } from '@renderer/store/se
 import AddEQPresetBtn from './AddEQPresetBtn.vue'
 import { getUserEQPresetList, removeUserEQPreset } from '@renderer/store/soundEffect'
 
-const labels = freqs.map(num => num < 1000 ? num : `${num / 1000}k`)
+const labels = freqs.map((num) => (num < 1000 ? num : `${num / 1000}k`))
 
-const handleUpdate = async(key, value) => {
+const handleUpdate = async (key, value) => {
   if (appSetting['player.mediaDeviceId'] != 'default') {
-    await setMediaDeviceId('default').catch(_ => _)
+    await setMediaDeviceId('default').catch((_) => _)
     saveMediaDeviceId('default')
   }
 
@@ -69,16 +88,15 @@ const handleSetPreset = (item) => {
 
 const userPresetList = ref([])
 
-const handleRemovePreset = id => {
+const handleRemovePreset = (id) => {
   void removeUserEQPreset(id)
 }
 
 onMounted(() => {
-  void getUserEQPresetList().then(list => {
+  void getUserEQPresetList().then((list) => {
     userPresetList.value = list
   })
 })
-
 </script>
 
 <style lang="less" module>
@@ -127,7 +145,8 @@ onMounted(() => {
   &:nth-child(even) {
     padding-left: 10px;
   }
-  &:nth-last-child(1), &:nth-last-child(2) {
+  &:nth-last-child(1),
+  &:nth-last-child(2) {
     margin-bottom: 0;
   }
 }
@@ -165,5 +184,4 @@ onMounted(() => {
   margin-top: 10px;
   gap: 10px;
 }
-
 </style>

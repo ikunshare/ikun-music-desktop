@@ -148,7 +148,7 @@ export const getListDetail = async(id: string, source: LX.OnlineSource, page: nu
  */
 export const getListDetailAll = async(id: string, source: LX.OnlineSource, isRefresh = false): Promise<LX.Music.MusicInfoOnline[]> => {
   // console.log(source, id)
-  // eslint-disable-next-line @typescript-eslint/promise-function-async
+
   const loadData = (id: string, page: number): Promise<ListDetailInfo> => {
     let key = `sdetail__${source}__${id}__${page}`
     if (isRefresh && cache.has(key)) cache.delete(key)
@@ -160,16 +160,16 @@ export const getListDetailAll = async(id: string, source: LX.OnlineSource, isRef
         return result
       }) ?? Promise.reject(new Error('source not found' + source))
   }
-  // eslint-disable-next-line @typescript-eslint/promise-function-async
+
   return loadData(id, 1).then((result: ListDetailInfo) => {
     if (result.total <= result.limit) return result.list
 
     let maxPage = Math.ceil(result.total / result.limit)
-    // eslint-disable-next-line @typescript-eslint/promise-function-async
+
     const loadDetail = (loadPage = 2): Promise<ListDetailInfo['list']> => {
       return loadPage == maxPage
         ? loadData(id, loadPage).then((result: ListDetailInfo) => result.list)
-        // eslint-disable-next-line @typescript-eslint/promise-function-async
+
         : loadData(id, loadPage).then((result1: ListDetailInfo) => loadDetail(++loadPage).then((result2: ListDetailInfo['list']) => [...result1.list, ...result2]))
     }
     return loadDetail().then(result2 => [...result.list, ...result2])

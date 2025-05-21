@@ -3,45 +3,101 @@
     <ul>
       <li v-if="page == 1" :class="$style.disabled">
         <span>
-          <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" height="100%" viewBox="0 0 451.846 451.847" space="preserve">
+          <svg
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xlink="http://www.w3.org/1999/xlink"
+            height="100%"
+            viewBox="0 0 451.846 451.847"
+            space="preserve"
+          >
             <use xlink:href="#icon-left" />
           </svg>
         </span>
       </li>
       <li v-else>
         <button type="button" :aria-label="$t('pagination__prev')" @click="handleClick(page - 1)">
-          <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" height="100%" viewBox="0 0 451.846 451.847" space="preserve">
+          <svg
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xlink="http://www.w3.org/1999/xlink"
+            height="100%"
+            viewBox="0 0 451.846 451.847"
+            space="preserve"
+          >
             <use xlink:href="#icon-left" />
           </svg>
         </button>
       </li>
-      <li v-if="maxPage > btnLength && page > pageEvg+1" :class="$style.first">
-        <button type="button" :aria-label="$t('pagination__page', { num: 1 })" @click="handleClick(1)">
-          <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" height="100%" viewBox="0 0 451.846 451.847" space="preserve">
+      <li v-if="maxPage > btnLength && page > pageEvg + 1" :class="$style.first">
+        <button
+          type="button"
+          :aria-label="$t('pagination__page', { num: 1 })"
+          @click="handleClick(1)"
+        >
+          <svg
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xlink="http://www.w3.org/1999/xlink"
+            height="100%"
+            viewBox="0 0 451.846 451.847"
+            space="preserve"
+          >
             <use xlink:href="#icon-first" />
           </svg>
         </button>
       </li>
-      <li v-for="p in pages" :key="p" :class="{[$style.active] : p == page}">
+      <li v-for="p in pages" :key="p" :class="{ [$style.active]: p == page }">
         <span v-if="p === page" v-text="page" />
-        <button v-else type="button" :aria-label="$t('pagination__page', { num: p })" @click="handleClick(p)" v-text="p" />
+        <button
+          v-else
+          type="button"
+          :aria-label="$t('pagination__page', { num: p })"
+          @click="handleClick(p)"
+          v-text="p"
+        />
       </li>
       <li v-if="maxPage > btnLength && maxPage - page > pageEvg" :class="$style.last">
-        <button type="button" :aria-label="$t('pagination__page', { num: maxPage })" @click="handleClick(maxPage)">
-          <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" height="100%" viewBox="0 0 451.846 451.847" space="preserve">
+        <button
+          type="button"
+          :aria-label="$t('pagination__page', { num: maxPage })"
+          @click="handleClick(maxPage)"
+        >
+          <svg
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xlink="http://www.w3.org/1999/xlink"
+            height="100%"
+            viewBox="0 0 451.846 451.847"
+            space="preserve"
+          >
             <use xlink:href="#icon-last" />
           </svg>
         </button>
       </li>
       <li v-if="page == maxPage" :class="$style.disabled">
         <span>
-          <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" height="100%" viewBox="0 0 451.846 451.847" space="preserve">
-            <use xlink:href="#icon-right" />
-          </svg></span>
+          <svg
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xlink="http://www.w3.org/1999/xlink"
+            height="100%"
+            viewBox="0 0 451.846 451.847"
+            space="preserve"
+          >
+            <use xlink:href="#icon-right" /></svg
+        ></span>
       </li>
       <li v-else>
         <button type="button" :aria-label="$t('pagination__next')" @click="handleClick(page + 1)">
-          <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" height="100%" viewBox="0 0 451.846 451.847" space="preserve">
+          <svg
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xlink="http://www.w3.org/1999/xlink"
+            height="100%"
+            viewBox="0 0 451.846 451.847"
+            space="preserve"
+          >
             <use xlink:href="#icon-right" />
           </svg>
         </button>
@@ -81,13 +137,14 @@ export default {
       return Math.floor(props.btnLength / 2)
     })
     const pages = computed(() => {
-      if (maxPage.value <= props.btnLength) return Array.from({ length: maxPage.value }, (_, i) => i + 1)
-      let start = props.page - pageEvg.value > 1
-        // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-        ? maxPage.value - props.page < pageEvg.value + 1
-          ? maxPage.value - (props.btnLength - 1)
-          : props.page - pageEvg.value
-        : 1
+      if (maxPage.value <= props.btnLength)
+        return Array.from({ length: maxPage.value }, (_, i) => i + 1)
+      let start =
+        props.page - pageEvg.value > 1
+          ? maxPage.value - props.page < pageEvg.value + 1
+            ? maxPage.value - (props.btnLength - 1)
+            : props.page - pageEvg.value
+          : 1
       return Array.from({ length: props.btnLength }, (_, i) => start + i)
     })
 
@@ -104,7 +161,6 @@ export default {
   },
 }
 </script>
-
 
 <style lang="less" module>
 @import '@renderer/assets/styles/layout.less';
@@ -150,7 +206,7 @@ export default {
         border: none;
         cursor: pointer;
         outline: none;
-        transition: background-color .3s ease;
+        transition: background-color 0.3s ease;
         &:hover {
           background-color: var(--color-button-background-hover);
         }
@@ -160,24 +216,29 @@ export default {
       }
       &.disabled {
         span {
-          opacity: .3;
+          opacity: 0.3;
         }
       }
       &:first-child {
-        span, button {
+        span,
+        button {
           border-top-left-radius: @radius-border;
           border-bottom-left-radius: @radius-border;
         }
         // border-right: .0625rem solid @theme_line;
       }
       &:last-child {
-        span, button {
+        span,
+        button {
           border-top-right-radius: @radius-border;
           border-bottom-right-radius: @radius-border;
         }
         // border-right: .0625rem solid @theme_line;
       }
-      &:first-child, &:last-child, &.first, &.last {
+      &:first-child,
+      &:last-child,
+      &.first,
+      &.last {
         span,
         button {
           line-height: 0;
@@ -186,6 +247,4 @@ export default {
     }
   }
 }
-
-
 </style>

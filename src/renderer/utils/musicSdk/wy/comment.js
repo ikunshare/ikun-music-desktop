@@ -65,7 +65,7 @@ const emojis = [
   ['叉', '❌'],
 ]
 
-const applyEmoji = text => {
+const applyEmoji = (text) => {
   for (const e of emojis) text = text.replaceAll(`[${e[0]}]`, e[1])
   return text
 }
@@ -127,7 +127,8 @@ export default {
     const _requestObj = httpFetch('https://music.163.com/weapi/comment/resource/comments/get', {
       method: 'post',
       headers: {
-        'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36',
+        'User-Agent':
+          'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36',
         origin: 'https://music.163.com',
         Refere: 'http://music.163.com/',
       },
@@ -145,7 +146,14 @@ export default {
     // console.log(body)
     if (statusCode != 200 || body.code !== 200) throw new Error('获取评论失败')
     cursorTools.setCursor(songmid, body.data.cursor, cursorInfo.orderType, cursorInfo.offset, page)
-    return { source: 'wy', comments: this.filterComment(body.data.comments), total: body.data.totalCount, page, limit, maxPage: Math.ceil(body.data.totalCount / limit) || 1 }
+    return {
+      source: 'wy',
+      comments: this.filterComment(body.data.comments),
+      total: body.data.totalCount,
+      page,
+      limit,
+      maxPage: Math.ceil(body.data.totalCount / limit) || 1,
+    }
   },
   async getHotComment({ songmid }, page = 1, limit = 100) {
     if (this._requestObj2) this._requestObj2.cancelHttp()
@@ -156,7 +164,8 @@ export default {
     const _requestObj2 = httpFetch(`https://music.163.com/weapi/v1/resource/hotcomments/${id}`, {
       method: 'post',
       headers: {
-        'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36',
+        'User-Agent':
+          'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36',
         origin: 'https://music.163.com',
         Refere: 'http://music.163.com/',
       },
@@ -170,10 +179,17 @@ export default {
     const { body, statusCode } = await _requestObj2.promise
     if (statusCode != 200 || body.code !== 200) throw new Error('获取热门评论失败')
     const total = body.total ?? 0
-    return { source: 'wy', comments: this.filterComment(body.hotComments), total, page, limit, maxPage: Math.ceil(total / limit) || 1 }
+    return {
+      source: 'wy',
+      comments: this.filterComment(body.hotComments),
+      total,
+      page,
+      limit,
+      maxPage: Math.ceil(total / limit) || 1,
+    }
   },
   filterComment(rawList) {
-    return rawList.map(item => {
+    return rawList.map((item) => {
       let data = {
         id: item.commentId,
         text: item.content ? applyEmoji(item.content) : '',

@@ -2,7 +2,8 @@ import { weapi } from './utils/crypto'
 import { httpFetch } from '../../request'
 import musicDetailApi from './musicDetail'
 
-const topList = [{ id: 'wy__19723756', name: '飙升榜', bangid: '19723756' },
+const topList = [
+  { id: 'wy__19723756', name: '飙升榜', bangid: '19723756' },
   { id: 'wy__3779629', name: '新歌榜', bangid: '3779629' },
   { id: 'wy__2884035', name: '原创榜', bangid: '2884035' },
   { id: 'wy__3778678', name: '热歌榜', bangid: '3778678' },
@@ -38,7 +39,11 @@ const topList = [{ id: 'wy__19723756', name: '飙升榜', bangid: '19723756' },
   { id: 'wy__6939992364', name: '俄罗斯top hit流行音乐榜', bangid: '6939992364' },
   { id: 'wy__7095271308', name: '泰语榜', bangid: '7095271308' },
   { id: 'wy__7356827205', name: 'BEAT排行榜', bangid: '7356827205' },
-  { id: 'wy__7325478166', name: '编辑推荐榜VOL.44 天才女子摇滚乐队boygenius剖白卑微心迹', bangid: '7325478166' },
+  {
+    id: 'wy__7325478166',
+    name: '编辑推荐榜VOL.44 天才女子摇滚乐队boygenius剖白卑微心迹',
+    bangid: '7325478166',
+  },
   { id: 'wy__7603212484', name: 'LOOK直播歌曲榜', bangid: '7603212484' },
   { id: 'wy__7775163417', name: '赏音榜', bangid: '7775163417' },
   { id: 'wy__7785123708', name: '黑胶VIP新歌榜', bangid: '7785123708' },
@@ -178,11 +183,14 @@ export default {
         return this.getList(bangid, page, retryNum)
       }
     }
-    if (resp.statusCode !== 200 || resp.body.code !== 200) return this.getList(bangid, page, retryNum)
+    if (resp.statusCode !== 200 || resp.body.code !== 200)
+      return this.getList(bangid, page, retryNum)
     // console.log(resp.body)
     let musicDetail
     try {
-      musicDetail = await musicDetailApi.getList(resp.body.playlist.trackIds.map(trackId => trackId.id))
+      musicDetail = await musicDetailApi.getList(
+        resp.body.playlist.trackIds.map((trackId) => trackId.id)
+      )
     } catch (err) {
       console.log(err)
       if (err.message == 'try max num') {

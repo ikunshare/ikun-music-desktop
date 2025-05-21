@@ -6,13 +6,11 @@
       "@renderer/*": ["src/renderer/*"],
       "@lyric/*": ["src/renderer-lyric/*"],
       "@static/*": ["src/static/*"],
-      "@common/*": ["src/common/*"],
+      "@common/*": ["src/common/*"]
     }
   },
   "vueCompilerOptions": {
-    "plugins": [
-      "@vue/language-plugin-pug"
-    ]
+    "plugins": ["@vue/language-plugin-pug"]
   },
   "exclude": ["node_modules", "build", "dist"]
 }

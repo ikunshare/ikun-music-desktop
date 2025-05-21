@@ -41,10 +41,9 @@ export default () => {
 
   void getEnvParams().then(envParams => {
     // 移除代理相关的环境变量设置，防止请求库自动应用它们
-    // eslint-disable-next-line no-undef
     // const processEnv = ENVIRONMENT
     // for (const key of Object.keys(processEnv)) {
-    //   // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+    //
     //   if (/^(?:http_proxy|https_proxy|NO_PROXY)$/i.test(key)) delete processEnv[key]
     // }
     const envProxy = envParams.cmdParams['proxy-server']

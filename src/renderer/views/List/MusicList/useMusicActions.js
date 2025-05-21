@@ -10,12 +10,11 @@ import { addDislikeInfo, hasDislike } from '@renderer/core/dislikeList'
 import { playNext } from '@renderer/core/player'
 import { playMusicInfo } from '@renderer/store/player/state'
 
-
 export default ({ props, list, selectedList, removeAllSelect }) => {
   const router = useRouter()
   const t = useI18n()
 
-  const handleSearch = index => {
+  const handleSearch = (index) => {
     const info = list.value[index]
     router.push({
       path: '/search',
@@ -25,22 +24,26 @@ export default ({ props, list, selectedList, removeAllSelect }) => {
     })
   }
 
-  const handleOpenMusicDetail = index => {
+  const handleOpenMusicDetail = (index) => {
     const minfo = list.value[index]
     const url = musicSdk[minfo.source]?.getMusicDetailPageUrl(toOldMusicInfo(minfo))
     if (!url) return
     openUrl(url)
   }
 
-  const handleCopyName = index => {
+  const handleCopyName = (index) => {
     const minfo = list.value[index]
-    clipboardWriteText(appSetting['download.fileName'].replace('歌名', minfo.name).replace('歌手', minfo.singer))
+    clipboardWriteText(
+      appSetting['download.fileName'].replace('歌名', minfo.name).replace('歌手', minfo.singer)
+    )
   }
 
-  const handleDislikeMusic = async(index) => {
+  const handleDislikeMusic = async (index) => {
     const minfo = list.value[index]
     const confirm = await dialog.confirm({
-      message: minfo.singer ? t('lists__dislike_music_singer_tip', { name: minfo.name, singer: minfo.singer }) : t('lists__dislike_music_tip', { name: minfo.name }),
+      message: minfo.singer
+        ? t('lists__dislike_music_singer_tip', { name: minfo.name, singer: minfo.singer })
+        : t('lists__dislike_music_tip', { name: minfo.name }),
       cancelButtonText: t('cancel_button_text_2'),
       confirmButtonText: t('confirm_button_text'),
     })
@@ -51,17 +54,16 @@ export default ({ props, list, selectedList, removeAllSelect }) => {
     }
   }
 
-  const handleRemoveMusic = async(index, single) => {
+  const handleRemoveMusic = async (index, single) => {
     if (selectedList.value.length && !single) {
       const confirm = await (selectedList.value.length > 1
         ? dialog.confirm({
-          message: t('lists__remove_music_tip', { len: selectedList.value.length }),
-          confirmButtonText: t('lists__remove_tip_button'),
-        })
-        : Promise.resolve(true)
-      )
+            message: t('lists__remove_music_tip', { len: selectedList.value.length }),
+            confirmButtonText: t('lists__remove_tip_button'),
+          })
+        : Promise.resolve(true))
       if (!confirm) return
-      removeListMusics({ listId: props.listId, ids: selectedList.value.map(m => m.id) })
+      removeListMusics({ listId: props.listId, ids: selectedList.value.map((m) => m.id) })
       removeAllSelect()
     } else {
       removeListMusics({ listId: props.listId, ids: [list.value[index].id] })

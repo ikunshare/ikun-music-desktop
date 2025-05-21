@@ -6,7 +6,14 @@ Sortable.mount(new AutoScroll())
 
 const noop = () => {}
 
-export default ({ dom_list, dragingItemClassName, filter, onUpdate, onStart = noop, onEnd = noop }) => {
+export default ({
+  dom_list,
+  dragingItemClassName,
+  filter,
+  onUpdate,
+  onStart = noop,
+  onEnd = noop,
+}) => {
   let sortable
 
   onMounted(() => {

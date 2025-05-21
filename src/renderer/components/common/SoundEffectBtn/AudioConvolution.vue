@@ -17,18 +17,43 @@
       <div :class="[$style.sliderList, { [$style.disabled]: disabledConvolution }]">
         <div :class="$style.sliderItem">
           <span :class="$style.label">{{ $t('player__sound_effect_convolution_main_gain') }}</span>
-          <base-slider-bar :class="$style.slider" :value="appSetting['player.soundEffect.convolution.mainGain']" :min="0" :max="50" :disabled="disabledConvolution" @change="handleUpdateMainGain" />
-          <span :class="[$style.value]">{{ appSetting['player.soundEffect.convolution.mainGain'] * 10 }}%</span>
+          <base-slider-bar
+            :class="$style.slider"
+            :value="appSetting['player.soundEffect.convolution.mainGain']"
+            :min="0"
+            :max="50"
+            :disabled="disabledConvolution"
+            @change="handleUpdateMainGain"
+          />
+          <span :class="[$style.value]"
+            >{{ appSetting['player.soundEffect.convolution.mainGain'] * 10 }}%</span
+          >
         </div>
         <div :class="$style.sliderItem">
           <span :class="$style.label">{{ $t('player__sound_effect_convolution_send_gain') }}</span>
-          <base-slider-bar :class="$style.slider" :value="appSetting['player.soundEffect.convolution.sendGain']" :min="0" :max="50" :disabled="disabledConvolution" @change="handleUpdateSendGain" />
-          <span :class="[$style.value]">{{ appSetting['player.soundEffect.convolution.sendGain'] * 10 }}%</span>
+          <base-slider-bar
+            :class="$style.slider"
+            :value="appSetting['player.soundEffect.convolution.sendGain']"
+            :min="0"
+            :max="50"
+            :disabled="disabledConvolution"
+            @change="handleUpdateSendGain"
+          />
+          <span :class="[$style.value]"
+            >{{ appSetting['player.soundEffect.convolution.sendGain'] * 10 }}%</span
+          >
         </div>
       </div>
     </div>
     <div :class="$style.saveList">
-      <base-btn v-for="item in userPresetList" :key="item.id" min @click="handleSetPreset(item)" @contextmenu="handleRemovePreset(item.id)">{{ item.name }}</base-btn>
+      <base-btn
+        v-for="item in userPresetList"
+        :key="item.id"
+        min
+        @click="handleSetPreset(item)"
+        @contextmenu="handleRemovePreset(item.id)"
+        >{{ item.name }}</base-btn
+      >
       <AddConvolutionPresetBtn v-if="userPresetList.length < 31" :disabled="disabledConvolution" />
     </div>
   </div>
@@ -39,14 +64,17 @@ import { ref, onMounted, computed } from '@common/utils/vueTools'
 import { appSetting, saveMediaDeviceId, updateSetting } from '@renderer/store/setting'
 import { convolutions, setMediaDeviceId } from '@renderer/plugins/player'
 import AddConvolutionPresetBtn from './AddConvolutionPresetBtn.vue'
-import { getUserConvolutionPresetList, removeUserConvolutionPreset } from '@renderer/store/soundEffect'
+import {
+  getUserConvolutionPresetList,
+  removeUserConvolutionPreset,
+} from '@renderer/store/soundEffect'
 
-const updateConvolution = async val => {
+const updateConvolution = async (val) => {
   if (appSetting['player.mediaDeviceId'] != 'default') {
-    await setMediaDeviceId('default').catch(_ => _)
+    await setMediaDeviceId('default').catch((_) => _)
     saveMediaDeviceId('default')
   }
-  const target = convolutions.find(c => c.source == val)
+  const target = convolutions.find((c) => c.source == val)
   const setting = {
     'player.soundEffect.convolution.fileName': val,
   }
@@ -73,7 +101,7 @@ const handleSetPreset = (item) => {
   })
 }
 const userPresetList = ref([])
-const handleRemovePreset = id => {
+const handleRemovePreset = (id) => {
   void removeUserConvolutionPreset(id)
 }
 
@@ -82,12 +110,10 @@ const disabledConvolution = computed(() => {
 })
 
 onMounted(() => {
-  void getUserConvolutionPresetList().then(list => {
+  void getUserConvolutionPresetList().then((list) => {
     userPresetList.value = list
   })
 })
-
-
 </script>
 
 <style lang="less" module>
@@ -122,8 +148,8 @@ onMounted(() => {
   gap: 15px;
   width: 100%;
   transition: opacity @transition-normal;
-  &.disabled  {
-    opacity: .4;
+  &.disabled {
+    opacity: 0.4;
   }
 }
 .sliderItem {
@@ -155,5 +181,4 @@ onMounted(() => {
   margin-top: 10px;
   gap: 10px;
 }
-
 </style>

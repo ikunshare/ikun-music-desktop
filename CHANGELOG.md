@@ -22,7 +22,7 @@ Change log format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ---
 
-*感谢 @3gf8jv4dv 对 LX 系列项目翻译、文档等文案的大幅修订优化。*
+_感谢 @3gf8jv4dv 对 LX 系列项目翻译、文档等文案的大幅修订优化。_
 
 ### 不兼容性变更
 

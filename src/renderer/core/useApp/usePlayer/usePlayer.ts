@@ -156,9 +156,9 @@ export default () => {
 
 
   onBeforeUnmount(() => {
-  // eslint-disable-next-line @typescript-eslint/no-misused-promises
+
     window.key_event.off(HOTKEY_PLAYER.next.action, handlePlayNext)
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+
     window.key_event.off(HOTKEY_PLAYER.prev.action, handlePlayPrev)
     window.key_event.off(HOTKEY_PLAYER.toggle_play.action, togglePlay)
     window.key_event.off(HOTKEY_PLAYER.music_love.action, collectMusic)

@@ -1,7 +1,19 @@
 <template>
   <div :class="[$style.progress, className]">
-    <div :class="[$style.progressBar, $style.progressBar2, {[$style.barTransition]: isActiveTransition}]" :style="{ transform: `scaleX(${progress || 0})` }" @transitionend="handleTransitionEnd" />
-    <div v-show="dragging" :class="[$style.progressBar, $style.progressBar3]" :style="{ transform: `scaleX(${dragProgress || 0})` }" />
+    <div
+      :class="[
+        $style.progressBar,
+        $style.progressBar2,
+        { [$style.barTransition]: isActiveTransition },
+      ]"
+      :style="{ transform: `scaleX(${progress || 0})` }"
+      @transitionend="handleTransitionEnd"
+    />
+    <div
+      v-show="dragging"
+      :class="[$style.progressBar, $style.progressBar3]"
+      :style="{ transform: `scaleX(${dragProgress || 0})` }"
+    />
   </div>
   <div ref="dom_progress" :class="$style.progressMask" @mousedown="handleMsDown" />
 </template>
@@ -39,7 +51,7 @@ export default {
     const dragging = ref(false)
     const dragProgress = ref(0)
 
-    const handleMsDown = event => {
+    const handleMsDown = (event) => {
       msEvent.isMsDown = true
       msEvent.msDownX = event.clientX
 
@@ -54,11 +66,12 @@ export default {
       msEvent.isMsDown = false
       dragging.value = false
     }
-    const handleMsMove = event => {
+    const handleMsMove = (event) => {
       if (!msEvent.isMsDown) return
       dragging.value ||= true
 
-      let progress = msEvent.msDownProgress + (event.clientX - msEvent.msDownX) / dom_progress.value.clientWidth
+      let progress =
+        msEvent.msDownProgress + (event.clientX - msEvent.msDownX) / dom_progress.value.clientWidth
       if (progress > 1) progress = 1
       else if (progress < 0) progress = 0
       dragProgress.value = progress
@@ -71,7 +84,7 @@ export default {
       document.removeEventListener('mouseup', handleMsUp)
     })
 
-    const setProgress = num => {
+    const setProgress = (num) => {
       window.app_event.setProgress(num)
     }
 
@@ -140,5 +153,4 @@ export default {
   transition-timing-function: ease-out;
   transition-duration: 0.2s;
 }
-
 </style>

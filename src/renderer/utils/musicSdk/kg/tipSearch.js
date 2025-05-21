@@ -7,19 +7,22 @@ export default {
   },
   tipSearchBySong(str) {
     this.cancelTipSearch()
-    this.requestObj = createHttpFetch(`https://searchtip.kugou.com/getSearchTip?MusicTipCount=10&keyword=${encodeURIComponent(str)}`, {
-      headers: {
-        referer: 'https://www.kugou.com/',
-      },
-    })
-    return this.requestObj.then(body => {
+    this.requestObj = createHttpFetch(
+      `https://searchtip.kugou.com/getSearchTip?MusicTipCount=10&keyword=${encodeURIComponent(str)}`,
+      {
+        headers: {
+          referer: 'https://www.kugou.com/',
+        },
+      }
+    )
+    return this.requestObj.then((body) => {
       return body[0].RecordDatas
     })
   },
   handleResult(rawData) {
-    return rawData.map(info => info.HintInfo)
+    return rawData.map((info) => info.HintInfo)
   },
   async search(str) {
-    return this.tipSearchBySong(str).then(result => this.handleResult(result))
+    return this.tipSearchBySong(str).then((result) => this.handleResult(result))
   },
 }

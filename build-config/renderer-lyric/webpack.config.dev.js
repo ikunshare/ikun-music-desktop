@@ -24,4 +24,3 @@ module.exports = merge(baseConfig, {
     hints: false,
   },
 })
-

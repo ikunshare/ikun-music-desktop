@@ -1,14 +1,26 @@
 <template>
-  <material-modal :show="show" teleport="#view" @close="handleClose" @after-enter="$refs.input.focus()">
+  <material-modal
+    :show="show"
+    teleport="#view"
+    @close="handleClose"
+    @after-enter="$refs.input.focus()"
+  >
     <main :class="$style.main">
-      <h2>{{ selectedNum > 0 ? $t('music_sort__title_multiple', { num: selectedNum }) : $t('music_sort__title', { name: musicInfo ? musicInfo.name : '' }) }}</h2>
+      <h2>
+        {{
+          selectedNum > 0
+            ? $t('music_sort__title_multiple', { num: selectedNum })
+            : $t('music_sort__title', { name: musicInfo ? musicInfo.name : '' })
+        }}
+      </h2>
       <base-input
         ref="input"
         v-model="sortNum"
         :class="$style.input"
         type="number"
         :placeholder="$t('music_sort__input_tip')"
-        @submit="handleSubmit" @blur="verify"
+        @submit="handleSubmit"
+        @blur="verify"
       />
       <div :class="$style.footer">
         <base-btn :class="$style.btn" @click="handleSubmit">{{ $t('btn_confirm') }}</base-btn>
@@ -68,7 +80,6 @@ export default {
 }
 </script>
 
-
 <style lang="less" module>
 @import '@renderer/assets/styles/layout.less';
 
@@ -109,9 +120,8 @@ export default {
   min-width: 70px;
   // .mixin-ellipsis-1;
 
-  +.btn {
+  + .btn {
     margin-left: 10px;
   }
 }
-
 </style>

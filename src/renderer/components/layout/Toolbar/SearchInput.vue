@@ -1,15 +1,16 @@
 <template>
-  <material-search-input v-model="searchText" :list="tipList" :visible-list="visibleList" @event="handleEvent" />
+  <material-search-input
+    v-model="searchText"
+    :list="tipList"
+    :visible-list="visibleList"
+    @event="handleEvent"
+  />
 </template>
 
 <script>
 import music from '@renderer/utils/musicSdk'
 import { debounce } from '@common/utils'
-import {
-  ref,
-  watch,
-  nextTick,
-} from '@common/utils/vueTools'
+import { ref, watch, nextTick } from '@common/utils/vueTools'
 import { useRouter, useRoute } from '@common/utils/vueRouter'
 import { appSetting } from '@renderer/store/setting'
 import { searchText as _searchText } from '@renderer/store/search/state'
@@ -27,14 +28,17 @@ export default {
     const route = useRoute()
     const router = useRouter()
 
-    watch(() => route.name, (newValue, oldValue) => {
-      if (oldValue == 'Search' && newValue != 'SongListDetail') {
-        setTimeout(() => {
-          if (appSetting['odc.isAutoClearSearchInput'] && searchText.value) searchText.value = ''
-          if (appSetting['odc.isAutoClearSearchList']) setSearchText('')
-        })
+    watch(
+      () => route.name,
+      (newValue, oldValue) => {
+        if (oldValue == 'Search' && newValue != 'SongListDetail') {
+          setTimeout(() => {
+            if (appSetting['odc.isAutoClearSearchInput'] && searchText.value) searchText.value = ''
+            if (appSetting['odc.isAutoClearSearchList']) setSearchText('')
+          })
+        }
       }
-    })
+    )
 
     watch(_searchText, (newValue, oldValue) => {
       searchText.value = newValue
@@ -44,8 +48,7 @@ export default {
       handleTipSearch()
     })
 
-
-    const tipSearch = debounce(async() => {
+    const tipSearch = debounce(async () => {
       if (searchText.value === '' && prevTempSearchSource) {
         tipList.value = []
         music[prevTempSearchSource].tipSearch.cancelTipSearch()
@@ -53,9 +56,12 @@ export default {
       }
       const { temp_source } = await getSearchSetting()
       prevTempSearchSource ||= temp_source
-      music[prevTempSearchSource].tipSearch.search(searchText.value).then(list => {
-        tipList.value = list
-      }).catch(() => {})
+      music[prevTempSearchSource].tipSearch
+        .search(searchText.value)
+        .then((list) => {
+          tipList.value = list
+        })
+        .catch(() => {})
     }, 50)
 
     const handleTipSearch = () => {
@@ -69,14 +75,19 @@ export default {
         setSearchText('')
         return
       }
-      setTimeout(() => {
-        router.push({
-          path: '/search',
-          query: {
-            text: searchText.value,
-          },
-        }).catch(_ => _)
-      }, searchText.value ? 200 : 0)
+      setTimeout(
+        () => {
+          router
+            .push({
+              path: '/search',
+              query: {
+                text: searchText.value,
+              },
+            })
+            .catch((_) => _)
+        },
+        searchText.value ? 200 : 0
+      )
     }
 
     const handleEvent = ({ action, data }) => {
@@ -109,5 +120,4 @@ export default {
     }
   },
 }
-
 </script>

@@ -13,13 +13,37 @@
     <div :class="$style.eqList">
       <div :class="$style.eqItem">
         <span :class="$style.label">{{ $t('player__sound_effect_panner_sound_speed') }}</span>
-        <base-slider-bar :class="$style.slider" :value="appSetting['player.soundEffect.panner.speed']" :min="1" :max="50" @change="handleUpdateSpeed" />
-        <span :class="[$style.value, { [$style.active]: appSetting['player.soundEffect.panner.speed'] != 25 }]">{{ appSetting['player.soundEffect.panner.speed'] }}</span>
+        <base-slider-bar
+          :class="$style.slider"
+          :value="appSetting['player.soundEffect.panner.speed']"
+          :min="1"
+          :max="50"
+          @change="handleUpdateSpeed"
+        />
+        <span
+          :class="[
+            $style.value,
+            { [$style.active]: appSetting['player.soundEffect.panner.speed'] != 25 },
+          ]"
+          >{{ appSetting['player.soundEffect.panner.speed'] }}</span
+        >
       </div>
       <div :class="$style.eqItem">
         <span :class="$style.label">{{ $t('player__sound_effect_panner_sound_r') }}</span>
-        <base-slider-bar :class="$style.slider" :value="appSetting['player.soundEffect.panner.soundR']" :min="1" :max="30" @change="handleUpdateSoundR" />
-        <span :class="[$style.value, { [$style.active]: appSetting['player.soundEffect.panner.soundR'] != 5 }]">{{ appSetting['player.soundEffect.panner.soundR'] }}</span>
+        <base-slider-bar
+          :class="$style.slider"
+          :value="appSetting['player.soundEffect.panner.soundR']"
+          :min="1"
+          :max="30"
+          @change="handleUpdateSoundR"
+        />
+        <span
+          :class="[
+            $style.value,
+            { [$style.active]: appSetting['player.soundEffect.panner.soundR'] != 5 },
+          ]"
+          >{{ appSetting['player.soundEffect.panner.soundR'] }}</span
+        >
       </div>
     </div>
   </div>
@@ -36,10 +60,10 @@ import { appSetting, saveMediaDeviceId, updateSetting } from '@renderer/store/se
 //   speed: 25,
 // })
 
-const updateEnabled = async(enabled) => {
+const updateEnabled = async (enabled) => {
   // console.log(enabled)
   if (appSetting['player.mediaDeviceId'] != 'default') {
-    await setMediaDeviceId('default').catch(_ => _)
+    await setMediaDeviceId('default').catch((_) => _)
     saveMediaDeviceId('default')
   }
   updateSetting({ 'player.soundEffect.panner.enable': enabled })
@@ -51,8 +75,6 @@ const handleUpdateSoundR = (value) => {
 const handleUpdateSpeed = (value) => {
   updateSetting({ 'player.soundEffect.panner.speed': Math.round(value) })
 }
-
-
 </script>
 
 <style lang="less" module>
@@ -127,5 +149,4 @@ const handleUpdateSpeed = (value) => {
   margin-right: 10px;
   font-size: 13px;
 }
-
 </style>

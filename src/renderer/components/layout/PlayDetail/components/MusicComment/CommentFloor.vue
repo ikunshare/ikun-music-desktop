@@ -77,7 +77,7 @@ export default {
 .avatar {
   width: 40px;
   border-radius: 4px;
-  box-shadow: 0 0 2px rgba(0, 0, 0, .15);
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.15);
 }
 .right {
   flex: auto;
@@ -155,7 +155,7 @@ export default {
 .reply_floor {
   padding: 0 0 0 @padding;
   margin-left: @padding * 2;
-  border-radius: .5rem;
+  border-radius: 0.5rem;
   &:last-child {
     margin-bottom: 12px;
   }
@@ -168,6 +168,4 @@ export default {
 
   background-color: var(--color-primary-light-500-alpha-700);
 }
-
-
 </style>

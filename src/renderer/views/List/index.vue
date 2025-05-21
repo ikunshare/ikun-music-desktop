@@ -68,5 +68,4 @@ export default {
   display: flex;
   position: relative;
 }
-
 </style>

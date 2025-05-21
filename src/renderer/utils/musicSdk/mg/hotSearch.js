@@ -13,6 +13,6 @@ export default {
     return { source: 'mg', list: this.filterList(body.data.hotwords[0].hotwordList) }
   },
   filterList(rawList) {
-    return rawList.filter(item => item.resourceType == 'song').map(item => item.word)
+    return rawList.filter((item) => item.resourceType == 'song').map((item) => item.word)
   },
 }

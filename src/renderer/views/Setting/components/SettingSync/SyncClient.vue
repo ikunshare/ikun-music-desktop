@@ -43,10 +43,9 @@ export default {
       return status
     })
 
-    const setSyncClientHost = debounce(host => {
+    const setSyncClientHost = debounce((host) => {
       updateSetting({ 'sync.client.host': host.trim() })
     }, 500)
-
 
     return {
       appSetting,
@@ -60,7 +59,7 @@ export default {
 
 <style lang="less" module>
 .hostInput[disabled] {
-  opacity: .8 !important;
+  opacity: 0.8 !important;
 }
 
 .hostInput {

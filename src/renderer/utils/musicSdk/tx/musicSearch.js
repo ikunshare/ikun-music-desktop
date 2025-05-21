@@ -45,14 +45,15 @@ export default {
     // searchRequest = httpFetch(`http://ioscdn.kugou.com/api/v3/search/song?keyword=${encodeURIComponent(str)}&page=${page}&pagesize=${this.limit}&showtype=10&plat=2&version=7910&tag=1&correct=1&privilege=1&sver=5`)
     return searchRequest.promise.then(({ body }) => {
       // console.log(body)
-      if (body.code != this.successCode || body.req.code != this.successCode) return this.musicSearch(str, page, limit, ++retryNum)
+      if (body.code != this.successCode || body.req.code != this.successCode)
+        return this.musicSearch(str, page, limit, ++retryNum)
       return body.req.data
     })
   },
   handleResult(rawList) {
     // console.log(rawList)
     const list = []
-    rawList.forEach(item => {
+    rawList.forEach((item) => {
       if (!item.file?.media_mid) return
 
       let types = []
@@ -125,9 +126,12 @@ export default {
         albumMid: item.album?.mid ?? '',
         strMediaMid: item.file.media_mid,
         songmid: item.mid,
-        img: (albumId === '' || albumId === '空')
-          ? item.singer?.length ? `https://y.gtimg.cn/music/photo_new/T001R500x500M000${item.singer[0].mid}.jpg` : ''
-          : `https://y.gtimg.cn/music/photo_new/T002R500x500M000${albumId}.jpg`,
+        img:
+          albumId === '' || albumId === '空'
+            ? item.singer?.length
+              ? `https://y.gtimg.cn/music/photo_new/T001R500x500M000${item.singer[0].mid}.jpg`
+              : ''
+            : `https://y.gtimg.cn/music/photo_new/T002R500x500M000${albumId}.jpg`,
         types,
         _types,
         typeUrl: {},

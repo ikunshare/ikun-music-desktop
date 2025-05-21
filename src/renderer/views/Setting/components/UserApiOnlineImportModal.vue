@@ -1,5 +1,10 @@
 <template>
-  <material-modal :show="show" teleport="#view" @close="handleClose" @after-enter="$refs.input.focus()">
+  <material-modal
+    :show="show"
+    teleport="#view"
+    @close="handleClose"
+    @after-enter="$refs.input.focus()"
+  >
     <main :class="$style.main">
       <h2>{{ $t('user_api_import_online__title') }}</h2>
       <base-input
@@ -8,11 +13,14 @@
         :class="$style.input"
         type="url"
         :placeholder="$t('user_api_import_online__input_tip')"
-        @submit="handleSubmit" @blur="verify"
+        @submit="handleSubmit"
+        @blur="verify"
       />
       <div :class="$style.footer">
         <base-btn :class="$style.btn" @click="handleClose">{{ $t('btn_close') }}</base-btn>
-        <base-btn :class="$style.btn" :disabled="disabled" @click="handleSubmit">{{ btnText }}</base-btn>
+        <base-btn :class="$style.btn" :disabled="disabled" @click="handleSubmit">{{
+          btnText
+        }}</base-btn>
       </div>
     </main>
   </material-modal>
@@ -61,7 +69,7 @@ export default {
       this.btnText = this.$t('user_api_import_online__input_loading')
       let script
       try {
-        script = await httpFetch(url, { follow_max: 3 }).promise.then(resp => resp.body)
+        script = await httpFetch(url, { follow_max: 3 }).promise.then((resp) => resp.body)
       } catch (err) {
         void dialog(this.$t('user_api_import__failed', { message: err.message }))
         return
@@ -70,10 +78,12 @@ export default {
         this.btnText = this.$t('user_api_import_online__input_confirm')
       }
       if (script.length > 9_000_000) {
-        void dialog(this.$t('user_api_import__failed', {
-          message: 'Too large script',
-          confirm: this.$t('ok'),
-        }))
+        void dialog(
+          this.$t('user_api_import__failed', {
+            message: 'Too large script',
+            confirm: this.$t('ok'),
+          })
+        )
         return
       }
       this.$emit('import', script)
@@ -82,7 +92,6 @@ export default {
   },
 }
 </script>
-
 
 <style lang="less" module>
 @import '@renderer/assets/styles/layout.less';
@@ -124,10 +133,8 @@ export default {
   min-width: 70px;
   // .mixin-ellipsis-1;
 
-  +.btn {
+  + .btn {
     margin-left: 10px;
   }
 }
-
-
 </style>

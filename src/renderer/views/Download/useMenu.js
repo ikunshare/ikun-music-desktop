@@ -73,25 +73,28 @@ export default ({
   })
 
   const showMenu = (event, taskInfo) => {
-    itemMenuControl.sourceDetail = !!musicSdk[taskInfo.metadata.musicInfo.source]?.getMusicDetailPageUrl
+    itemMenuControl.sourceDetail =
+      !!musicSdk[taskInfo.metadata.musicInfo.source]?.getMusicDetailPageUrl
 
     if (taskInfo.isComplate) {
-      itemMenuControl.play =
-        itemMenuControl.playLater =
-        itemMenuControl.file = true
-      itemMenuControl.start =
-        itemMenuControl.pause = false
-    } else if (taskInfo.status === DOWNLOAD_STATUS.ERROR || taskInfo.status === DOWNLOAD_STATUS.PAUSE) {
+      itemMenuControl.play = itemMenuControl.playLater = itemMenuControl.file = true
+      itemMenuControl.start = itemMenuControl.pause = false
+    } else if (
+      taskInfo.status === DOWNLOAD_STATUS.ERROR ||
+      taskInfo.status === DOWNLOAD_STATUS.PAUSE
+    ) {
       itemMenuControl.play =
         itemMenuControl.playLater =
         itemMenuControl.pause =
-        itemMenuControl.file = false
+        itemMenuControl.file =
+          false
       itemMenuControl.start = true
     } else {
       itemMenuControl.play =
         itemMenuControl.playLater =
         itemMenuControl.start =
-        itemMenuControl.file = false
+        itemMenuControl.file =
+          false
       itemMenuControl.pause = true
     }
 

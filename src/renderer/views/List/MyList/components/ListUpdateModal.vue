@@ -5,20 +5,44 @@
     </div>
     <main class="scroll" :class="$style.main">
       <ul v-if="lists.length" ref="dom_list" :class="$style.list">
-        <li v-for="list in lists" :key="list.id" :class="[$style.listItem, {[$style.fetching]: fetchingListStatus[list.id]}]">
+        <li
+          v-for="list in lists"
+          :key="list.id"
+          :class="[$style.listItem, { [$style.fetching]: fetchingListStatus[list.id] }]"
+        >
           <div :class="$style.listLeft">
-            <h3 :class="$style.text">{{ list.name }} <span :class="$style.label">{{ list.source }}</span></h3>
+            <h3 :class="$style.text">
+              {{ list.name }} <span :class="$style.label">{{ list.source }}</span>
+            </h3>
             <div>
               <base-checkbox
-                :id="`list_auto_update_${list.id}`" :model-value="updateInfo[list.id]?.isAutoUpdate == true"
-                :class="$style.checkbox" :label="$t('list_update_modal__auto_update')" @change="handleChangeAutoUpdate(list, $event)"
+                :id="`list_auto_update_${list.id}`"
+                :model-value="updateInfo[list.id]?.isAutoUpdate == true"
+                :class="$style.checkbox"
+                :label="$t('list_update_modal__auto_update')"
+                @change="handleChangeAutoUpdate(list, $event)"
               />
-              <span :class="$style.label" style="vertical-align: text-top;">{{ listUpdateTimes[list.id] }}</span>
+              <span :class="$style.label" style="vertical-align: text-top">{{
+                listUpdateTimes[list.id]
+              }}</span>
             </div>
           </div>
           <div :class="$style.btns">
-            <button :class="$style.btn" :disabled="fetchingListStatus[list.id]" outline="outline" :aria-label="$t('list_update_modal__update')" @click.stop="handleUpdate(list)">
-              <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" style="transform: rotate(45deg);" viewBox="0 0 24 24" space="preserve">
+            <button
+              :class="$style.btn"
+              :disabled="fetchingListStatus[list.id]"
+              outline="outline"
+              :aria-label="$t('list_update_modal__update')"
+              @click.stop="handleUpdate(list)"
+            >
+              <svg
+                version="1.1"
+                xmlns="http://www.w3.org/2000/svg"
+                xlink="http://www.w3.org/1999/xlink"
+                style="transform: rotate(45deg)"
+                viewBox="0 0 24 24"
+                space="preserve"
+              >
                 <use xlink:href="#icon-refresh" />
               </svg>
             </button>
@@ -52,7 +76,9 @@ export default {
   },
   emits: ['update:visible'],
   setup() {
-    const lists = computed(() => userLists.filter(l => !!l.source && !!musicSdk[l.source]?.songList))
+    const lists = computed(() =>
+      userLists.filter((l) => !!l.source && !!musicSdk[l.source]?.songList)
+    )
     const updateInfo = ref({})
     // const updateTimes = ref({})
 
@@ -118,7 +144,7 @@ export default {
   .listItem {
     position: relative;
     padding: 15px 10px 15px 15px;
-    transition: .3s ease;
+    transition: 0.3s ease;
     transition-property: background-color, opacity;
     line-height: 1.3;
     // overflow: hidden;
@@ -135,7 +161,7 @@ export default {
     //   border-bottom-right-radius: 4px;
     // }
     &.fetching {
-      opacity: .5;
+      opacity: 0.5;
     }
   }
 }
@@ -156,7 +182,7 @@ export default {
 .checkbox {
   margin-top: 3px;
   font-size: 14px;
-  opacity: .86;
+  opacity: 0.86;
 }
 
 .label {
@@ -227,5 +253,4 @@ export default {
     color: var(--color-font-label);
   }
 }
-
 </style>

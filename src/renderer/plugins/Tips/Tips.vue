@@ -1,8 +1,11 @@
 <template>
   <transition name="tips-fade" @after-leave="afterLeave">
     <div
-      v-show="visible" ref="dom_tips" :style="{ left: position.left + 'px' , top: position.top + 'px', transform, maxWidth, }"
-      :class="$style.tips" role="presentation"
+      v-show="visible"
+      ref="dom_tips"
+      :style="{ left: position.left + 'px', top: position.top + 'px', transform, maxWidth }"
+      :class="$style.tips"
+      role="presentation"
     >
       {{ message }}
     </div>
@@ -97,12 +100,12 @@ export default {
   box-sizing: border-box;
 }
 
-:global(.tips-fade-enter-active), :global(.tips-fade-leave-active) {
-  transition: opacity .2s;
+:global(.tips-fade-enter-active),
+:global(.tips-fade-leave-active) {
+  transition: opacity 0.2s;
 }
-:global(.tips-fade-enter), :global(.tips-fade-leave-to) {
+:global(.tips-fade-enter),
+:global(.tips-fade-leave-to) {
   opacity: 0;
 }
-
-
 </style>

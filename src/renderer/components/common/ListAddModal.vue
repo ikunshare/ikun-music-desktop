@@ -1,14 +1,50 @@
 <template>
-  <material-modal :show="show" :bg-close="bgClose" :teleport="teleport" max-width="70%" min-width="200px" @close="handleClose">
+  <material-modal
+    :show="show"
+    :bg-close="bgClose"
+    :teleport="teleport"
+    max-width="70%"
+    min-width="200px"
+    @close="handleClose"
+  >
     <main :class="$style.main">
-      <h2>{{ $t('list_add__' + (isMove ? 'title_first_move' : 'title_first_add')) }}&nbsp;<span :class="$style.name">{{ currentMusicInfo.name }}</span>&nbsp;{{ $t('list_add__title_last') }}</h2>
+      <h2>
+        {{ $t('list_add__' + (isMove ? 'title_first_move' : 'title_first_add')) }}&nbsp;<span
+          :class="$style.name"
+          >{{ currentMusicInfo.name }}</span
+        >&nbsp;{{ $t('list_add__title_last') }}
+      </h2>
       <div class="scroll" :class="$style.btnContent">
-        <base-btn v-for="(item, index) in lists" :key="item.id" :class="$style.btn" :aria-label="$t('list_add__btn_title', { name: item.name })" :disabled="item.isExist" @click="handleClick(index)">{{ item.name }}</base-btn>
-        <base-btn :class="[$style.btn, $style.newList, isEditing ? $style.editing : null]" :aria-label="$t('lists__new_list_btn')" @click="handleEditing($event)">
-          <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" viewBox="0 0 42 42" space="preserve">
+        <base-btn
+          v-for="(item, index) in lists"
+          :key="item.id"
+          :class="$style.btn"
+          :aria-label="$t('list_add__btn_title', { name: item.name })"
+          :disabled="item.isExist"
+          @click="handleClick(index)"
+          >{{ item.name }}</base-btn
+        >
+        <base-btn
+          :class="[$style.btn, $style.newList, isEditing ? $style.editing : null]"
+          :aria-label="$t('lists__new_list_btn')"
+          @click="handleEditing($event)"
+        >
+          <svg
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xlink="http://www.w3.org/1999/xlink"
+            viewBox="0 0 42 42"
+            space="preserve"
+          >
             <use xlink:href="#icon-addTo" />
           </svg>
-          <base-input :class="$style.newListInput" :value="newListName" :placeholder="$t('lists__new_list_input')" @keyup.enter="handleSaveList($event)" @blur="handleSaveList($event)" />
+          <base-input
+            :class="$style.newListInput"
+            :value="newListName"
+            :placeholder="$t('lists__new_list_input')"
+            @keyup.enter="handleSaveList($event)"
+            @blur="handleSaveList($event)"
+          />
         </base-btn>
         <span v-for="i in spaceNum" :key="i" :class="$style.btn" />
       </div>
@@ -20,7 +56,12 @@
 // import { mapMutations } from 'vuex'
 import { watch, ref, onBeforeUnmount } from '@common/utils/vueTools'
 import { defaultList, loveList, userLists } from '@renderer/store/list/state'
-import { addListMusics, moveListMusics, createUserList, getMusicExistListIds } from '@renderer/store/list/action'
+import {
+  addListMusics,
+  moveListMusics,
+  createUserList,
+  getMusicExistListIds,
+} from '@renderer/store/list/action'
 import useKeyDown from '@renderer/utils/compositions/useKeyDown'
 import { useI18n } from '@root/lang'
 import { dialog } from '@renderer/plugins/Dialog'
@@ -72,7 +113,7 @@ export default {
 
     const checkMusicExist = (musicInfo) => {
       const mid = musicInfo.id
-      void getMusicExistListIds(mid).then(ids => {
+      void getMusicExistListIds(mid).then((ids) => {
         if (mid != musicInfo.id) return
         for (const list of lists.value) {
           if (ids.includes(list.id)) list.isExist = true
@@ -87,26 +128,32 @@ export default {
         { ...defaultList, name: t(defaultList.name) },
         { ...loveList, name: t(loveList.name) },
         ...userLists,
-      ].filter(l => !props.excludeListId.includes(l.id)).map(l => ({ ...l, isExist: false }))
+      ]
+        .filter((l) => !props.excludeListId.includes(l.id))
+        .map((l) => ({ ...l, isExist: false }))
       checkMusicExist(currentMusicInfo.value)
     }
 
-    watch(() => props.show, show => {
-      if (!show) {
-        if (stopWatchUserList) {
-          stopWatchUserList()
-          stopWatchUserList = null
+    watch(
+      () => props.show,
+      (show) => {
+        if (!show) {
+          if (stopWatchUserList) {
+            stopWatchUserList()
+            stopWatchUserList = null
+          }
+          return
         }
-        return
+        if (!props.musicInfo) return (lists.value = [])
+
+        currentMusicInfo.value =
+          'progress' in props.musicInfo ? props.musicInfo.metadata.musicInfo : props.musicInfo
+
+        getList()
+
+        stopWatchUserList = watch(userLists, getList)
       }
-      if (!props.musicInfo) return lists.value = []
-
-      currentMusicInfo.value = 'progress' in props.musicInfo ? props.musicInfo.metadata.musicInfo : props.musicInfo
-
-      getList()
-
-      stopWatchUserList = watch(userLists, getList)
-    })
+    )
 
     onBeforeUnmount(() => {
       if (stopWatchUserList) {
@@ -131,7 +178,7 @@ export default {
   },
   computed: {
     spaceNum() {
-      return this.lists.length < 2 ? 0 : (this.rowNum - this.lists.length % this.rowNum - 1)
+      return this.lists.length < 2 ? 0 : this.rowNum - (this.lists.length % this.rowNum) - 1
     },
   },
   mounted() {
@@ -144,14 +191,11 @@ export default {
   methods: {
     handleResize() {
       const width = window.innerWidth
-      this.rowNum = width < 1920
-        ? 3
-        : width < 2560
-          ? 4
-          : width < 3840 ? 5 : 6
+      this.rowNum = width < 1920 ? 3 : width < 2560 ? 4 : width < 3840 ? 5 : 6
     },
     handleClick(index) {
-      if (this.isMove) void moveListMusics(this.fromListId, this.lists[index].id, [this.currentMusicInfo])
+      if (this.isMove)
+        void moveListMusics(this.fromListId, this.lists[index].id, [this.currentMusicInfo])
       else void addListMusics(this.lists[index].id, [this.currentMusicInfo])
 
       this.lists[index].isExist = true
@@ -167,21 +211,25 @@ export default {
       if (this.isEditing) return
       // if (!this.newListName) this.newListName = this.listName
       this.isEditing = true
-      this.$nextTick(() => event.currentTarget.querySelector('.' + this.$style.newListInput).focus())
+      this.$nextTick(() =>
+        event.currentTarget.querySelector('.' + this.$style.newListInput).focus()
+      )
     },
     async handleSaveList(event) {
       let name = event.target.value
       this.newListName = event.target.value = ''
       this.isEditing = false
-      if (!name || (
-        userLists.some(l => l.name == name) && !(await dialog.confirm(window.i18n.t('list_duplicate_tip'))))
-      ) return
+      if (
+        !name ||
+        (userLists.some((l) => l.name == name) &&
+          !(await dialog.confirm(window.i18n.t('list_duplicate_tip'))))
+      )
+        return
       void createUserList({ name })
     },
   },
 }
 </script>
-
 
 <style lang="less" module>
 @import '@renderer/assets/styles/layout.less';
@@ -236,7 +284,7 @@ export default {
   border: 1px dashed var(--color-primary-font-hover);
   // background-color: var(--color-main-background);
   color: var(--color-primary-font-hover);
-  opacity: .7;
+  opacity: 0.7;
 
   svg {
     height: 18px;
@@ -272,22 +320,21 @@ export default {
 }
 
 @item-width2: (100% / 4);
-@media (min-width: 1920px){
+@media (min-width: 1920px) {
   .btn {
     width: calc(@item-width2 - 15px);
   }
 }
 @item-width3: (100% / 5);
-@media (min-width: 2560px){
+@media (min-width: 2560px) {
   .btn {
     width: calc(@item-width3 - 15px);
   }
 }
 @item-width4: (100% / 6);
-@media (min-width: 3840px){
+@media (min-width: 3840px) {
   .btn {
     width: calc(@item-width4 - 15px);
   }
 }
-
 </style>

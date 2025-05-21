@@ -56,7 +56,6 @@ import { isPlay } from '@renderer/store/player/state'
 import { TRY_QUALITYS_LIST } from '@renderer/core/music/utils'
 import { isMac } from '@common/utils'
 
-
 export default {
   name: 'SettingPlay',
   setup() {
@@ -64,9 +63,9 @@ export default {
     const playQualityList = [...TRY_QUALITYS_LIST, '128k'].reverse()
 
     const mediaDevices = ref([])
-    const getMediaDevice = async() => {
+    const getMediaDevice = async () => {
       const devices = await navigator.mediaDevices.enumerateDevices()
-      let audioDevices = devices.filter(device => device.kind === 'audiooutput')
+      let audioDevices = devices.filter((device) => device.kind === 'audiooutput')
       mediaDevices.value = audioDevices
       // console.log(this.mediaDevices)
     }
@@ -78,7 +77,7 @@ export default {
     })
 
     const mediaDeviceId = ref(appSetting['player.mediaDeviceId'])
-    const handleMediaDeviceIdChnage = async() => {
+    const handleMediaDeviceIdChnage = async () => {
       if (hasInitedAdvancedAudioFeatures()) {
         await dialog({
           message: t('setting__play_media_device_error_tip'),
@@ -103,9 +102,12 @@ export default {
         appSetting['player.mediaDeviceId'] = mediaDeviceId.value
       }
     }
-    watch(() => appSetting['player.mediaDeviceId'], val => {
-      mediaDeviceId.value = val
-    })
+    watch(
+      () => appSetting['player.mediaDeviceId'],
+      (val) => {
+        mediaDeviceId.value = val
+      }
+    )
 
     const handleUpdatePowerSaveBlocker = (enabled) => {
       if (enabled) {
@@ -117,7 +119,7 @@ export default {
     }
 
     const isMaxOutputChannelCount = ref(appSetting['player.isMaxOutputChannelCount'])
-    const handleUpdateMaxOutputChannelCount = async(enabled) => {
+    const handleUpdateMaxOutputChannelCount = async (enabled) => {
       isMaxOutputChannelCount.value = enabled
       if (appSetting['player.mediaDeviceId'] != 'default') {
         const confirm = await dialog.confirm({
@@ -129,12 +131,11 @@ export default {
           isMaxOutputChannelCount.value = false
           return
         }
-        await setMediaDeviceId('default').catch(_ => _)
+        await setMediaDeviceId('default').catch((_) => _)
         saveMediaDeviceId('default')
       }
       updateSetting({ 'player.isMaxOutputChannelCount': enabled })
     }
-
 
     return {
       appSetting,

@@ -73,7 +73,7 @@ export const createLocalMusicInfo = async(path: string): Promise<LX.Music.MusicI
 
   // console.log(metadata)
   let ext = extname(path)
-  // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+
   let name = (metadata.common.title || basename(path, ext)).trim()
   let singer = metadata.common.artists?.length ? metadata.common.artists.map(a => a.trim()).join('、') : ''
   let interval = metadata.format.duration ? formatPlayTime(metadata.format.duration) : ''

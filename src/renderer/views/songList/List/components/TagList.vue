@@ -1,9 +1,16 @@
 <template>
-  <div :class="[$style.tagList, {[$style.active]: popupVisible}]">
+  <div :class="[$style.tagList, { [$style.active]: popupVisible }]">
     <div ref="dom_btn" :class="$style.label" @click.stop="handleShow">
       <span>{{ tagName }}</span>
       <div :class="$style.icon">
-        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" height="100%" viewBox="0 0 451.847 451.847" space="preserve">
+        <svg
+          version="1.1"
+          xmlns="http://www.w3.org/2000/svg"
+          xlink="http://www.w3.org/1999/xlink"
+          height="100%"
+          viewBox="0 0 451.847 451.847"
+          space="preserve"
+        >
           <use xlink:href="#icon-down" />
         </svg>
       </div>
@@ -13,7 +20,14 @@
         <div :class="$style.tag" @click="handleToggleTag('')">{{ $t('default') }}</div>
         <dl v-for="tagInfo in list" :key="tagInfo.name">
           <dt :class="$style.type">{{ tagInfo.name }}</dt>
-          <dd v-for="tag in tagInfo.list" :key="tag.id" :class="$style.tag" @click="handleToggleTag(tag.id)">{{ tag.name }}</dd>
+          <dd
+            v-for="tag in tagInfo.list"
+            :key="tag.id"
+            :class="$style.tag"
+            @click="handleToggleTag(tag.id)"
+          >
+            {{ tag.name }}
+          </dd>
         </dl>
       </div>
     </div>
@@ -21,7 +35,15 @@
 </template>
 
 <script setup>
-import { watch, shallowReactive, ref, onMounted, onBeforeUnmount, computed, reactive } from '@common/utils/vueTools'
+import {
+  watch,
+  shallowReactive,
+  ref,
+  onMounted,
+  onBeforeUnmount,
+  computed,
+  reactive,
+} from '@common/utils/vueTools'
 import { setTags, getTags } from '@renderer/store/songList/action'
 import { tags } from '@renderer/store/songList/state'
 import { useRouter, useRoute } from '@common/utils/vueRouter'
@@ -58,21 +80,32 @@ const handleToggleTag = (id) => {
   })
   handleHide()
 }
-watch(() => props.source, async(source) => {
-  if (!source) return
-  // const source = (await getLeaderboardSetting()).source as LX.OnlineSource
-  let tagInfo = tags[source]
-  // console.log(await getTags(source))
-  if (tagInfo == null) setTags(tagInfo = await getTags(source), source)
+watch(
+  () => props.source,
+  async (source) => {
+    if (!source) return
+    // const source = (await getLeaderboardSetting()).source as LX.OnlineSource
+    let tagInfo = tags[source]
+    // console.log(await getTags(source))
+    if (tagInfo == null) setTags((tagInfo = await getTags(source)), source)
 
-  list.splice(0, list.length, ...[{ name: window.i18n.t('songlist__tag_info_hot_tag'), list: [...tagInfo.hotTag] }, ...tagInfo.tags])
-}, {
-  immediate: true,
-})
+    list.splice(
+      0,
+      list.length,
+      ...[
+        { name: window.i18n.t('songlist__tag_info_hot_tag'), list: [...tagInfo.hotTag] },
+        ...tagInfo.tags,
+      ]
+    )
+  },
+  {
+    immediate: true,
+  }
+)
 const tagName = computed(() => {
   if (!props.tagId) return t('default')
   for (const tags of list) {
-    const tag = tags.list.find(t => t.id == props.tagId)
+    const tag = tags.list.find((t) => t.id == props.tagId)
     if (tag) return tag.name
   }
   return props.tagId
@@ -91,16 +124,15 @@ const setTagPopupWidth = () => {
   }, 50)
 }
 
-const dom_btn = ref<HTMLElement | null>(null)
+const dom_btn = (ref < HTMLElement) | (null > null)
 const popupVisible = ref(false)
-const handleShow = () => popupVisible.value = !popupVisible.value
+const handleShow = () => (popupVisible.value = !popupVisible.value)
 const handleHide = (evt) => {
   // if (e && e.target.parentNode != this.$refs.dom_popup && this.show) return this.show = false
   // console.log(this.$refs)
   if (evt && (evt.target == dom_btn.value || dom_btn.value?.contains(evt.target))) return
   popupVisible.value = false
 }
-
 
 onMounted(() => {
   setTagPopupWidth()
@@ -112,9 +144,7 @@ onBeforeUnmount(() => {
   document.removeEventListener('click', handleHide)
   window.removeEventListener('resize', setTagPopupWidth)
 })
-
 </script>
-
 
 <style lang="less" module>
 @import '@renderer/assets/styles/layout.less';
@@ -126,7 +156,7 @@ onBeforeUnmount(() => {
   &.active {
     .label {
       .icon {
-        svg{
+        svg {
           transform: rotate(180deg);
         }
       }
@@ -161,8 +191,8 @@ onBeforeUnmount(() => {
     margin-left: 7px;
     line-height: 0;
     svg {
-      width: .8em;
-      transition: transform .2s ease;
+      width: 0.8em;
+      transition: transform 0.2s ease;
       transform: rotate(0);
     }
   }
@@ -184,18 +214,18 @@ onBeforeUnmount(() => {
   border-radius: 4px;
   background-color: var(--color-content-background);
   opacity: 0;
-  transform: scale(.95, .8);
+  transform: scale(0.95, 0.8);
   transform-origin: 0 0 0;
-  transition: .25s ease;
+  transition: 0.25s ease;
   transition-property: transform, opacity;
   max-height: 250px;
   z-index: 10;
   pointer-events: none;
-  filter: drop-shadow(0px 0px 4px rgba(0, 0, 0, .15));
+  filter: drop-shadow(0px 0px 4px rgba(0, 0, 0, 0.15));
   display: flex;
 
   &:before {
-    content: " ";
+    content: ' ';
     position: absolute;
     top: -6px;
     left: 20px;
@@ -233,5 +263,4 @@ onBeforeUnmount(() => {
     background-color: var(--color-button-background-active);
   }
 }
-
 </style>

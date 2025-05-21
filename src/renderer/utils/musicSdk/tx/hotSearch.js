@@ -49,6 +49,6 @@ export default {
     return { source: 'tx', list: this.filterList(body.hotkey.data.vec_hotkey) }
   },
   filterList(rawList) {
-    return rawList.map(item => item.query)
+    return rawList.map((item) => item.query)
   },
 }

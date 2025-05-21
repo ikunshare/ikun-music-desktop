@@ -7,8 +7,10 @@ import { isWin } from '@common/utils'
 
 const getOffsetTop = (contentWidth, lineWidth) => {
   switch (setting['desktopLyric.scrollAlign']) {
-    case 'top': return contentWidth - lineWidth - 2
-    default: return contentWidth * 0.5 - lineWidth / 2
+    case 'top':
+      return contentWidth - lineWidth - 2
+    default:
+      return contentWidth * 0.5 - lineWidth / 2
   }
 }
 
@@ -35,7 +37,6 @@ export default (isComputeWidth) => {
   let isSetedLines = false
   let prevActiveLine = 0
 
-
   const handleScrollLrc = (duration = 300) => {
     if (!dom_lines?.length || !dom_lyric.value) return
     if (isStopScroll) return
@@ -45,10 +46,19 @@ export default (isComputeWidth) => {
       let offset = 0
       if (isComputeWidth.value) {
         let prevLineWidth = line_widths[prevActiveLine] ?? 0
-        offset = prevActiveLine < lyric.line ? ((dom_lines[prevActiveLine]?.clientWidth ?? 0) - prevLineWidth) : 0
+        offset =
+          prevActiveLine < lyric.line
+            ? (dom_lines[prevActiveLine]?.clientWidth ?? 0) - prevLineWidth
+            : 0
         // console.log(prevActiveLine, dom_lines[prevActiveLine]?.clientHeight ?? 0, prevLineWidth, offset)
       }
-      cancelScrollFn = scrollXRTo(dom_lyric.value, dom_p ? (dom_p.offsetLeft + offset - getOffsetTop(dom_lyric.value.clientWidth, dom_p.clientWidth)) : 0, duration)
+      cancelScrollFn = scrollXRTo(
+        dom_lyric.value,
+        dom_p
+          ? dom_p.offsetLeft + offset - getOffsetTop(dom_lyric.value.clientWidth, dom_p.clientWidth)
+          : 0,
+        duration
+      )
     } else {
       cancelScrollFn = scrollXRTo(dom_lyric.value, 0, duration)
     }
@@ -69,10 +79,11 @@ export default (isComputeWidth) => {
   }
 
   const handleLyricDown = (target, x, y) => {
-    if (target.classList.contains('font-lrc') ||
-        target.parentNode.classList.contains('font-lrc') ||
-        target.classList.contains('extended') ||
-        target.parentNode.classList.contains('extended')
+    if (
+      target.classList.contains('font-lrc') ||
+      target.parentNode.classList.contains('font-lrc') ||
+      target.classList.contains('extended') ||
+      target.parentNode.classList.contains('extended')
     ) {
       if (delayScrollTimeout) {
         clearTimeout(delayScrollTimeout)
@@ -91,10 +102,10 @@ export default (isComputeWidth) => {
       if (isWin) setWindowResizeable(false)
     }
   }
-  const handleLyricMouseDown = event => {
+  const handleLyricMouseDown = (event) => {
     handleLyricDown(event.target, event.clientX, event.clientY)
   }
-  const handleLyricTouchStart = event => {
+  const handleLyricTouchStart = (event) => {
     if (event.changedTouches.length) {
       const touch = event.changedTouches[0]
       handleLyricDown(event.target, touch.clientX, touch.clientY)
@@ -134,7 +145,7 @@ export default (isComputeWidth) => {
       }
     }
   }
-  const handleMouseMsMove = event => {
+  const handleMouseMsMove = (event) => {
     handleMove(event.clientX, event.clientY)
   }
   const handleTouchMove = (e) => {
@@ -163,7 +174,7 @@ export default (isComputeWidth) => {
     dom_lyric_text.value.appendChild(dom_line_content)
     nextTick(() => {
       dom_lines = dom_lyric.value.querySelectorAll('.line-content')
-      line_widths = Array.from(dom_lines).map(l => l.clientWidth)
+      line_widths = Array.from(dom_lines).map((l) => l.clientWidth)
       handleScrollLrc()
     })
   }
@@ -175,10 +186,16 @@ export default (isComputeWidth) => {
       if (lines.length) {
         setLyric(lines)
       } else {
-        cancelScrollFn = scrollXRTo(dom_lyric.value, 0, 300, () => {
-          if (lyric.lines !== lines) return
-          setLyric(lines)
-        }, 50)
+        cancelScrollFn = scrollXRTo(
+          dom_lyric.value,
+          0,
+          300,
+          () => {
+            if (lyric.lines !== lines) return
+            setLyric(lines)
+          },
+          50
+        )
       }
     } else {
       setLyric(lines)
@@ -191,7 +208,7 @@ export default (isComputeWidth) => {
       prevActiveLine = line
     })
     if (line < 0) return
-    if (line == 0 && isSetedLines) return isSetedLines = false
+    if (line == 0 && isSetedLines) return (isSetedLines = false)
     isSetedLines &&= false
     if (oldLine == null || line - oldLine != 1) return handleScrollLrc()
 

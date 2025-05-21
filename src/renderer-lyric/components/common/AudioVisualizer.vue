@@ -27,7 +27,7 @@ import { isPlay, setting } from '@lyric/store/state'
 //   happy_new_year: 'rgba(192,57,43,.1)',
 // }
 
-const getBarWidth = canvasWidth => {
+const getBarWidth = (canvasWidth) => {
   let barWidth = (canvasWidth / 128) * 2.5
   const width = canvasWidth / 86
   const diffWidth = barWidth - width
@@ -36,7 +36,9 @@ const getBarWidth = canvasWidth => {
   // barWidth = newBarWidth
   return diffWidth > 32
     ? canvasWidth / 128 // 4k屏、超宽屏直接显示所有频谱条
-    : diffWidth > 12 ? width : barWidth
+    : diffWidth > 12
+      ? width
+      : barWidth
 }
 export default {
   setup() {
@@ -86,7 +88,7 @@ export default {
 
       for (let i = 0; i < dataArray.length; i++) {
         mult = Math.floor(i / maxNum)
-        num = mult % 2 === 0 ? (i - maxNum * mult) : (maxNum - (i - maxNum * mult))
+        num = mult % 2 === 0 ? i - maxNum * mult : maxNum - (i - maxNum * mult)
         let spectrum = num > 90 ? 0 : dataArray[num + 20]
         frequencyAvg += spectrum * 1.4
       }
@@ -127,7 +129,6 @@ export default {
       getAnalyserDataArray()
     }
 
-
     const handlePause = () => {
       if (animationFrameId) window.cancelAnimationFrame(animationFrameId)
       isPlaying = false
@@ -139,7 +140,7 @@ export default {
       canvas.height = canvas.clientHeight
       WIDTH = canvas.width
       HEIGHT = canvas.height
-      MAX_HEIGHT = Math.round(HEIGHT * 0.46 / 255 * 10000) / 10000
+      MAX_HEIGHT = Math.round(((HEIGHT * 0.46) / 255) * 10000) / 10000
       // console.log(MAX_HEIGHT)
       barWidth = getBarWidth(WIDTH)
     }
@@ -148,9 +149,12 @@ export default {
       if (isPlay) handlePlay()
       else handlePause()
     })
-    watch(() => setting['desktopLyric.audioVisualization'], (enable) => {
-      if (!enable) handlePause()
-    })
+    watch(
+      () => setting['desktopLyric.audioVisualization'],
+      (enable) => {
+        if (!enable) handlePause()
+      }
+    )
     window.addEventListener('resize', handleResize)
     onBeforeUnmount(() => {
       handlePause()
@@ -164,7 +168,7 @@ export default {
       canvas.height = canvas.clientHeight
       WIDTH = canvas.width
       HEIGHT = canvas.height
-      MAX_HEIGHT = Math.round(HEIGHT * 0.46 / 255 * 10000) / 10000
+      MAX_HEIGHT = Math.round(((HEIGHT * 0.46) / 255) * 10000) / 10000
 
       // console.log(MAX_HEIGHT)
       if (isPlay.value) handlePlay()

@@ -30,25 +30,27 @@ const props = defineProps<Props>()
 const router = useRouter()
 const route = useRoute()
 
-const {
-  listRef,
-  listInfo,
-  search,
-  handlePlayList,
-} = useList()
+const { listRef, listInfo, search, handlePlayList } = useList()
 
-watch(() => [props.sourceId, props.page], ([sourceId, page]) => {
-  setTimeout(() => {
-    search(searchText.value, sourceId as SearchSource, page as number || 1)
-  })
-})
-watch(searchText, (searchText) => {
-  setTimeout(() => {
-    search(searchText, props.sourceId, props.page)
-  })
-}, {
-  immediate: true,
-})
+watch(
+  () => [props.sourceId, props.page],
+  ([sourceId, page]) => {
+    setTimeout(() => {
+      search(searchText.value, sourceId as SearchSource, (page as number) || 1)
+    })
+  }
+)
+watch(
+  searchText,
+  (searchText) => {
+    setTimeout(() => {
+      search(searchText, props.sourceId, props.page)
+    })
+  },
+  {
+    immediate: true,
+  }
+)
 
 const handleTogglePage = (page: number) => {
   void router.replace({
@@ -59,10 +61,7 @@ const handleTogglePage = (page: number) => {
     },
   })
 }
-
-
 </script>
-
 
 <style lang="less" module>
 .container {
@@ -78,5 +77,4 @@ const handleTogglePage = (page: number) => {
   height: 100%;
   flex: auto;
 }
-
 </style>

@@ -25,7 +25,6 @@ transition(enter-active-class="animated slideInRight" leave-active-class="animat
       common-audio-visualizer(v-if="appSetting['player.audioVisualization'] && visibled")
 </template>
 
-
 <script>
 import { ref, watch } from '@common/utils/vueTools'
 import { isFullscreen } from '@renderer/store'
@@ -93,10 +92,9 @@ export default {
       unregisterAutoHideMounse()
     }
 
-    watch(isFullscreen, isFullscreen => {
-      (isFullscreen ? registerAutoHideMounse : unregisterAutoHideMounse)()
+    watch(isFullscreen, (isFullscreen) => {
+      ;(isFullscreen ? registerAutoHideMounse : unregisterAutoHideMounse)()
     })
-
 
     return {
       appSetting,
@@ -130,11 +128,10 @@ export default {
 }
 </script>
 
-
 <style lang="less" module>
 @import '@renderer/assets/styles/layout.less';
 
-@control-btn-width: @height-toolbar * .26;
+@control-btn-width: @height-toolbar * 0.26;
 
 .container {
   position: absolute;
@@ -170,7 +167,7 @@ export default {
   background-size: var(--background-image-size);
   // background-size: 110% 110%;
   // filter: blur(60px);
-  opacity: .7;
+  opacity: 0.7;
   z-index: -1;
   &:before {
     content: '';
@@ -252,7 +249,7 @@ export default {
   min-width: 100%;
   box-shadow: 0 0 6px var(--color-primary-alpha-500);
   border-radius: 6px;
-  opacity: .8;
+  opacity: 0.8;
 }
 .description {
   max-width: 300px;
@@ -266,7 +263,6 @@ export default {
   }
 }
 
-
 .comment {
   position: absolute;
   right: 0;
@@ -277,6 +273,4 @@ export default {
   margin-left: 10px;
   transform: scaleX(0);
 }
-
-
 </style>

@@ -32,7 +32,7 @@ import { debounce } from '@common/utils'
 export default {
   name: 'SettingOpenAPI',
   setup() {
-    const setPort = debounce(port => {
+    const setPort = debounce((port) => {
       updateSetting({ 'openAPI.port': port.trim() })
     }, 500)
 
@@ -49,7 +49,8 @@ export default {
 
 <style lang="less" module>
 @import '@renderer/assets/styles/layout.less';
-.portInput[disabled], .hostInput[disabled] {
-  opacity: .8 !important;
+.portInput[disabled],
+.hostInput[disabled] {
+  opacity: 0.8 !important;
 }
 </style>

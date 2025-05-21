@@ -71,15 +71,15 @@ export default {
         nextPage: 1,
         limit: 20,
         list: [
-        // {
-        //   text: ['123123hhh'],
-        //   userName: 'dsads',
-        //   avatar: 'http://img4.kuwo.cn/star/userhead/39/52/1602393411654_512039239s.jpg',
-        //   time: '2020-10-22 22:14:17',
-        //   timeStr: '2020-10-22 22:14:17',
-        //   likedCount: 100,
-        //   reply: [],
-        // },
+          // {
+          //   text: ['123123hhh'],
+          //   userName: 'dsads',
+          //   avatar: 'http://img4.kuwo.cn/star/userhead/39/52/1602393411654_512039239s.jpg',
+          //   time: '2020-10-22 22:14:17',
+          //   timeStr: '2020-10-22 22:14:17',
+          //   likedCount: 100,
+          //   reply: [],
+          // },
         ],
       },
       hotComment: {
@@ -91,24 +91,24 @@ export default {
         nextPage: 1,
         limit: 20,
         list: [
-        // {
-        //   text: ['123123hhh'],
-        //   userName: 'dsads',
-        //   avatar: 'http://img4.kuwo.cn/star/userhead/39/52/1602393411654_512039239s.jpg',
-        //   time: '2020-10-22 22:14:17',
-        //   timeStr: '2020-10-22 22:14:17',
-        //   likedCount: 100,
-        //   reply: [
-        //     {
-        //       text: ['123123hhh'],
-        //       userName: 'dsads',
-        //       avatar: 'http://img4.kuwo.cn/star/userhead/39/52/1602393411654_512039239s.jpg',
-        //       time: '2020-10-22 22:14:17',
-        //       timeStr: '2020-10-22 22:14:17',
-        //       likedCount: 100,
-        //     },
-        //   ],
-        // },
+          // {
+          //   text: ['123123hhh'],
+          //   userName: 'dsads',
+          //   avatar: 'http://img4.kuwo.cn/star/userhead/39/52/1602393411654_512039239s.jpg',
+          //   time: '2020-10-22 22:14:17',
+          //   timeStr: '2020-10-22 22:14:17',
+          //   likedCount: 100,
+          //   reply: [
+          //     {
+          //       text: ['123123hhh'],
+          //       userName: 'dsads',
+          //       avatar: 'http://img4.kuwo.cn/star/userhead/39/52/1602393411654_512039239s.jpg',
+          //       time: '2020-10-22 22:14:17',
+          //       timeStr: '2020-10-22 22:14:17',
+          //       likedCount: 100,
+          //     },
+          //   ],
+          // },
         ],
       },
     }
@@ -128,7 +128,8 @@ export default {
   methods: {
     setWidth() {
       setTimeout(() => {
-        this.$refs.dom_container.style.width = Math.floor(this.$refs.dom_container.parentNode.clientWidth * 0.5) + 'px'
+        this.$refs.dom_container.style.width =
+          Math.floor(this.$refs.dom_container.parentNode.clientWidth * 0.5) + 'px'
 
         setTimeout(() => {
           this.handleToggleTab(this.tabActiveId, true)
@@ -158,43 +159,48 @@ export default {
     handleGetNewComment(musicInfo, page, limit) {
       this.newComment.isLoadError = false
       this.newComment.isLoading = true
-      this.getComment(toOldMusicInfo(musicInfo), page, limit).then(comment => {
-        this.newComment.isLoading = false
-        this.newComment.total = comment.total
-        this.newComment.maxPage = comment.maxPage
-        this.newComment.page = page
-        this.newComment.list = comment.comments
-        this.$nextTick(() => {
-          this.$refs.dom_commentNew.scrollTo(0, 0)
+      this.getComment(toOldMusicInfo(musicInfo), page, limit)
+        .then((comment) => {
+          this.newComment.isLoading = false
+          this.newComment.total = comment.total
+          this.newComment.maxPage = comment.maxPage
+          this.newComment.page = page
+          this.newComment.list = comment.comments
+          this.$nextTick(() => {
+            this.$refs.dom_commentNew.scrollTo(0, 0)
+          })
         })
-      }).catch(err => {
-        console.log(err)
-        if (err.message == '取消请求') return
-        this.newComment.isLoadError = true
-        this.newComment.isLoading = false
-      })
+        .catch((err) => {
+          console.log(err)
+          if (err.message == '取消请求') return
+          this.newComment.isLoadError = true
+          this.newComment.isLoading = false
+        })
     },
     handleGetHotComment(musicInfo, page, limit) {
       this.hotComment.isLoadError = false
       this.hotComment.isLoading = true
-      this.getHotComment(toOldMusicInfo(musicInfo), page, limit).then(hotComment => {
-        this.hotComment.isLoading = false
-        this.hotComment.total = hotComment.total
-        this.hotComment.maxPage = hotComment.maxPage
-        this.hotComment.page = page
-        this.hotComment.list = hotComment.comments
-        this.$nextTick(() => {
-          this.$refs.dom_commentHot.scrollTo(0, 0)
+      this.getHotComment(toOldMusicInfo(musicInfo), page, limit)
+        .then((hotComment) => {
+          this.hotComment.isLoading = false
+          this.hotComment.total = hotComment.total
+          this.hotComment.maxPage = hotComment.maxPage
+          this.hotComment.page = page
+          this.hotComment.list = hotComment.comments
+          this.$nextTick(() => {
+            this.$refs.dom_commentHot.scrollTo(0, 0)
+          })
         })
-      }).catch(err => {
-        console.log(err)
-        if (err.message == '取消请求') return
-        this.hotComment.isLoadError = true
-        this.hotComment.isLoading = false
-      })
+        .catch((err) => {
+          console.log(err)
+          if (err.message == '取消请求') return
+          this.hotComment.isLoadError = true
+          this.hotComment.isLoading = false
+        })
     },
     handleShowComment() {
-      this.currentMusicInfo = 'progress' in this.musicInfo ? this.musicInfo.metadata.musicInfo : this.musicInfo
+      this.currentMusicInfo =
+        'progress' in this.musicInfo ? this.musicInfo.metadata.musicInfo : this.musicInfo
 
       if (this.currentMusicInfo.source == 'local' || !music[this.currentMusicInfo.source].comment) {
         this.available = false
@@ -248,7 +254,7 @@ export default {
   display: flex;
   flex-flow: column nowrap;
   transition: @transition-normal;
-  transition-property: transform,opacity;
+  transition-property: transform, opacity;
   transform-origin: 100%;
   overflow: hidden;
 }
@@ -278,12 +284,12 @@ export default {
   cursor: pointer;
   transition: opacity @transition-normal;
 
-  +.commentHeaderBtn {
+  + .commentHeaderBtn {
     margin-left: 5px;
   }
 
   &:hover {
-    opacity: .7;
+    opacity: 0.7;
   }
 }
 .commentMain {
@@ -338,7 +344,7 @@ export default {
   transition: @transition-normal;
   transition-property: opacity, color;
   &:hover {
-    opacity: .7;
+    opacity: 0.7;
   }
   &.active {
     color: var(--color-primary);
@@ -349,7 +355,7 @@ export default {
   transition: opacity @transition-normal;
 
   &.loading {
-    opacity: .4;
+    opacity: 0.4;
   }
 }
 .pagination {
@@ -363,5 +369,4 @@ export default {
   font-size: 14px;
   color: var(--color-font-label);
 }
-
 </style>

@@ -1,15 +1,35 @@
 <template>
-  <div :class="$style.content" @click="handleShowPopup" @mouseenter="handlMsEnter" @mouseleave="handlMsLeave">
+  <div
+    :class="$style.content"
+    @click="handleShowPopup"
+    @mouseenter="handlMsEnter"
+    @mouseleave="handlMsLeave"
+  >
     <div ref="dom_btn" :class="$style.timeContent">
       <span>{{ nowPlayTimeStr }}</span>
-      <span style="margin: 0 1px;">/</span>
+      <span style="margin: 0 1px">/</span>
       <span>{{ maxPlayTimeStr }}</span>
       <div :class="$style.progress">
-        <div :class="[$style.progressBar, {[$style.barTransition]: isActiveTransition}]" :style="{ transform: `scaleX(${progress || 0})` }" @transitionend="handleTransitionEnd" />
+        <div
+          :class="[$style.progressBar, { [$style.barTransition]: isActiveTransition }]"
+          :style="{ transform: `scaleX(${progress || 0})` }"
+          @transitionend="handleTransitionEnd"
+        />
       </div>
-      <base-popup v-model:visible="visible" :btn-el="dom_btn" @mouseenter="handlMsEnter" @mouseleave="handlMsLeave" @transitionend="handleTranEnd">
+      <base-popup
+        v-model:visible="visible"
+        :btn-el="dom_btn"
+        @mouseenter="handlMsEnter"
+        @mouseleave="handlMsLeave"
+        @transitionend="handleTranEnd"
+      >
         <div :class="$style.popupProgress">
-          <common-progress-bar v-if="visibleProgress" :progress="progress" :handle-transition-end="handleTransitionEnd" :is-active-transition="isActiveTransition" />
+          <common-progress-bar
+            v-if="visibleProgress"
+            :progress="progress"
+            :handle-transition-end="handleTransitionEnd"
+            :is-active-transition="isActiveTransition"
+          />
         </div>
       </base-popup>
     </div>
@@ -33,13 +53,8 @@ export default {
         handlMsLeave()
       } else handlMsEnter()
     }
-    const {
-      nowPlayTimeStr,
-      maxPlayTimeStr,
-      progress,
-      isActiveTransition,
-      handleTransitionEnd,
-    } = usePlayProgress()
+    const { nowPlayTimeStr, maxPlayTimeStr, progress, isActiveTransition, handleTransitionEnd } =
+      usePlayProgress()
 
     let timeout = null
     const handlMsEnter = () => {
@@ -93,9 +108,7 @@ export default {
     }
   },
 }
-
 </script>
-
 
 <style lang="less" module>
 @import '@renderer/assets/styles/layout.less';
@@ -148,7 +161,7 @@ export default {
   // padding-bottom: 6px;
   // margin: 0 8px;
   height: 2px;
-  opacity: .24;
+  opacity: 0.24;
   overflow: hidden;
   transition: @transition-normal;
   transition-property: background-color, opacity;
@@ -180,6 +193,4 @@ export default {
   padding: 5px 0;
   margin: 0 5px;
 }
-
-
 </style>

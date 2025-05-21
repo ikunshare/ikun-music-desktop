@@ -1,6 +1,6 @@
 <template>
   <button
-    :class="[$style.btn, {[$style.min]: min}, {[$style.outline]: outline}]"
+    :class="[$style.btn, { [$style.min]: min }, { [$style.outline]: outline }]"
     tabindex="0"
     :disabled="disabled"
   >
@@ -26,7 +26,6 @@ export default {
 }
 </script>
 
-
 <style lang="less" module>
 @import '@renderer/assets/styles/layout.less';
 
@@ -42,7 +41,7 @@ export default {
   background-color: var(--color-button-background);
   font-size: 14px;
   &[disabled] {
-    opacity: .4;
+    opacity: 0.4;
     cursor: default;
   }
 
@@ -62,5 +61,4 @@ export default {
   padding: 3px 8px;
   font-size: 12px;
 }
-
 </style>

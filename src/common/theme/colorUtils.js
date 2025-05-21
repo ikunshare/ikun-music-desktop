@@ -1,4 +1,3 @@
-/* eslint-disable */
 // https://github.com/PimpTrizkit/PJs/wiki/12.-Shade,-Blend-and-Convert-a-Web-Color-(pSBC.js)#micro-functions-version-4
 
 /**
@@ -8,9 +7,26 @@
  * @param {string} c1 rgb(a) color2
  * @returns color
  */
-exports.RGB_Linear_Blend=(p,c0,c1)=>{
-	var i=parseInt,r=Math.round,P=1-p,[a,b,c,d]=c0.split(","),[e,f,g,h]=c1.split(","),x=d||h,j=x?","+(!d?h:!h?d:r((parseFloat(d)*P+parseFloat(h)*p)*1000)/1000+")"):")";
-	return"rgb"+(x?"a(":"(")+r(i(a[3]=="a"?a.slice(5):a.slice(4))*P+i(e[3]=="a"?e.slice(5):e.slice(4))*p)+","+r(i(b)*P+i(f)*p)+","+r(i(c)*P+i(g)*p)+j;
+exports.RGB_Linear_Blend = (p, c0, c1) => {
+  var i = parseInt,
+    r = Math.round,
+    P = 1 - p,
+    [a, b, c, d] = c0.split(','),
+    [e, f, g, h] = c1.split(','),
+    x = d || h,
+    j = x
+      ? ',' + (!d ? h : !h ? d : r((parseFloat(d) * P + parseFloat(h) * p) * 1000) / 1000 + ')')
+      : ')'
+  return (
+    'rgb' +
+    (x ? 'a(' : '(') +
+    r(i(a[3] == 'a' ? a.slice(5) : a.slice(4)) * P + i(e[3] == 'a' ? e.slice(5) : e.slice(4)) * p) +
+    ',' +
+    r(i(b) * P + i(f) * p) +
+    ',' +
+    r(i(c) * P + i(g) * p) +
+    j
+  )
 }
 
 /**
@@ -20,11 +36,31 @@ exports.RGB_Linear_Blend=(p,c0,c1)=>{
  * @param {string} c1 rgb(a) color2
  * @returns color
  */
-exports.RGB_Log_Blend=(p,c0,c1)=>{
-	var i=parseInt,r=Math.round,P=1-p,[a,b,c,d]=c0.split(","),[e,f,g,h]=c1.split(","),x=d||h,j=x?","+(!d?h:!h?d:r((parseFloat(d)*P+parseFloat(h)*p)*1000)/1000+")"):")";
-	return"rgb"+(x?"a(":"(")+r((P*i(a[3]=="a"?a.slice(5):a.slice(4))**2+p*i(e[3]=="a"?e.slice(5):e.slice(4))**2)**0.5)+","+r((P*i(b)**2+p*i(f)**2)**0.5)+","+r((P*i(c)**2+p*i(g)**2)**0.5)+j;
+exports.RGB_Log_Blend = (p, c0, c1) => {
+  var i = parseInt,
+    r = Math.round,
+    P = 1 - p,
+    [a, b, c, d] = c0.split(','),
+    [e, f, g, h] = c1.split(','),
+    x = d || h,
+    j = x
+      ? ',' + (!d ? h : !h ? d : r((parseFloat(d) * P + parseFloat(h) * p) * 1000) / 1000 + ')')
+      : ')'
+  return (
+    'rgb' +
+    (x ? 'a(' : '(') +
+    r(
+      (P * i(a[3] == 'a' ? a.slice(5) : a.slice(4)) ** 2 +
+        p * i(e[3] == 'a' ? e.slice(5) : e.slice(4)) ** 2) **
+        0.5
+    ) +
+    ',' +
+    r((P * i(b) ** 2 + p * i(f) ** 2) ** 0.5) +
+    ',' +
+    r((P * i(c) ** 2 + p * i(g) ** 2) ** 0.5) +
+    j
+  )
 }
-
 
 /**
  * Shade color (Lighten or Darken)
@@ -32,11 +68,24 @@ exports.RGB_Log_Blend=(p,c0,c1)=>{
  * @param {string} c0 rgb(a) color
  * @returns color
  */
-exports.RGB_Linear_Shade=(p,c0)=>{
-	var i=parseInt,r=Math.round,[a,b,c,d]=c0.split(","),n=p<0,t=n?0:255*p,P=n?1+p:1-p;
-	return"rgb"+(d?"a(":"(")+r(i(a[3]=="a"?a.slice(5):a.slice(4))*P+t)+","+r(i(b)*P+t)+","+r(i(c)*P+t)+(d?","+d:")");
+exports.RGB_Linear_Shade = (p, c0) => {
+  var i = parseInt,
+    r = Math.round,
+    [a, b, c, d] = c0.split(','),
+    n = p < 0,
+    t = n ? 0 : 255 * p,
+    P = n ? 1 + p : 1 - p
+  return (
+    'rgb' +
+    (d ? 'a(' : '(') +
+    r(i(a[3] == 'a' ? a.slice(5) : a.slice(4)) * P + t) +
+    ',' +
+    r(i(b) * P + t) +
+    ',' +
+    r(i(c) * P + t) +
+    (d ? ',' + d : ')')
+  )
 }
-
 
 /**
  * Shade color (Lighten or Darken)
@@ -44,11 +93,24 @@ exports.RGB_Linear_Shade=(p,c0)=>{
  * @param {string} c0 rgb(a) color
  * @returns color
  */
-exports.RGB_Log_Shade=(p,c0)=>{
-	var i=parseInt,r=Math.round,[a,b,c,d]=c0.split(","),n=p<0,t=n?0:p*255**2,P=n?1+p:1-p;
-	return"rgb"+(d?"a(":"(")+r((P*i(a[3]=="a"?a.slice(5):a.slice(4))**2+t)**0.5)+","+r((P*i(b)**2+t)**0.5)+","+r((P*i(c)**2+t)**0.5)+(d?","+d:")");
+exports.RGB_Log_Shade = (p, c0) => {
+  var i = parseInt,
+    r = Math.round,
+    [a, b, c, d] = c0.split(','),
+    n = p < 0,
+    t = n ? 0 : p * 255 ** 2,
+    P = n ? 1 + p : 1 - p
+  return (
+    'rgb' +
+    (d ? 'a(' : '(') +
+    r((P * i(a[3] == 'a' ? a.slice(5) : a.slice(4)) ** 2 + t) ** 0.5) +
+    ',' +
+    r((P * i(b) ** 2 + t) ** 0.5) +
+    ',' +
+    r((P * i(c) ** 2 + t) ** 0.5) +
+    (d ? ',' + d : ')')
+  )
 }
-
 
 /**
  * 修改透明度
@@ -59,7 +121,7 @@ exports.RGB_Log_Shade=(p,c0)=>{
 exports.RGB_Alpha_Shade = (p, color) => {
   var i = parseInt
   var n = p < 0
-  var [r, g, b, a] = color.split(",")
+  var [r, g, b, a] = color.split(',')
   r = r[3] == 'a' ? r.slice(5) : r.slice(4)
   if (a) {
     a = parseFloat(a)

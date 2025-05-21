@@ -77,7 +77,7 @@ export default {
   },
   filterAlbumList(raw) {
     const list = []
-    raw.forEach(item => {
+    raw.forEach((item) => {
       if (!item.id) return
       list.push({
         id: item.id,
@@ -94,13 +94,13 @@ export default {
   },
   filterSongList(raw) {
     const list = []
-    raw.forEach(item => {
+    raw.forEach((item) => {
       if (!item.id) return
 
       const types = []
       const _types = {}
       let size
-      item.privilege.chargeInfoList.forEach(i => {
+      item.privilege.chargeInfoList.forEach((i) => {
         switch (i.rate) {
           case 128000:
             size = item.lMusic ? sizeFormate(item.lMusic.size) : null

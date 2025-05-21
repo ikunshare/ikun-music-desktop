@@ -9,7 +9,6 @@ const names = {
   proxyUpdate: '',
 }
 
-
 for (const key of Object.keys(names)) {
   names[key] = `userApi_${key}`
 }

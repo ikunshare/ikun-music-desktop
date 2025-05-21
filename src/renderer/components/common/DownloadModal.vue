@@ -1,13 +1,15 @@
 <template>
   <material-modal :show="show" :bg-close="bgClose" :teleport="teleport" @close="handleClose">
     <main :class="$style.main">
-      <h2>{{ info.name }}<br>{{ info.singer }}</h2>
+      <h2>{{ info.name }}<br />{{ info.singer }}</h2>
 
       <template v-if="qualitys.length <= 4">
         <base-btn
-v-for="quality in qualitys" :key="quality.type" :class="$style.btn"
+          v-for="quality in qualitys"
+          :key="quality.type"
+          :class="$style.btn"
           @click="handleClick(quality.type)"
->
+        >
           {{ getTypeName(quality.type) }}{{ quality.size && ` - ${quality.size.toUpperCase()}` }}
         </base-btn>
       </template>
@@ -16,7 +18,8 @@ v-for="quality in qualitys" :key="quality.type" :class="$style.btn"
         <div :class="$style.selectWrapper">
           <select v-model="selectedQuality" :class="$style.select">
             <option v-for="quality in qualitys" :key="quality.type" :value="quality.type">
-              {{ getTypeName(quality.type) }}{{ quality.size && ` - ${quality.size.toUpperCase()}` }}
+              {{ getTypeName(quality.type)
+              }}{{ quality.size && ` - ${quality.size.toUpperCase()}` }}
             </option>
           </select>
         </div>
@@ -69,7 +72,7 @@ export default {
       return this.qualityList[this.musicInfo.source] || []
     },
     qualitys() {
-      return this.info.meta?.qualitys?.filter(quality => this.checkSource(quality.type)) || []
+      return this.info.meta?.qualitys?.filter((quality) => this.checkSource(quality.type)) || []
     },
   },
   watch: {
@@ -119,7 +122,6 @@ export default {
   },
 }
 </script>
-
 
 <style lang="less" module>
 @import '@renderer/assets/styles/layout.less';

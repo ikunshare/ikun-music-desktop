@@ -5,22 +5,21 @@ const fontSplitRxp = /(?=<\d+,\d+>).*?/g
 const timeRxpAll = /<(\d+),(\d+)>/g
 const timeRxp = /<(\d+),(\d+)>/
 
-
 // Create animation
-const createAnimation = (dom, duration, isVertical) => new window.Animation(new window.KeyframeEffect(dom, isVertical
-  ? [
-      { backgroundSize: '100% 0' },
-      { backgroundSize: '100% 100%' },
-    ]
-  : [
-      { backgroundSize: '0 100%' },
-      { backgroundSize: '100% 100%' },
-    ], {
-  duration,
-  easing: 'linear',
-},
-), document.timeline)
-
+const createAnimation = (dom, duration, isVertical) =>
+  new window.Animation(
+    new window.KeyframeEffect(
+      dom,
+      isVertical
+        ? [{ backgroundSize: '100% 0' }, { backgroundSize: '100% 100%' }]
+        : [{ backgroundSize: '0 100%' }, { backgroundSize: '100% 100%' }],
+      {
+        duration,
+        easing: 'linear',
+      }
+    ),
+    document.timeline
+  )
 
 // https://jsfiddle.net/ceqpnbky/
 // https://jsfiddle.net/ceqpnbky/1/
@@ -59,7 +58,6 @@ export default class FontPlayer {
     this.fontLrcClassName = fontLrcClassName
     this.extendedLrcClassName = extendedLrcClassName
     this.lineModeClassName = lineModeClassName
-
 
     this.isPlay = false
     this.curFontNum = 0
@@ -105,7 +103,6 @@ export default class FontPlayer {
       extendedLrcContent.className = this.extendedLrcClassName
       this.lineContent.appendChild(document.createElement('br'))
       this.lineContent.appendChild(extendedLrcContent)
-
 
       // if (this.shadowContent) {
       //   const extendedLrcShadowContent = document.createElement('div')
@@ -194,7 +191,8 @@ export default class FontPlayer {
 
   _findcurFontNum(curTime, startIndex = 0) {
     const length = this.fonts.length
-    for (let index = startIndex; index < length; index++) if (curTime < this.fonts[index].startTime) return index == 0 ? 0 : index - 1
+    for (let index = startIndex; index < length; index++)
+      if (curTime < this.fonts[index].startTime) return index == 0 ? 0 : index - 1
     return length - 1
   }
 
@@ -363,4 +361,3 @@ export default class FontPlayer {
     this.curFontNum = 0
   }
 }
-

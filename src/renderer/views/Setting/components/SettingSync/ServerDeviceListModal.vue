@@ -37,7 +37,7 @@ export default {
 
     const getList = () => {
       void getSyncServerDevices().then((list) => {
-        historyDeviceList.value = list.map(d => {
+        historyDeviceList.value = list.map((d) => {
           return {
             id: d.clientId,
             name: d.deviceName,
@@ -48,14 +48,20 @@ export default {
       })
     }
 
-    watch(() => sync.server.status.devices.length, () => {
-      if (!props.modelValue) return
-      getList()
-    })
-    watch(() => props.modelValue, (val) => {
-      if (!val) return
-      getList()
-    })
+    watch(
+      () => sync.server.status.devices.length,
+      () => {
+        if (!props.modelValue) return
+        getList()
+      }
+    )
+    watch(
+      () => props.modelValue,
+      (val) => {
+        if (!val) return
+        getList()
+      }
+    )
 
     const handleRemove = (index) => {
       void removeSyncServerDevice(historyDeviceList.value[index].id).then(getList)
@@ -159,5 +165,4 @@ export default {
   line-height: 1.25;
   color: var(--color-font);
 }
-
 </style>

@@ -9,7 +9,7 @@ import { httpOverHttp, httpsOverHttp } from 'tunnel'
 // import fs from 'fs'
 
 const httpsRxp = /^https:/
-const getRequestAgent = url => {
+const getRequestAgent = (url) => {
   let options
   if (proxy.enable && proxy.host) {
     options = {
@@ -28,7 +28,6 @@ const getRequestAgent = url => {
   }
   return options ? (httpsRxp.test(url) ? httpsOverHttp : httpOverHttp)(options) : undefined
 }
-
 
 const request = (url, options, callback) => {
   let data
@@ -55,9 +54,9 @@ const request = (url, options, callback) => {
   }).request
 }
 
-
 const defaultHeaders = {
-  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36',
+  'User-Agent':
+    'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36',
 }
 
 /**
@@ -69,7 +68,7 @@ const buildHttpPromose = (url, options) => {
   let obj = {
     isCancelled: false,
     cancelHttp: () => {
-      if (!obj.requestObj) return obj.isCancelled = true
+      if (!obj.requestObj) return (obj.isCancelled = true)
       cancelHttp(obj.requestObj)
       obj.requestObj = null
       obj.promise = obj.cancelHttp = null
@@ -79,15 +78,15 @@ const buildHttpPromose = (url, options) => {
   }
   obj.promise = new Promise((resolve, reject) => {
     obj.cancelFn = reject
-    console.log(`\n---send request------${url}------------`)
+    // console.log(`\n---send request------${url}------------`)
     fetchData(url, options.method, options, (err, resp, body) => {
-      console.log(`\n---response------${url}------------`)
-      console.log(body)
+      // console.log(`\n---response------${url}------------`)
+      // console.log(body)
       obj.requestObj = null
       obj.cancelFn = null
       if (err) return reject(err)
       resolve(resp)
-    }).then(ro => {
+    }).then((ro) => {
       obj.requestObj = ro
       if (obj.isCancelled) obj.cancelHttp()
     })
@@ -102,8 +101,8 @@ const buildHttpPromose = (url, options) => {
  */
 export const httpFetch = (url, options = { method: 'get' }) => {
   const requestObj = buildHttpPromose(url, options)
-  requestObj.promise = requestObj.promise.catch(err => {
-    // console.log('出错', err)
+  requestObj.promise = requestObj.promise.catch((err) => {
+    // // console.log('出错', err)
     if (err.message === 'socket hang up') {
       // window.globalObj.apiSource = 'temp'
       return Promise.reject(new Error(requestMsg.unachievable))
@@ -125,14 +124,13 @@ export const httpFetch = (url, options = { method: 'get' }) => {
  * 取消请求
  * @param {*} index
  */
-export const cancelHttp = requestObj => {
-  // console.log(requestObj)
+export const cancelHttp = (requestObj) => {
+  // // console.log(requestObj)
   if (!requestObj) return
-  // console.log('cancel:', requestObj)
+  // // console.log('cancel:', requestObj)
   if (!requestObj.abort) return
   requestObj.abort()
 }
-
 
 /**
  * http 请求
@@ -150,13 +148,13 @@ export const http = (url, options, cb) => {
   // 默认选项
   if (options.method == null) options.method = 'get'
 
-  console.log(`\n---send request------${url}------------`)
+  // console.log(`\n---send request------${url}------------`)
   return fetchData(url, options.method, options, (err, resp, body) => {
     // options.isShowProgress && window.api.hideProgress()
-    console.log(`\n---response------${url}------------`)
-    console.log(body)
+    // console.log(`\n---response------${url}------------`)
+    // console.log(body)
     if (err) {
-      console.log(JSON.stringify(err))
+      // console.log(JSON.stringify(err))
     }
     cb(err, resp, body)
   })
@@ -179,13 +177,13 @@ export const httpGet = (url, options, callback) => {
   //   modal: true,
   // })
 
-  console.log(`\n---send request-------${url}------------`)
-  return fetchData(url, 'get', options, function(err, resp, body) {
+  // console.log(`\n---send request-------${url}------------`)
+  return fetchData(url, 'get', options, function (err, resp, body) {
     // options.isShowProgress && window.api.hideProgress()
-    console.log(`\n---response------${url}------------`)
-    console.log(body)
+    // console.log(`\n---response------${url}------------`)
+    // console.log(body)
     if (err) {
-      console.log(JSON.stringify(err))
+      // console.log(JSON.stringify(err))
     }
     callback(err, resp, body)
   })
@@ -210,13 +208,13 @@ export const httpPost = (url, data, options, callback) => {
   // })
   options.data = data
 
-  console.log(`\n---send request-------${url}------------`)
-  return fetchData(url, 'post', options, function(err, resp, body) {
+  // console.log(`\n---send request-------${url}------------`)
+  return fetchData(url, 'post', options, function (err, resp, body) {
     // options.isShowProgress && window.api.hideProgress()
-    console.log(`\n---response------${url}------------`)
-    console.log(body)
+    // console.log(`\n---response------${url}------------`)
+    // console.log(body)
     if (err) {
-      console.log(JSON.stringify(err))
+      // console.log(JSON.stringify(err))
     }
     callback(err, resp, body)
   })
@@ -247,13 +245,13 @@ export const http_jsonp = (url, options, callback) => {
   //   modal: true,
   // })
 
-  console.log(`\n---send request-------${url}------------`)
-  return fetchData(url, 'get', options, function(err, resp, body) {
+  // console.log(`\n---send request-------${url}------------`)
+  return fetchData(url, 'get', options, function (err, resp, body) {
     // options.isShowProgress && window.api.hideProgress()
-    console.log(`\n---response------${url}------------`)
-    console.log(body)
+    // console.log(`\n---response------${url}------------`)
+    // console.log(body)
     if (err) {
-      console.log(JSON.stringify(err))
+      // console.log(JSON.stringify(err))
     } else {
       body = JSON.parse(body.replace(new RegExp(`^${jsonpCallback}\\(({.*})\\)$`), '$1'))
     }
@@ -262,45 +260,62 @@ export const http_jsonp = (url, options, callback) => {
   })
 }
 
-const handleDeflateRaw = data => new Promise((resolve, reject) => {
-  deflateRaw(data, (err, buf) => {
-    if (err) return reject(err)
-    resolve(buf)
+const handleDeflateRaw = (data) =>
+  new Promise((resolve, reject) => {
+    deflateRaw(data, (err, buf) => {
+      if (err) return reject(err)
+      resolve(buf)
+    })
   })
-})
 
 const regx = /(?:\d\w)+/g
 
-const fetchData = async(url, method, {
-  headers = {},
-  format = 'json',
-  timeout = 15000,
-  ...options
-}, callback) => {
-  // console.log(url, options)
-  console.log('---start---', url)
+const fetchData = async (
+  url,
+  method,
+  { headers = {}, format = 'json', timeout = 15000, ...options },
+  callback
+) => {
+  // // console.log(url, options)
+  // console.log('---start---', url)
   headers = Object.assign({}, headers)
   if (headers[bHh]) {
     const path = url.replace(/^https?:\/\/[\w.:]+\//, '/')
     let s = Buffer.from(bHh, 'hex').toString()
     s = s.replace(s.substr(-1), '')
     s = Buffer.from(s, 'base64').toString()
-    let v = process.versions.app.split('-')[0].split('.').map(n => n.length < 3 ? n.padStart(3, '0') : n).join('')
+    let v = process.versions.app
+      .split('-')[0]
+      .split('.')
+      .map((n) => (n.length < 3 ? n.padStart(3, '0') : n))
+      .join('')
     let v2 = process.versions.app.split('-')[1] || ''
-    headers[s] = !s || `${(await handleDeflateRaw(Buffer.from(JSON.stringify(`${path}${v}`.match(regx), null, 1).concat(v)).toString('base64'))).toString('hex')}&${parseInt(v)}${v2}`
+    headers[s] =
+      !s ||
+      `${(
+        await handleDeflateRaw(
+          Buffer.from(JSON.stringify(`${path}${v}`.match(regx), null, 1).concat(v)).toString(
+            'base64'
+          )
+        )
+      ).toString('hex')}&${parseInt(v)}${v2}`
     delete headers[bHh]
   }
-  return request(url, {
-    ...options,
-    method,
-    headers: Object.assign({}, defaultHeaders, headers),
-    timeout,
-    agent: getRequestAgent(url),
-    json: format === 'json',
-  }, (err, resp, body) => {
-    if (err) return callback(err, null)
-    callback(null, resp, body)
-  })
+  return request(
+    url,
+    {
+      ...options,
+      method,
+      headers: Object.assign({}, defaultHeaders, headers),
+      timeout,
+      agent: getRequestAgent(url),
+      json: format === 'json',
+    },
+    (err, resp, body) => {
+      if (err) return callback(err, null)
+      callback(null, resp, body)
+    }
+  )
 }
 
 export const checkUrl = (url, options = {}) => {

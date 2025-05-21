@@ -6,11 +6,7 @@ const path = require('node:path')
 const rootPath = path.join(__dirname, '../')
 
 const patchs = [
-  [
-    path.join(rootPath, './node_modules/ws/package.json'),
-    '\n      "browser": "./browser.js",',
-    '',
-  ],
+  [path.join(rootPath, './node_modules/ws/package.json'), '\n      "browser": "./browser.js",', ''],
   [
     path.join(rootPath, './node_modules/music-metadata/package.json'),
     '"default": "./lib/core.js"',
@@ -23,7 +19,7 @@ const patchs = [
   ],
 ]
 
-;(async() => {
+;(async () => {
   for (const [filePath, fromStr, toStr] of patchs) {
     console.log(`Patching ${filePath.replace(rootPath, '')}`)
     try {
@@ -35,4 +31,3 @@ const patchs = [
   }
   console.log('\nDependencies patch finished.\n')
 })()
-

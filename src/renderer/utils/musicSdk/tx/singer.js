@@ -3,7 +3,7 @@ import { httpFetch } from '../../request'
 import { formatPlayTime, sizeFormate } from '../../index'
 import { formatSingerName } from '../utils'
 
-export const filterMusicInfoItem = item => {
+export const filterMusicInfoItem = (item) => {
   const types = []
   const _types = {}
   if (item.file.size_128mp3 != 0) {
@@ -70,15 +70,17 @@ export const filterMusicInfoItem = item => {
     songId: item.id,
     songmid: item.mid,
     strMediaMid: item.file.media_mid,
-    img: (albumId === '' || albumId === '空')
-      ? item.singer?.length ? `https://y.gtimg.cn/music/photo_new/T001R500x500M000${item.singer[0].mid}.jpg` : ''
-      : `https://y.gtimg.cn/music/photo_new/T002R500x500M000${albumMid}.jpg`,
+    img:
+      albumId === '' || albumId === '空'
+        ? item.singer?.length
+          ? `https://y.gtimg.cn/music/photo_new/T001R500x500M000${item.singer[0].mid}.jpg`
+          : ''
+        : `https://y.gtimg.cn/music/photo_new/T002R500x500M000${albumMid}.jpg`,
     types,
     _types,
     typeUrl: {},
   }
 }
-
 
 /**
  * 创建一个适用于TX的Http请求
@@ -86,7 +88,7 @@ export const filterMusicInfoItem = item => {
  * @param {*} options
  * @param {*} retryNum
  */
-const createMusicuFetch = async(data, options, retryNum = 0) => {
+const createMusicuFetch = async (data, options, retryNum = 0) => {
   if (retryNum > 2) throw new Error('try max num')
 
   let result
@@ -112,7 +114,8 @@ const createMusicuFetch = async(data, options, retryNum = 0) => {
     console.log(err)
     return createMusicuFetch(data, options, ++retryNum)
   }
-  if (result.statusCode !== 200 || result.body.code != 0) return createMusicuFetch(data, options, ++retryNum)
+  if (result.statusCode !== 200 || result.body.code != 0)
+    return createMusicuFetch(data, options, ++retryNum)
 
   return result.body
 }
@@ -158,8 +161,9 @@ export default {
           num: 1,
         },
       },
-    }).then(body => {
-      if (body.req_1.code != 0 || body.req_2 != 0 || body.req_3 != 0) throw new Error('get singer info faild.')
+    }).then((body) => {
+      if (body.req_1.code != 0 || body.req_2 != 0 || body.req_3 != 0)
+        throw new Error('get singer info faild.')
 
       const info = body.req_1.data.singer_list[0]
       const music = body.req_3.data
@@ -201,7 +205,7 @@ export default {
           singerID: 0,
         },
       },
-    }).then(body => {
+    }).then((body) => {
       if (body.req.code != 0) throw new Error('get singer album faild.')
 
       const list = this.filterAlbumList(body.req.data.albumList)
@@ -233,7 +237,7 @@ export default {
           num: limit,
         },
       },
-    }).then(body => {
+    }).then((body) => {
       if (body.req.code != 0) throw new Error('get singer song list faild.')
 
       const list = this.filterSongList(body.req.data.songList)
@@ -247,7 +251,7 @@ export default {
     })
   },
   filterAlbumList(raw) {
-    return raw.map(item => {
+    return raw.map((item) => {
       return {
         id: item.albumID,
         mid: item.albumMid,
@@ -262,9 +266,8 @@ export default {
     })
   },
   filterSongList(raw) {
-    raw.map(item => {
+    raw.map((item) => {
       return filterMusicInfoItem(item.songInfo)
     })
   },
 }
-

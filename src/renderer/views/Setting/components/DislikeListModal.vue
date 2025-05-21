@@ -25,17 +25,20 @@ export default {
   setup(props, { emit }) {
     const rules = ref('')
 
-    const handleSave = async() => {
+    const handleSave = async () => {
       if (rules.value.trim() != dislikeInfo.rules.trim()) {
         await overwirteDislikeInfo(rules.value)
       }
       emit('update:modelValue', false)
     }
 
-    watch(() => props.modelValue, (visible) => {
-      if (!visible) return
-      rules.value = dislikeInfo.rules.length ? dislikeInfo.rules + '\n' : dislikeInfo.rules
-    })
+    watch(
+      () => props.modelValue,
+      (visible) => {
+        if (!visible) return
+        rules.value = dislikeInfo.rules.length ? dislikeInfo.rules + '\n' : dislikeInfo.rules
+      }
+    )
 
     return {
       rules,
@@ -110,5 +113,4 @@ export default {
 .btn {
   min-width: 80px;
 }
-
 </style>

@@ -78,9 +78,7 @@ export default ({
     itemMenuControl.dislike = !hasDislike(musicInfo)
 
     if (props.checkApiSource) {
-      itemMenuControl.playLater =
-      itemMenuControl.play =
-        itemMenuControl.download
+      itemMenuControl.playLater = itemMenuControl.play = itemMenuControl.download
     }
 
     menuLocation.x = event.pageX

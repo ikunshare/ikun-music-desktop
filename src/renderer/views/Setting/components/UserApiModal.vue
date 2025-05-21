@@ -30,7 +30,12 @@ material-modal(:show="modelValue" bg-close teleport="#view" @close="handleClose"
 </template>
 
 <script>
-import { importUserApi, removeUserApi, showSelectDialog, setAllowShowUserApiUpdateAlert } from '@renderer/utils/ipc'
+import {
+  importUserApi,
+  removeUserApi,
+  showSelectDialog,
+  setAllowShowUserApiUpdateAlert,
+} from '@renderer/utils/ipc'
 import { readFile } from '@common/utils/nodejs'
 import { openUrl } from '@common/utils/electron'
 import apiSourceInfo from '@renderer/utils/musicSdk/api-source-info'
@@ -67,11 +72,13 @@ export default {
   },
   methods: {
     async importUserApi(script) {
-      return importUserApi(script).then(({ apiList }) => {
-        userApi.list = apiList
-      }).catch((err) => {
-        void dialog(this.$t('user_api_import__failed', { message: err.message }))
-      })
+      return importUserApi(script)
+        .then(({ apiList }) => {
+          userApi.list = apiList
+        })
+        .catch((err) => {
+          void dialog(this.$t('user_api_import__failed', { message: err.message }))
+        })
     },
     handleImport() {
       if (this.userApi.list.length > 20) {
@@ -88,21 +95,19 @@ export default {
           { name: 'LX API File', extensions: ['js'] },
           { name: 'All Files', extensions: ['*'] },
         ],
-      }).then(async result => {
+      }).then(async (result) => {
         if (result.canceled) return
-        return readFile(result.filePaths[0]).then(async data => {
+        return readFile(result.filePaths[0]).then(async (data) => {
           return this.importUserApi(data.toString())
         })
       })
     },
-    handleExport() {
-
-    },
+    handleExport() {},
     async handleRemove(index) {
       const api = this.apiList[index]
       if (!api) return
       if (appSetting['common.apiSource'] == api.id) {
-        let backApi = apiSourceInfo.find(api => !api.disabled)
+        let backApi = apiSourceInfo.find((api) => !api.disabled)
         if (!backApi) backApi = userApi.list[0]
         updateSetting({ 'common.apiSource': backApi?.id ?? '' })
       }
@@ -120,7 +125,6 @@ export default {
   },
 }
 </script>
-
 
 <style lang="less" module>
 @import '@renderer/assets/styles/layout.less';
@@ -149,7 +153,7 @@ export default {
 .checkbox {
   margin-top: 3px;
   font-size: 14px;
-  opacity: .86;
+  opacity: 0.86;
 }
 
 .content {
@@ -248,5 +252,4 @@ export default {
 .ruleLink {
   .mixin-ellipsis-1;
 }
-
 </style>

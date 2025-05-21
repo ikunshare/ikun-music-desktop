@@ -1,5 +1,18 @@
 <template>
-  <component :is="containerEl" ref="dom_scrollContainer" :class="containerClass" tabindex="0" style="outline: none; height: 100%; overflow-y: auto; position: relative; display: block; contain: strict;">
+  <component
+    :is="containerEl"
+    ref="dom_scrollContainer"
+    :class="containerClass"
+    tabindex="0"
+    style="
+      outline: none;
+      height: 100%;
+      overflow-y: auto;
+      position: relative;
+      display: block;
+      contain: strict;
+    "
+  >
     <component :is="contentEl" ref="dom_list" :class="contentClass" :style="contentStyle">
       <!-- <div v-for="item in views" :key="item.key" :style="item.style">
         <slot name="default" v-bind="{ item: item.item, index: item.index }" />
@@ -28,7 +41,10 @@ const easeInOutQuad = (t, b, c, d) => {
   return (-c / 2) * (t * (t - 2) - 1) + b
 }
 const handleScroll = (element, to, duration = 300, callback = () => {}, onCancel = () => {}) => {
-  if (!element) { callback(); return }
+  if (!element) {
+    callback()
+    return
+  }
   const start = element.scrollTop || element.scrollY || 0
   let cancel = false
   if (to > start) {
@@ -36,10 +52,16 @@ const handleScroll = (element, to, duration = 300, callback = () => {}, onCancel
     if (to > maxScrollTop) to = maxScrollTop
   } else if (to < start) {
     if (to < 0) to = 0
-  } else { callback(); return }
+  } else {
+    callback()
+    return
+  }
   const change = to - start
   const increment = 10
-  if (!change) { callback(); return }
+  if (!change) {
+    callback()
+    return
+  }
 
   let currentTime = 0
   let val
@@ -124,13 +146,19 @@ export default {
         if (cache[i]) return cache[i]
         const top = (startIndex + i) * props.itemHeight
         const index = startIndex + i
-        return cachedList[index] = {
+        return (cachedList[index] = {
           item,
           top,
-          style: { position: 'absolute', left: 0, right: 0, top: top + 'px', height: props.itemHeight + 'px' },
+          style: {
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            top: top + 'px',
+            height: props.itemHeight + 'px',
+          },
           index,
           key: item[props.keyName],
-        }
+        })
       })
       return list
     }
@@ -164,16 +192,18 @@ export default {
       if (!force && continuous) {
         // if (Math.abs(currentScrollTop - this.scrollTop) < this.itemHeight * 0.6) return
         // console.log('update')
-        if (currentScrollTop > scrollTop) { // scroll down
+        if (currentScrollTop > scrollTop) {
+          // scroll down
           console.log('scroll down')
           renderListItem(createList(endIndex + 1, currentEndRenderIndex))
-        //   // views.value.push(...list.slice(list.indexOf(views.value[views.value.length - 1]) + 1))
-        //   // // if (this.views.length > 100) {
-        //   // nextTick(() => {
-        //   //   views.value.splice(0, views.value.indexOf(list[0]))
-        //   // })
-        //   // }
-        } else if (currentScrollTop < scrollTop) { // scroll up
+          //   // views.value.push(...list.slice(list.indexOf(views.value[views.value.length - 1]) + 1))
+          //   // // if (this.views.length > 100) {
+          //   // nextTick(() => {
+          //   //   views.value.splice(0, views.value.indexOf(list[0]))
+          //   // })
+          //   // }
+        } else if (currentScrollTop < scrollTop) {
+          // scroll up
           console.log('scroll up')
           renderListItem(createList(currentStartRenderIndex, startIndex))
           // views.value = createList(currentStartRenderIndex, currentEndRenderIndex)
@@ -188,7 +218,7 @@ export default {
       scrollTop = currentScrollTop
     }
 
-    const onScroll = event => {
+    const onScroll = (event) => {
       const currentScrollTop = dom_scrollContainer.value.scrollTop
       if (Math.abs(currentScrollTop - scrollTop) > props.itemHeight * 0.6) {
         updateView(false, currentScrollTop)
@@ -196,27 +226,33 @@ export default {
       emit('scroll', event)
     }
 
-    const scrollTo = async(scrollTop, animate = false) => {
-      return new Promise(resolve => {
+    const scrollTo = async (scrollTop, animate = false) => {
+      return new Promise((resolve) => {
         if (cancelScroll) {
           cancelScroll(resolve)
         } else {
           resolve()
         }
-      }).then(async() => {
+      }).then(async () => {
         return new Promise((resolve, reject) => {
           if (animate) {
             isScrolling = true
             scrollToValue = scrollTop
-            cancelScroll = handleScroll(dom_scrollContainer.value, scrollTop, 300, () => {
-              cancelScroll = null
-              isScrolling = false
-              resolve()
-            }, () => {
-              cancelScroll = null
-              isScrolling = false
-              reject(new Error('canceled'))
-            })
+            cancelScroll = handleScroll(
+              dom_scrollContainer.value,
+              scrollTop,
+              300,
+              () => {
+                cancelScroll = null
+                isScrolling = false
+                resolve()
+              },
+              () => {
+                cancelScroll = null
+                isScrolling = false
+                reject(new Error('canceled'))
+              }
+            )
           } else {
             dom_scrollContainer.value.scrollTop = scrollTop
           }
@@ -224,7 +260,7 @@ export default {
       })
     }
 
-    const scrollToIndex = async(index, offset = 0, animate = false) => {
+    const scrollToIndex = async (index, offset = 0, animate = false) => {
       return scrollTo(Math.max(index * props.itemHeight + offset, 0), animate)
     }
 
@@ -241,7 +277,7 @@ export default {
       height: props.list.length * props.itemHeight + 'px',
     }))
 
-    const handleReset = list => {
+    const handleReset = (list) => {
       cachedList = Array(list.length)
       startIndex = -1
       endIndex = -1
@@ -249,14 +285,21 @@ export default {
         updateView(true)
       })
     }
-    watch(() => props.itemHeight, () => {
-      handleReset(props.list)
-    })
-    watch(() => props.list, (list) => {
-      handleReset(list)
-    }, {
-      deep: true,
-    })
+    watch(
+      () => props.itemHeight,
+      () => {
+        handleReset(props.list)
+      }
+    )
+    watch(
+      () => props.list,
+      (list) => {
+        handleReset(list)
+      },
+      {
+        deep: true,
+      }
+    )
 
     onMounted(() => {
       dom_scrollContainer.value.addEventListener('scroll', onScroll, false)

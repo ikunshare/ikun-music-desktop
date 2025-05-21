@@ -54,7 +54,7 @@ export default () => {
                           musicInfo: songInfo,
                         },
                       },
-                      // eslint-disable-next-line @typescript-eslint/promise-function-async
+
                     }).then(res => {
                       // console.log(res)
                       return { type, url: res.data.url }
@@ -82,7 +82,7 @@ export default () => {
                           musicInfo: songInfo,
                         },
                       },
-                      // eslint-disable-next-line @typescript-eslint/promise-function-async
+
                     }).then(res => {
                       // console.log(res)
                       return res.data
@@ -110,7 +110,7 @@ export default () => {
                           musicInfo: songInfo,
                         },
                       },
-                      // eslint-disable-next-line @typescript-eslint/promise-function-async
+
                     }).then(res => {
                       // console.log(res)
                       return res.data

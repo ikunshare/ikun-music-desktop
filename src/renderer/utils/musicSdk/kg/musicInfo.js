@@ -1,6 +1,5 @@
-import { decodeName, formatPlayTime } from '../../index'
 import { createHttpFetch } from './util'
-import { getMusicQualityInfo } from './quality_detail'
+import { filterData } from './quality_detail'
 
 const createGetMusicInfosTask = (hashs) => {
   let data = {
@@ -24,61 +23,40 @@ const createGetMusicInfosTask = (hashs) => {
     list = list.slice(100)
   }
   let url = 'http://gateway.kugou.com/v3/album_audio/audio'
-  return tasks.map(task => createHttpFetch(url, {
-    method: 'POST',
-    body: task,
-    headers: {
-      'KG-THash': '13a3164',
-      'KG-RC': '1',
-      'KG-Fake': '0',
-      'KG-RF': '00869891',
-      'User-Agent': 'Android712-AndroidPhone-11451-376-0-FeeCacheUpdate-wifi',
-      'x-router': 'kmr.service.kugou.com',
-    },
-  }).then(data => data.map(s => s[0])))
+  return tasks.map((task) =>
+    createHttpFetch(url, {
+      method: 'POST',
+      body: task,
+      headers: {
+        'KG-THash': '13a3164',
+        'KG-RC': '1',
+        'KG-Fake': '0',
+        'KG-RF': '00869891',
+        'User-Agent': 'Android712-AndroidPhone-11451-376-0-FeeCacheUpdate-wifi',
+        'x-router': 'kmr.service.kugou.com',
+      },
+    }).then((data) => data.map((s) => s[0]))
+  )
 }
 
-export const filterMusicInfoList = (rawList) => {
-  // console.log(rawList)
-  let ids = new Set()
-  let list = []
-  rawList.forEach(item => {
-    if (!item) return
-    if (ids.has(item.audio_info.audio_id)) return
-    ids.add(item.audio_info.audio_id)
-    const { types, _types } = getMusicQualityInfo(item.FileHash)
-    list.push({
-      singer: decodeName(item.author_name),
-      name: decodeName(item.songname),
-      albumName: decodeName(item.album_info.album_name),
-      albumId: item.album_info.album_id,
-      songmid: item.audio_info.audio_id,
-      source: 'kg',
-      interval: formatPlayTime(parseInt(item.audio_info.timelength) / 1000),
-      img: null,
-      lrc: null,
-      hash: item.audio_info.hash,
-      otherSource: null,
-      types,
-      _types,
-      typeUrl: {},
-    })
-  })
-  return list
+export const filterMusicInfoList = async (rawList) => {
+  return await filterData(rawList, { removeDuplicates: true })
 }
 
-export const getMusicInfos = async(hashs) => {
-  return filterMusicInfoList(await Promise.all(createGetMusicInfosTask(hashs)).then(data => data.flat()))
+export const getMusicInfos = async (hashs) => {
+  return await filterMusicInfoList(
+    await Promise.all(createGetMusicInfosTask(hashs)).then((data) => data.flat())
+  )
 }
 
-export const getMusicInfoRaw = async(hash) => {
-  return Promise.all(createGetMusicInfosTask([{ hash }])).then(data => data.flat()[0])
+export const getMusicInfoRaw = async (hash) => {
+  return Promise.all(createGetMusicInfosTask([{ hash }])).then((data) => data.flat()[0])
 }
 
-export const getMusicInfo = async(hash) => {
-  return getMusicInfos([{ hash }]).then(data => data[0])
+export const getMusicInfo = async (hash) => {
+  return getMusicInfos([{ hash }]).then((data) => data[0])
 }
 
 export const getMusicInfosByList = (list) => {
-  return getMusicInfos(list.map(item => ({ hash: item.hash })))
+  return getMusicInfos(list.map((item) => ({ hash: item.hash })))
 }

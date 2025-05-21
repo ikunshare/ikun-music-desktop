@@ -1,7 +1,11 @@
 <template>
   <div :class="[$style.sliderContent, { [$style.disabled]: disabled }, className]">
     <div :class="[$style.slider]">
-      <div ref="dom_sliderBar" :class="$style.sliderBar" :style="{ transform: `scaleX(${(value - min) / (max - min) || 0})` }" />
+      <div
+        ref="dom_sliderBar"
+        :class="$style.sliderBar"
+        :style="{ transform: `scaleX(${(value - min) / (max - min) || 0})` }"
+      />
     </div>
     <div :class="$style.sliderMask" @mousedown="handleSliderMsDown" />
   </div>
@@ -43,7 +47,7 @@ export default {
     }
     const dom_sliderBar = ref(null)
 
-    const handleSliderMsDown = event => {
+    const handleSliderMsDown = (event) => {
       if (props.disabled) return
 
       sliderEvent.isMsDown = true
@@ -60,9 +64,13 @@ export default {
     const handleSliderMsUp = () => {
       sliderEvent.isMsDown = false
     }
-    const handleSliderMsMove = event => {
+    const handleSliderMsMove = (event) => {
       if (!sliderEvent.isMsDown || props.disabled) return
-      let value = (sliderEvent.msDownValue + (event.clientX - sliderEvent.msDownX) / dom_sliderBar.value.clientWidth) * (props.max - props.min) + props.min
+      let value =
+        (sliderEvent.msDownValue +
+          (event.clientX - sliderEvent.msDownX) / dom_sliderBar.value.clientWidth) *
+          (props.max - props.min) +
+        props.min
       if (value > props.max) value = props.max
       else if (value < props.min) value = props.min
       emit('change', value)
@@ -94,13 +102,13 @@ export default {
   // margin-right: 10px;
   display: flex;
   align-items: center;
-  opacity: .5;
+  opacity: 0.5;
   transition: opacity @transition-normal;
   &:hover {
     opacity: 1;
   }
   &.disabled {
-    opacity: .3;
+    opacity: 0.3;
     .sliderMask {
       cursor: default;
     }
@@ -148,5 +156,4 @@ export default {
   height: 100%;
   cursor: pointer;
 }
-
 </style>

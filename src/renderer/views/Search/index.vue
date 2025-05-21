@@ -5,7 +5,12 @@
       <base-tab v-model="searchType" :list="searchTypes" @change="handleTypeChange" />
     </div>
     <div :class="$style.main">
-      <song-list-list v-if="searchType == 'songlist'" v-show="searchText" :page="page" :source-id="source" />
+      <song-list-list
+        v-if="searchType == 'songlist'"
+        v-show="searchText"
+        :page="page"
+        :source-id="source"
+      />
       <music-list v-else v-show="searchText" :page="page" :source-id="source" />
       <blank-view :visible="!searchText" :source="source" />
     </div>
@@ -28,7 +33,7 @@ const source = ref('kw')
 const searchType = ref(null)
 const page = ref(1)
 
-const verifyQueryParams = async(to, from, next) => {
+const verifyQueryParams = async (to, from, next) => {
   let _source = to.query.source
   let _type = to.query.type
   let _page = to.query.page
@@ -69,7 +74,7 @@ export default {
     const route = useRoute()
     const router = useRouter()
 
-    const sources = _sources.map(id => {
+    const sources = _sources.map((id) => {
       return {
         id,
         label: sourceNames.value[id],
@@ -103,7 +108,6 @@ export default {
       })
     }
 
-
     return {
       sources,
       source,
@@ -116,8 +120,6 @@ export default {
     }
   },
 }
-
-
 </script>
 
 <style lang="less" module>

@@ -148,7 +148,7 @@ export const getLyricInfo = async({ musicInfo, isRefresh, onToggleSource = () =>
   }
 
   try {
-    // eslint-disable-next-line @typescript-eslint/promise-function-async
+
     return await getOnlineOtherSourceLyricByLocal(musicInfo, isRefresh).then(({ lyricInfo, isFromCache }) => {
       if (!isFromCache) void saveLyric(musicInfo, lyricInfo)
       return buildLyricInfo(lyricInfo)

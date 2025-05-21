@@ -3,11 +3,14 @@ import getSongId from './songId'
 
 export default {
   async getPicUrl(songId, tryNum = 0) {
-    let requestObj = httpFetch(`http://music.migu.cn/v3/api/music/audioPlayer/getSongPic?songId=${songId}`, {
-      headers: {
-        Referer: 'http://music.migu.cn/v3/music/player/audio?from=migu',
-      },
-    })
+    let requestObj = httpFetch(
+      `http://music.migu.cn/v3/api/music/audioPlayer/getSongPic?songId=${songId}`,
+      {
+        headers: {
+          Referer: 'http://music.migu.cn/v3/music/player/audio?from=migu',
+        },
+      }
+    )
     requestObj.promise.then(({ body }) => {
       if (body.returnCode !== '000000') {
         if (tryNum > 5) return Promise.reject(new Error('图片获取失败'))

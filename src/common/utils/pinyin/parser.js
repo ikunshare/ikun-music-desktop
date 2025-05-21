@@ -31,7 +31,7 @@ const yuanyin = [
   ['ǜ', 'v'],
 ]
 
-const parse = async() => {
+const parse = async () => {
   let datas = (await fs.readFile(sourceFilePath)).toString()
   datas = datas.replace(/ +=> +(\w|\+)+ */gm, ' ')
   for (const [y1, y2] of yuanyin) datas = datas.replaceAll(y1, y2)
@@ -44,13 +44,12 @@ const parse = async() => {
     let [p1, comment] = line.split('#')
     let [z, ps] = comment.split(/(?: *\? *-> *| *-> *)/)
     const ys = new Set([p1.trim()])
-    if (ps != null) ps.split(/(?: +| *, *)/).forEach(y => ys.add(y.trim()))
+    if (ps != null) ps.split(/(?: +| *, *)/).forEach((y) => ys.add(y.trim()))
     dict[z.trim()] = Array.from(ys)
   }
 
   fs.writeFile(distFilePath, JSON.stringify(dict))
 }
-
 
 parse()
 
@@ -64,5 +63,3 @@ parse()
 // console.log(ps)
 // if (ps != null) ys.push(...ps.split(/(?: +| *, *)/).map(y => y.trim()))
 // console.log(dict)
-
-

@@ -10,7 +10,7 @@ const useOpenSonglist = () => {
   const router = useRouter()
   const route = useRoute()
 
-  const handleOpenSonglist = params => {
+  const handleOpenSonglist = (params) => {
     if (params.id) {
       router[route.path == '/songList/detail' ? 'replace' : 'push']({
         path: '/songList/detail',
@@ -45,11 +45,14 @@ const useOpenSonglist = () => {
 
     sourceVerify(songlistInfo.source)
 
-    songlistInfo = dataVerify([
-      { key: 'source', types: ['string'] },
-      { key: 'id', types: ['string', 'number'], max: 64 },
-      { key: 'url', types: ['string'], max: 500 },
-    ], songlistInfo)
+    songlistInfo = dataVerify(
+      [
+        { key: 'source', types: ['string'] },
+        { key: 'id', types: ['string', 'number'], max: 64 },
+        { key: 'url', types: ['string'], max: 500 },
+      ],
+      songlistInfo
+    )
 
     if (!songlistInfo.id && !songlistInfo.url) throw new Error('id or url missing')
     if (isShowPlayerDetail.value) setShowPlayerDetail(false)
@@ -60,7 +63,7 @@ const useOpenSonglist = () => {
 const usePlaySonglistDetail = () => {
   const playSongListDetail = usePlaySonglist()
 
-  return async({ paths, data }) => {
+  return async ({ paths, data }) => {
     let songlistInfo = {
       source: null,
       id: null,
@@ -81,16 +84,23 @@ const usePlaySonglistDetail = () => {
 
     sourceVerify(songlistInfo.source)
 
-    songlistInfo = dataVerify([
-      { key: 'source', types: ['string'] },
-      { key: 'id', types: ['string', 'number'], max: 64 },
-      { key: 'url', types: ['string'], max: 500 },
-      { key: 'index', types: ['number'], max: 1000000 },
-    ], songlistInfo)
+    songlistInfo = dataVerify(
+      [
+        { key: 'source', types: ['string'] },
+        { key: 'id', types: ['string', 'number'], max: 64 },
+        { key: 'url', types: ['string'], max: 500 },
+        { key: 'index', types: ['number'], max: 1000000 },
+      ],
+      songlistInfo
+    )
 
     if (!songlistInfo.id && !songlistInfo.url) throw new Error('id or url missing')
 
-    await playSongListDetail(songlistInfo.source, songlistInfo.id ?? songlistInfo.url, songlistInfo.index)
+    await playSongListDetail(
+      songlistInfo.source,
+      songlistInfo.id ?? songlistInfo.url,
+      songlistInfo.index
+    )
   }
 }
 
@@ -98,8 +108,7 @@ export default () => {
   const handleOpenSonglist = useOpenSonglist()
   const handlePlaySonglist = usePlaySonglistDetail()
 
-
-  return async(action, info) => {
+  return async (action, info) => {
     switch (action) {
       case 'open':
         handleOpenSonglist(info)
@@ -107,7 +116,8 @@ export default () => {
       case 'play':
         await handlePlaySonglist(info)
         break
-      default: throw new Error('Unknown action: ' + action)
+      default:
+        throw new Error('Unknown action: ' + action)
     }
   }
 }

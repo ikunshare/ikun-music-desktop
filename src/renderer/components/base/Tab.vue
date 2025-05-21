@@ -2,8 +2,14 @@
   <ul :class="[$style.list, $style[align]]" role="tablist">
     <li
       v-for="item in list"
-      :key="item[itemKey]" :class="[$style.listItem, {[$style.active]: modelValue == item[itemKey]}]" tabindex="-1" role="tab"
-      :aria-label="item[itemLabel]" ignore-tip :aria-selected="modelValue == item[itemKey]" @click="handleToggle(item[itemKey])"
+      :key="item[itemKey]"
+      :class="[$style.listItem, { [$style.active]: modelValue == item[itemKey] }]"
+      tabindex="-1"
+      role="tab"
+      :aria-label="item[itemLabel]"
+      ignore-tip
+      :aria-selected="modelValue == item[itemKey]"
+      @click="handleToggle(item[itemKey])"
     >
       <span :class="$style.label">{{ item[itemLabel] }}</span>
     </li>
@@ -11,7 +17,6 @@
 </template>
 
 <script>
-
 export default {
   props: {
     list: {
@@ -39,7 +44,7 @@ export default {
   },
   emits: ['update:modelValue', 'change'],
   setup(props, { emit }) {
-    const handleToggle = id => {
+    const handleToggle = (id) => {
       if (id == props.modelValue) return
       emit('update:modelValue', id)
       emit('change', id)
@@ -78,17 +83,15 @@ export default {
   cursor: pointer;
   transition: color @transition-normal;
 
-
   &:hover {
     color: var(--color-primary);
   }
-
 
   &.active {
     color: var(--color-primary);
     cursor: default;
 
-    >.label {
+    > .label {
       &:after {
         // background-color: var(--color-primary);
         opacity: 1;

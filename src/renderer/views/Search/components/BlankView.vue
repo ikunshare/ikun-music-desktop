@@ -1,19 +1,60 @@
 <template>
   <transition enter-active-class="animated-fast fadeIn" leave-active-class="animated-fast fadeOut">
     <div v-show="props.visible" :class="$style.noitem">
-      <div v-if="appSetting['search.isShowHotSearch'] || (appSetting['search.isShowHistorySearch'] && historyList.length)" class="scroll" :class="$style.noitemListContainer">
-        <dl v-if="appSetting['search.isShowHotSearch']" :class="[$style.noitemList, $style.noitemHotSearchList]">
+      <div
+        v-if="
+          appSetting['search.isShowHotSearch'] ||
+          (appSetting['search.isShowHistorySearch'] && historyList.length)
+        "
+        class="scroll"
+        :class="$style.noitemListContainer"
+      >
+        <dl
+          v-if="appSetting['search.isShowHotSearch']"
+          :class="[$style.noitemList, $style.noitemHotSearchList]"
+        >
           <dt :class="$style.noitemListTitle">{{ $t('search__hot_search') }}</dt>
-          <dd v-for="(item, index) in hotSearchList" :key="index" :class="$style.noitemListItem" @click="handleSearch(item)">{{ item }}</dd>
+          <dd
+            v-for="(item, index) in hotSearchList"
+            :key="index"
+            :class="$style.noitemListItem"
+            @click="handleSearch(item)"
+          >
+            {{ item }}
+          </dd>
         </dl>
-        <dl v-if="appSetting['search.isShowHistorySearch'] && historyList.length" :class="$style.noitemList">
+        <dl
+          v-if="appSetting['search.isShowHistorySearch'] && historyList.length"
+          :class="$style.noitemList"
+        >
           <dt :class="$style.noitemListTitle">
-            <span>{{ $t('history_search') }}</span><span :class="$style.historyClearBtn" :aria-label="$t('history_clear')" @click="clearHistoryList">
-              <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" height="100%" viewBox="0 0 512 512" space="preserve">
-                <use xlink:href="#icon-eraser" />
-              </svg></span>
+            <span>{{ $t('history_search') }}</span
+            ><span
+              :class="$style.historyClearBtn"
+              :aria-label="$t('history_clear')"
+              @click="clearHistoryList"
+            >
+              <svg
+                version="1.1"
+                xmlns="http://www.w3.org/2000/svg"
+                xlink="http://www.w3.org/1999/xlink"
+                height="100%"
+                viewBox="0 0 512 512"
+                space="preserve"
+              >
+                <use xlink:href="#icon-eraser" /></svg
+            ></span>
           </dt>
-          <dd v-for="(item, index) in historyList" :key="index + item" :class="$style.noitemListItem" :aria-label="$t('history_remove')" @contextmenu="removeHistoryWord(index)" @click="handleSearch(item)">{{ item }}</dd>
+          <dd
+            v-for="(item, index) in historyList"
+            :key="index + item"
+            :class="$style.noitemListItem"
+            :aria-label="$t('history_remove')"
+            @contextmenu="removeHistoryWord(index)"
+            @click="handleSearch(item)"
+          >
+            {{ item }}
+          </dd>
         </dl>
       </div>
       <div v-else :class="$style.noitem_label">
@@ -42,22 +83,29 @@ const props = defineProps({
 const hotSearchList = shallowRef([])
 
 if (appSetting['search.isShowHotSearch']) {
-  watch(() => props.visible, (visible) => {
-    if (!visible) return
-    void getList(props.source).then(list => {
-      hotSearchList.value = list
-    })
-  }, {
-    immediate: true,
-  })
+  watch(
+    () => props.visible,
+    (visible) => {
+      if (!visible) return
+      void getList(props.source).then((list) => {
+        hotSearchList.value = list
+      })
+    },
+    {
+      immediate: true,
+    }
+  )
 
-  watch(() => props.source, (source) => {
-    if (!props.visible) return
-    void getList(source).then(list => {
-      if (source != props.source) return
-      hotSearchList.value = list
-    })
-  })
+  watch(
+    () => props.source,
+    (source) => {
+      if (!props.visible) return
+      void getList(source).then((list) => {
+        if (source != props.source) return
+        hotSearchList.value = list
+      })
+    }
+  )
 }
 
 if (appSetting['search.isShowHistorySearch']) {
@@ -73,7 +121,6 @@ const handleSearch = (text) => {
     },
   })
 }
-
 </script>
 
 <style lang="less" module>
@@ -97,7 +144,7 @@ const handleSearch = (text) => {
   max-height: 94.7%;
 }
 .noitemList {
-  +.noitemList {
+  + .noitemList {
     margin-top: 15px;
   }
 }
@@ -135,10 +182,10 @@ const handleSearch = (text) => {
   cursor: pointer;
   transition: @transition-normal;
   transition-property: color, opacity;
-  opacity: .3;
+  opacity: 0.3;
   &:hover {
     color: var(--color-primary-font-hover);
-    opacity: .8;
+    opacity: 0.8;
   }
   &:active {
     color: var(--color-primary-font-active);

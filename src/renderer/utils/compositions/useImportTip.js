@@ -4,7 +4,6 @@ import { dialog } from '@renderer/plugins/Dialog'
 export default () => {
   const t = useI18n()
 
-
   return (type) => {
     let message
     switch (type) {

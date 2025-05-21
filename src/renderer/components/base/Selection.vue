@@ -3,15 +3,34 @@
     <div ref="dom_btn" class="label-content" :class="$style.label" @click="handleShow">
       <span class="label">{{ label }}</span>
       <div class="icon" :class="$style.icon">
-        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" height="100%" viewBox="0 0 451.847 451.847" space="preserve">
+        <svg
+          version="1.1"
+          xmlns="http://www.w3.org/2000/svg"
+          xlink="http://www.w3.org/1999/xlink"
+          height="100%"
+          viewBox="0 0 451.847 451.847"
+          space="preserve"
+        >
           <use xlink:href="#icon-down" />
         </svg>
       </div>
     </div>
-    <ul v-if="show" ref="dom_list" class="selection-list scroll" :class="$style.list" :style="listStyles">
+    <ul
+      v-if="show"
+      ref="dom_list"
+      class="selection-list scroll"
+      :class="$style.list"
+      :style="listStyles"
+    >
       <li
-        v-for="(item, index) in list" :key="index" :class="[$style.listItem, (itemKey ? item[itemKey] : item) == modelValue ? $style.active : null]"
-        :aria-label="itemName ? item[itemName] : item" @click="handleClick(item)"
+        v-for="(item, index) in list"
+        :key="index"
+        :class="[
+          $style.listItem,
+          (itemKey ? item[itemKey] : item) == modelValue ? $style.active : null,
+        ]"
+        :aria-label="itemName ? item[itemName] : item"
+        @click="handleClick(item)"
       >
         {{ itemName ? item[itemName] : item }}
       </li>
@@ -20,7 +39,6 @@
 </template>
 
 <script>
-
 export default {
   props: {
     list: {
@@ -55,7 +73,7 @@ export default {
     activeIndex() {
       if (this.modelValue == null) return -1
       if (!this.itemName) return this.list.indexOf(this.modelValue)
-      return this.list.findIndex(l => l[this.itemKey] == this.modelValue)
+      return this.list.findIndex((l) => l[this.itemKey] == this.modelValue)
     },
     label() {
       if (this.modelValue == null) return ''
@@ -93,7 +111,9 @@ export default {
         this.listStyles.transform = `scaleY(1) translateY(${this.handleGetOffset()}px)`
 
         const activeItem = this.$refs.dom_list.children[this.activeIndex]
-        if (activeItem) this.$refs.dom_list.scrollTop = activeItem.offsetTop - this.$refs.dom_list.clientHeight * 0.38
+        if (activeItem)
+          this.$refs.dom_list.scrollTop =
+            activeItem.offsetTop - this.$refs.dom_list.clientHeight * 0.38
       })
     },
     handleGetOffset() {
@@ -102,14 +122,14 @@ export default {
       const dom_container = dom_select.offsetParent
       const containerHeight = dom_container.clientHeight
       if (containerHeight < listHeight) return 0
-      const offsetHeight = (dom_container.scrollTop + containerHeight) - (dom_select.offsetTop + listHeight)
+      const offsetHeight =
+        dom_container.scrollTop + containerHeight - (dom_select.offsetTop + listHeight)
       if (offsetHeight > 0) return 0
       return offsetHeight - 5
     },
   },
 }
 </script>
-
 
 <style lang="less" module>
 @import '@renderer/assets/styles/layout.less';
@@ -130,7 +150,7 @@ export default {
       opacity: 1;
     }
     .icon {
-      svg{
+      svg {
         transform: rotate(180deg);
       }
     }
@@ -161,7 +181,7 @@ export default {
     line-height: 0;
     svg {
       width: 1em;
-      transition: transform .2s ease;
+      transition: transform 0.2s ease;
       transform: rotate(0);
     }
   }
@@ -183,11 +203,11 @@ export default {
   opacity: 0;
   transform: scaleY(0) translateY(0);
   transform-origin: 0 (@selection-height / 2) 0;
-  transition: .25s ease;
+  transition: 0.25s ease;
   transition-property: transform, opacity;
   z-index: 10;
   border-radius: @form-radius;
-  box-shadow: 0 0 4px rgba(0, 0, 0, .15);
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
   overflow: auto;
   max-height: 200px;
 }
@@ -212,6 +232,4 @@ export default {
     color: var(--color-button-font);
   }
 }
-
-
 </style>

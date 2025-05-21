@@ -21,7 +21,7 @@ export const request = async(url: string, options: RequestOptions = { }) => {
   // return fetch(url, {
   //   ...options,
   //   signal: controller.signal,
-  // // eslint-disable-next-line @typescript-eslint/promise-function-async
+  //
   // }).then(async(response) => {
   //   const text = await response.text()
   //   return {

@@ -2,15 +2,43 @@
   <div :class="$style.controlBtn">
     <!-- <common-volume-bar /> -->
     <button :class="$style.titleBtn" :aria-label="$t('player__add_music_to')" @click="addMusicTo">
-      <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="90%" viewBox="0 0 512 512" space="preserve">
+      <svg
+        version="1.1"
+        xmlns="http://www.w3.org/2000/svg"
+        xlink="http://www.w3.org/1999/xlink"
+        width="90%"
+        viewBox="0 0 512 512"
+        space="preserve"
+      >
         <use xlink:href="#icon-add-2" />
       </svg>
     </button>
-    <button :class="$style.titleBtn" :aria-label="toggleDesktopLyricBtnTitle" @click="toggleDesktopLyric" @contextmenu="toggleLockDesktopLyric">
-      <svg v-show="appSetting['desktopLyric.enable']" version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" height="100%" viewBox="0 0 512 512" space="preserve">
+    <button
+      :class="$style.titleBtn"
+      :aria-label="toggleDesktopLyricBtnTitle"
+      @click="toggleDesktopLyric"
+      @contextmenu="toggleLockDesktopLyric"
+    >
+      <svg
+        v-show="appSetting['desktopLyric.enable']"
+        version="1.1"
+        xmlns="http://www.w3.org/2000/svg"
+        xlink="http://www.w3.org/1999/xlink"
+        height="100%"
+        viewBox="0 0 512 512"
+        space="preserve"
+      >
         <use xlink:href="#icon-desktop-lyric-on" />
       </svg>
-      <svg v-show="!appSetting['desktopLyric.enable']" version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" height="100%" viewBox="0 0 512 512" space="preserve">
+      <svg
+        v-show="!appSetting['desktopLyric.enable']"
+        version="1.1"
+        xmlns="http://www.w3.org/2000/svg"
+        xlink="http://www.w3.org/1999/xlink"
+        height="100%"
+        viewBox="0 0 512 512"
+        space="preserve"
+      >
         <use xlink:href="#icon-desktop-lyric-off" />
       </svg>
     </button>
@@ -29,11 +57,8 @@ import { appSetting } from '@renderer/store/setting'
 export default {
   setup() {
     const isShowAddMusicTo = ref(false)
-    const {
-      toggleDesktopLyricBtnTitle,
-      toggleDesktopLyric,
-      toggleLockDesktopLyric,
-    } = useToggleDesktopLyric()
+    const { toggleDesktopLyricBtnTitle, toggleDesktopLyric, toggleLockDesktopLyric } =
+      useToggleDesktopLyric()
     const addMusicTo = () => {
       if (!musicInfo.id) return
       isShowAddMusicTo.value = true
@@ -83,7 +108,7 @@ export default {
   width: 24px;
   padding: 0;
 
-  opacity: .6;
+  opacity: 0.6;
   cursor: pointer;
 
   svg {
@@ -96,6 +121,4 @@ export default {
     opacity: 1;
   }
 }
-
-
 </style>

@@ -34,10 +34,7 @@ import {
   isShowPlayComment,
   playMusicInfo,
 } from '@renderer/store/player/state'
-import {
-  setShowPlayLrcSelectContentLrc,
-  setShowPlayComment,
-} from '@renderer/store/player/action'
+import { setShowPlayLrcSelectContentLrc, setShowPlayComment } from '@renderer/store/player/action'
 
 import useNextTogglePlay from '@renderer/utils/compositions/useNextTogglePlay'
 import useToggleDesktopLyric from '@renderer/utils/compositions/useToggleDesktopLyric'
@@ -58,20 +55,14 @@ export default {
     const toggleVisibleComment = () => {
       setShowPlayComment(!isShowPlayComment.value)
     }
-    const {
-      nextTogglePlayName,
-      toggleNextPlayMode,
-    } = useNextTogglePlay()
+    const { nextTogglePlayName, toggleNextPlayMode } = useNextTogglePlay()
 
-    const {
-      toggleDesktopLyricBtnTitle,
-      toggleDesktopLyric,
-      toggleLockDesktopLyric,
-    } = useToggleDesktopLyric()
+    const { toggleDesktopLyricBtnTitle, toggleDesktopLyric, toggleLockDesktopLyric } =
+      useToggleDesktopLyric()
 
     const isShowAddMusicTo = ref(false)
 
-    const toggleAudioVisualization = async() => {
+    const toggleAudioVisualization = async () => {
       const newSetting = !appSetting['player.audioVisualization']
       if (newSetting && appSetting['player.mediaDeviceId'] != 'default') {
         const confirm = await dialog.confirm({
@@ -80,7 +71,7 @@ export default {
           confirmButtonText: t('confirm_button_text'),
         })
         if (!confirm) return
-        await setMediaDeviceId('default').catch(_ => _)
+        await setMediaDeviceId('default').catch((_) => _)
         saveMediaDeviceId('default')
       }
       setEnableAudioVisualization(newSetting)
@@ -123,7 +114,7 @@ export default {
   .footerLeftControlBtn {
     // width: 18px;
     // height: 18px;
-    opacity: .5;
+    opacity: 0.5;
     cursor: pointer;
     transition: opacity @transition-normal;
     display: flex;
@@ -134,12 +125,12 @@ export default {
     padding: 0;
 
     &:hover {
-      opacity: .9;
+      opacity: 0.9;
     }
 
     &.active {
       color: var(--color-primary);
-      opacity: .8;
+      opacity: 0.8;
     }
   }
 
@@ -147,5 +138,4 @@ export default {
     width: 20px;
   }
 }
-
 </style>

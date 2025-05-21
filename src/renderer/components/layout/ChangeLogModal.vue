@@ -33,7 +33,7 @@ import { computed, ref } from '@common/utils/vueTools'
 export default {
   setup() {
     const lastStartVersion = ref(null)
-    void getLastStartInfo().then(version => {
+    void getLastStartInfo().then((version) => {
       lastStartVersion.value = version
     })
 
@@ -49,7 +49,10 @@ export default {
       if (!versionInfo.newVersion?.history) return info
       info.isLatest = compareVer(currentVer, versionInfo.newVersion.version) >= 0
 
-      const history = [{ version: versionInfo.newVersion.version, desc: versionInfo.newVersion.desc }, ...versionInfo.newVersion.history]
+      const history = [
+        { version: versionInfo.newVersion.version, desc: versionInfo.newVersion.desc },
+        ...versionInfo.newVersion.history,
+      ]
 
       if (lastStartVer) {
         for (const ver of history) {
@@ -63,7 +66,7 @@ export default {
           }
         }
       } else {
-        const verInfo = history.find(v => v.version == currentVer)
+        const verInfo = history.find((v) => v.version == currentVer)
         if (verInfo) {
           info.version = verInfo.version
           info.desc = verInfo.desc
@@ -85,7 +88,6 @@ export default {
   },
 }
 </script>
-
 
 <style lang="less" module>
 @import '@renderer/assets/styles/layout.less';
@@ -137,7 +139,8 @@ export default {
 }
 
 .desc {
-  h3, h4 {
+  h3,
+  h4 {
     font-weight: bold;
   }
   h3 {
@@ -173,7 +176,6 @@ export default {
       padding-left: 15px;
     }
   }
-
 }
 .footer {
   flex: 0 0 none;
@@ -207,5 +209,4 @@ export default {
 //   display: block;
 //   width: 50%;
 // }
-
 </style>

@@ -5,7 +5,7 @@ let isLockedPointer = false
 let event = null
 let isMouseDown = false
 
-const isControl = dom => {
+const isControl = (dom) => {
   if (!dom || dom === document.body) return false
   // console.log(dom)
   if (dom.getAttribute('aria-label') || dom.tagName == 'BUTTON') return true

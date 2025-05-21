@@ -2,8 +2,15 @@
   <ul ref="dom_lists_list" class="scroll" :class="$style.listsContent">
     <li
       v-for="(item, index) in list"
-      :key="item.id" :class="[$style.listsItem, { [$style.active]: item.id == boardId }, { [$style.clicked]: rightClickItemIndex == index }]"
-      :aria-label="item.name" @click="handleToggleList(item.id)" @contextmenu="handleRigthClick($event, index)"
+      :key="item.id"
+      :class="[
+        $style.listsItem,
+        { [$style.active]: item.id == boardId },
+        { [$style.clicked]: rightClickItemIndex == index },
+      ]"
+      :aria-label="item.name"
+      @click="handleToggleList(item.id)"
+      @contextmenu="handleRigthClick($event, index)"
     >
       <span :class="$style.listsLabel">
         <transition name="list-active">
@@ -58,13 +65,7 @@ const handleToggleList = (id) => {
   })
 }
 
-const {
-  menus,
-  menuLocation,
-  isShowMenu,
-  showMenu,
-  menuClick,
-} = useMenu({ emit, list })
+const { menus, menuLocation, isShowMenu, showMenu, menuClick } = useMenu({ emit, list })
 
 const handleRigthClick = (event, index) => {
   rightClickItemIndex.value = index
@@ -77,19 +78,21 @@ const handleMenuClick = (action) => {
   menuClick(action, index, props.source)
 }
 
-
-watch(() => props.source, async(source) => {
-  // const source = (await getLeaderboardSetting()).source as LX.OnlineSource
-  let boardList = boards[source]
-  if (boardList == null) setBoard(boardList = await getBoardsList(source), source)
-  list.splice(0, list.length, ...boardList.list)
-  if (!props.boardId && boardList.list.length) handleToggleList(boardList.list[0].id)
-}, {
-  immediate: true,
-})
+watch(
+  () => props.source,
+  async (source) => {
+    // const source = (await getLeaderboardSetting()).source as LX.OnlineSource
+    let boardList = boards[source]
+    if (boardList == null) setBoard((boardList = await getBoardsList(source)), source)
+    list.splice(0, list.length, ...boardList.list)
+    if (!props.boardId && boardList.list.length) handleToggleList(boardList.list[0].id)
+  },
+  {
+    immediate: true,
+  }
+)
 
 defineExpose({ hideMenu: handleMenuClick })
-
 </script>
 
 <style lang="less" module>
@@ -104,7 +107,7 @@ defineExpose({ hideMenu: handleMenuClick })
 }
 .listsItem {
   position: relative;
-  transition: .3s ease;
+  transition: 0.3s ease;
   transition-property: color, background-color;
   background-color: transparent;
   &:hover:not(.active) {
@@ -133,8 +136,8 @@ defineExpose({ hideMenu: handleMenuClick })
   }
 }
 .activeIcon {
-  height: .9em;
-  width: .9em;
+  height: 0.9em;
+  width: 0.9em;
   margin-left: -0.45em;
   vertical-align: -0.05em;
 }
@@ -146,7 +149,4 @@ defineExpose({ hideMenu: handleMenuClick })
   line-height: 36px;
   .mixin-ellipsis-1;
 }
-
-
 </style>
-

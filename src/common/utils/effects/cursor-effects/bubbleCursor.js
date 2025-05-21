@@ -26,8 +26,7 @@ class Particle {
     else if (this.position.y <= 5) this.lifeSpan = 0
     this.lifeSpan--
 
-    const scale =
-      0.2 + (this.initialLifeSpan - this.lifeSpan) / this.initialLifeSpan
+    const scale = 0.2 + (this.initialLifeSpan - this.lifeSpan) / this.initialLifeSpan
 
     context.fillStyle = this.fillStyle
     context.strokeStyle = this.strokeStyle
@@ -37,7 +36,7 @@ class Particle {
       this.position.y - this.baseDimension / 2,
       this.baseDimension * scale,
       0,
-      2 * Math.PI,
+      2 * Math.PI
     )
 
     context.stroke()
@@ -47,9 +46,12 @@ class Particle {
   }
 }
 
-
 export default class BubbleCursor {
-  constructor({ element, fillStyle = 'rgba(77, 175, 124, 0.1)', strokeStyle = 'rgba(77, 175, 124, 0.3)' } = {}) {
+  constructor({
+    element,
+    fillStyle = 'rgba(77, 175, 124, 0.1)',
+    strokeStyle = 'rgba(77, 175, 124, 0.3)',
+  } = {}) {
     this.hasWrapperEl = element
     this.element = this.hasWrapperEl || document.body
 
@@ -97,7 +99,6 @@ export default class BubbleCursor {
     window.addEventListener('resize', this.onWindowResize)
   }
 
-
   onWindowResize = (e) => {
     this.width = window.innerWidth
     this.height = window.innerHeight
@@ -114,10 +115,7 @@ export default class BubbleCursor {
   onTouchMove = (e) => {
     if (e.touches.length > 0) {
       for (let i = 0; i < e.touches.length; i++) {
-        this.addParticle(
-          e.touches[i].clientX,
-          e.touches[i].clientY,
-        )
+        this.addParticle(e.touches[i].clientX, e.touches[i].clientY)
       }
     }
   }

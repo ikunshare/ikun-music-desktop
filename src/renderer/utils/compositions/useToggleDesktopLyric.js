@@ -1,6 +1,4 @@
-import {
-  computed,
-} from '@common/utils/vueTools'
+import { computed } from '@common/utils/vueTools'
 import { useI18n } from '@renderer/plugins/i18n'
 import { appSetting, setLockDesktopLyric, setVisibleDesktopLyric } from '@renderer/store/setting'
 

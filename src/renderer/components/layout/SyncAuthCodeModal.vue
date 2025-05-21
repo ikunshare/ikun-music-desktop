@@ -1,5 +1,10 @@
 <template>
-  <material-modal :show="sync.isShowAuthCodeModal" :bg-close="false" @close="handleClose" @after-enter="$refs.input.focus()">
+  <material-modal
+    :show="sync.isShowAuthCodeModal"
+    :bg-close="false"
+    @close="handleClose"
+    @after-enter="$refs.input.focus()"
+  >
     <main :class="$style.main">
       <h2>{{ $t('sync__auth_code_title') }}</h2>
       <base-input
@@ -7,7 +12,8 @@
         v-model="authCode"
         :class="$style.input"
         :placeholder="$t('sync__auth_code_input_tip')"
-        @submit="handleSubmit" @blur="verify"
+        @submit="handleSubmit"
+        @blur="verify"
       />
       <div :class="$style.footer">
         <base-btn :class="$style.btn" @click="handleSubmit">{{ $t('btn_confirm') }}</base-btn>
@@ -44,7 +50,7 @@ export default {
           host: appSetting['sync.client.host'],
           authCode: code,
         },
-      }).catch(err => {
+      }).catch((err) => {
         console.log(err)
       })
     }
@@ -58,7 +64,6 @@ export default {
   },
 }
 </script>
-
 
 <style lang="less" module>
 @import '@renderer/assets/styles/layout.less';
@@ -100,10 +105,8 @@ export default {
   min-width: 70px;
   // .mixin-ellipsis-1;
 
-  +.btn {
+  + .btn {
     margin-left: 10px;
   }
 }
-
-
 </style>

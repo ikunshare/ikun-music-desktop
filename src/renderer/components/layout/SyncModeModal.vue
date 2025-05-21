@@ -1,30 +1,49 @@
 <template>
-  <material-modal :show="sync.isShowSyncMode" :bg-close="false" :close-btn="false" @close="handleClose(false)">
+  <material-modal
+    :show="sync.isShowSyncMode"
+    :bg-close="false"
+    :close-btn="false"
+    @close="handleClose(false)"
+  >
     <main v-if="sync.type == 'list'" :class="$style.main">
       <h2>{{ $t('sync__list_title', { name: sync.deviceName }) }}</h2>
       <div class="scroll" :class="$style.content">
         <dl :class="$style.btnGroup">
           <dt :class="$style.label">{{ $t('sync__merge_label') }}</dt>
           <dd :class="$style.btns">
-            <base-btn :class="$style.btn" @click="handleSelectMode('merge_local_remote')">{{ $t('sync__merge_btn_local_remote') }}</base-btn>
-            <base-btn :class="$style.btn" @click="handleSelectMode('merge_remote_local')">{{ $t('sync__merge_btn_remote_local') }}</base-btn>
+            <base-btn :class="$style.btn" @click="handleSelectMode('merge_local_remote')">{{
+              $t('sync__merge_btn_local_remote')
+            }}</base-btn>
+            <base-btn :class="$style.btn" @click="handleSelectMode('merge_remote_local')">{{
+              $t('sync__merge_btn_remote_local')
+            }}</base-btn>
           </dd>
         </dl>
         <dl :class="$style.btnGroup">
           <dt :class="$style.label">{{ $t('sync__overwrite_label') }}</dt>
           <dd :class="$style.btns">
-            <base-btn :class="$style.btn" @click="handleSelectMode('overwrite_local_remote')">{{ $t('sync__overwrite_btn_local_remote') }}</base-btn>
-            <base-btn :class="$style.btn" @click="handleSelectMode('overwrite_remote_local')">{{ $t('sync__overwrite_btn_remote_local') }}</base-btn>
+            <base-btn :class="$style.btn" @click="handleSelectMode('overwrite_local_remote')">{{
+              $t('sync__overwrite_btn_local_remote')
+            }}</base-btn>
+            <base-btn :class="$style.btn" @click="handleSelectMode('overwrite_remote_local')">{{
+              $t('sync__overwrite_btn_remote_local')
+            }}</base-btn>
           </dd>
-          <dd style="font-size: 14px; margin-top: 5px;">
-            <base-checkbox id="sync_mode_modal_isOverwrite" v-model="isOverwrite" :label="$t('sync__overwrite')" />
+          <dd style="font-size: 14px; margin-top: 5px">
+            <base-checkbox
+              id="sync_mode_modal_isOverwrite"
+              v-model="isOverwrite"
+              :label="$t('sync__overwrite')"
+            />
           </dd>
         </dl>
         <dl :class="$style.btnGroup">
           <dt :class="$style.label">{{ $t('sync__other_label') }}</dt>
           <dd :class="$style.btns">
             <!-- <base-btn :class="$style.btn" @click="handleSelectMode('none')">{{ $t('sync__overwrite_btn_none') }}</base-btn> -->
-            <base-btn :class="$style.btn" @click="handleSelectMode('cancel')">{{ $t('sync__overwrite_btn_cancel') }}</base-btn>
+            <base-btn :class="$style.btn" @click="handleSelectMode('cancel')">{{
+              $t('sync__overwrite_btn_cancel')
+            }}</base-btn>
           </dd>
         </dl>
         <dl :class="$style.btnGroup">
@@ -51,22 +70,32 @@
         <dl :class="$style.btnGroup">
           <dt :class="$style.label">{{ $t('sync__merge_label') }}</dt>
           <dd :class="$style.btns">
-            <base-btn :class="$style.btn" @click="handleSelectMode('merge_local_remote')">{{ $t('sync__merge_btn_local_remote') }}</base-btn>
-            <base-btn :class="$style.btn" @click="handleSelectMode('merge_remote_local')">{{ $t('sync__merge_btn_remote_local') }}</base-btn>
+            <base-btn :class="$style.btn" @click="handleSelectMode('merge_local_remote')">{{
+              $t('sync__merge_btn_local_remote')
+            }}</base-btn>
+            <base-btn :class="$style.btn" @click="handleSelectMode('merge_remote_local')">{{
+              $t('sync__merge_btn_remote_local')
+            }}</base-btn>
           </dd>
         </dl>
         <dl :class="$style.btnGroup">
           <dt :class="$style.label">{{ $t('sync__overwrite_label') }}</dt>
           <dd :class="$style.btns">
-            <base-btn :class="$style.btn" @click="handleSelectMode('overwrite_local_remote')">{{ $t('sync__overwrite_btn_local_remote') }}</base-btn>
-            <base-btn :class="$style.btn" @click="handleSelectMode('overwrite_remote_local')">{{ $t('sync__overwrite_btn_remote_local') }}</base-btn>
+            <base-btn :class="$style.btn" @click="handleSelectMode('overwrite_local_remote')">{{
+              $t('sync__overwrite_btn_local_remote')
+            }}</base-btn>
+            <base-btn :class="$style.btn" @click="handleSelectMode('overwrite_remote_local')">{{
+              $t('sync__overwrite_btn_remote_local')
+            }}</base-btn>
           </dd>
         </dl>
         <dl :class="$style.btnGroup">
           <dt :class="$style.label">{{ $t('sync__other_label') }}</dt>
           <dd :class="$style.btns">
             <!-- <base-btn :class="$style.btn" @click="handleSelectMode('none')">{{ $t('sync__overwrite_btn_none') }}</base-btn> -->
-            <base-btn :class="$style.btn" @click="handleSelectMode('cancel')">{{ $t('sync__overwrite_btn_cancel') }}</base-btn>
+            <base-btn :class="$style.btn" @click="handleSelectMode('cancel')">{{
+              $t('sync__overwrite_btn_cancel')
+            }}</base-btn>
           </dd>
         </dl>
         <dl :class="$style.btnGroup">
@@ -117,7 +146,6 @@ export default {
   },
 }
 </script>
-
 
 <style lang="less" module>
 @import '@renderer/assets/styles/layout.less';
@@ -184,13 +212,11 @@ export default {
 .btn {
   display: block;
   white-space: nowrap;
-  +.btn {
+  + .btn {
     margin-left: 15px;
   }
   &:last-child {
     margin-bottom: 0;
   }
 }
-
-
 </style>

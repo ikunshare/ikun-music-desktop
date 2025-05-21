@@ -16,9 +16,7 @@ const t_rxp_1 = /^0+(\d+)/
 const t_rxp_2 = /:0+(\d+)/g
 const t_rxp_3 = /\.0+(\d+)/
 const formatTimeLabel = (label) => {
-  return label.replace(t_rxp_1, '$1')
-    .replace(t_rxp_2, ':$1')
-    .replace(t_rxp_3, '.$1')
+  return label.replace(t_rxp_1, '$1').replace(t_rxp_2, ':$1').replace(t_rxp_3, '.$1')
 }
 
 const parseExtendedLyric = (lrcLinesMap, extendedLyric) => {
@@ -44,7 +42,7 @@ const parseExtendedLyric = (lrcLinesMap, extendedLyric) => {
 }
 
 export default class LinePlayer {
-  constructor({ offset = 0, rate = 1, onPlay = function() { }, onSetLyric = function() { } } = {}) {
+  constructor({ offset = 0, rate = 1, onPlay = function () {}, onSetLyric = function () {} } = {}) {
     this.tags = {}
     this.lines = null
     this.onPlay = onPlay
@@ -101,11 +99,16 @@ export default class LinePlayer {
             }
             const timeArr = timeStr.split(':')
             if (timeArr.length > 3) continue
-            else if (timeArr.length < 3) for (let i = 3 - timeArr.length; i--;) timeArr.unshift('0')
+            else if (timeArr.length < 3)
+              for (let i = 3 - timeArr.length; i--; ) timeArr.unshift('0')
             if (timeArr[2].indexOf('.') > -1) timeArr.splice(2, 1, ...timeArr[2].split('.'))
 
             linesMap[timeStr] = {
-              time: parseInt(timeArr[0]) * 60 * 60 * 1000 + parseInt(timeArr[1]) * 60 * 1000 + parseInt(timeArr[2]) * 1000 + parseInt(timeArr[3] || 0),
+              time:
+                parseInt(timeArr[0]) * 60 * 60 * 1000 +
+                parseInt(timeArr[1]) * 60 * 1000 +
+                parseInt(timeArr[2]) * 1000 +
+                parseInt(timeArr[3] || 0),
               text,
               extendedLyrics: [],
             }
@@ -129,7 +132,8 @@ export default class LinePlayer {
   _findCurLineNum(curTime, startIndex = 0) {
     if (curTime <= 0) return 0
     const length = this.lines.length
-    for (let index = startIndex; index < length; index++) if (curTime <= this.lines[index].time) return index === 0 ? 0 : index - 1
+    for (let index = startIndex; index < length; index++)
+      if (curTime <= this.lines[index].time) return index === 0 ? 0 : index - 1
     return length - 1
   }
 

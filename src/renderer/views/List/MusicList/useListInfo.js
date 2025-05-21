@@ -3,33 +3,35 @@ import { playMusicInfo, playInfo } from '@renderer/store/player/state'
 import { getListMusics } from '@renderer/store/list/action'
 import { appSetting } from '@renderer/store/setting'
 
-
 export default ({ props, onLoadedList }) => {
   const rightClickSelectedIndex = ref(-1)
   const selectedIndex = ref(-1)
   const dom_listContent = ref(null)
   const listRef = ref(null)
 
-  const excludeListIds = computed(() => ([props.listId]))
-
+  const excludeListIds = computed(() => [props.listId])
 
   const list = ref([])
-  watch(() => props.listId, id => {
-    getListMusics(id).then(l => {
-      list.value = [...l]
-      if (id != props.listId) return
-      onLoadedList()
-    })
-  }, {
-    immediate: true,
-  })
+  watch(
+    () => props.listId,
+    (id) => {
+      getListMusics(id).then((l) => {
+        list.value = [...l]
+        if (id != props.listId) return
+        onLoadedList()
+      })
+    },
+    {
+      immediate: true,
+    }
+  )
 
   const playerInfo = computed(() => ({
     isPlayList: playMusicInfo.listId == props.listId,
     playIndex: playInfo.playIndex,
   }))
 
-  const setSelectedIndex = index => {
+  const setSelectedIndex = (index) => {
     selectedIndex.value = index
   }
 
@@ -37,7 +39,7 @@ export default ({ props, onLoadedList }) => {
 
   const handleMyListUpdate = (ids) => {
     if (!ids.includes(props.listId)) return
-    getListMusics(props.listId).then(l => {
+    getListMusics(props.listId).then((l) => {
       list.value = [...l]
     })
   }

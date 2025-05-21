@@ -2,7 +2,7 @@ const MetaDataBlock = require('./MetaDataBlock')
 
 function pad(n, width) {
   n = '' + n
-  return (n.length >= width) ? n : new Array(width - n.length + 1).join('0') + n
+  return n.length >= width ? n : new Array(width - n.length + 1).join('0') + n
 }
 
 class MetaDataBlockStreamInfo extends MetaDataBlock {
@@ -48,7 +48,10 @@ class MetaDataBlockStreamInfo extends MetaDataBlock {
 
       let minutes = '' + Math.floor(this.duration / 60)
       let seconds = pad(Math.floor(this.duration % 60), 2)
-      let milliseconds = pad(Math.round(((this.duration % 60) - Math.floor(this.duration % 60)) * 1000), 3)
+      let milliseconds = pad(
+        Math.round(((this.duration % 60) - Math.floor(this.duration % 60)) * 1000),
+        3
+      )
       this.durationStr = minutes + ':' + seconds + '.' + milliseconds
 
       this.hasData = true

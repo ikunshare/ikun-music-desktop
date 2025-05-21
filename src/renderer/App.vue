@@ -37,9 +37,7 @@ onMounted(() => {
 // onBeforeUnmount(() => {
 //   window.lxData.bubbleCursor?.destroy()
 // })
-
 </script>
-
 
 <style lang="less">
 @import './assets/styles/index.less';
@@ -48,7 +46,8 @@ onMounted(() => {
 html {
   height: 100vh;
 }
-html, body {
+html,
+body {
   // overflow: hidden;
   box-sizing: border-box;
 }
@@ -92,15 +91,15 @@ body {
     border-radius: @radius-border;
   }
   // #container {
-    // border-radius: @radius-border;
-    // background-color: transparent;
+  // border-radius: @radius-border;
+  // background-color: transparent;
   // }
 }
 .disableTransparent {
   background-color: var(--color-content-background);
 
   #body {
-    border: 1Px solid var(--color-primary-light-500);
+    border: 1px solid var(--color-primary-light-500);
   }
 
   #right {
@@ -144,7 +143,8 @@ body {
   overflow: hidden;
   box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);
 }
-#toolbar, #player {
+#toolbar,
+#player {
   flex: none;
 }
 #view {
@@ -158,11 +158,9 @@ body {
   transition: opacity @transition-normal;
 }
 #root.show-modal > .view-container {
-  opacity: .9;
+  opacity: 0.9;
 }
 #view.show-modal > .view-container {
-  opacity: .2;
+  opacity: 0.2;
 }
-
 </style>
-

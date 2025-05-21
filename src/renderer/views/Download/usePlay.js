@@ -9,7 +9,7 @@ export default ({ selectedList, list, listAll, removeAllSelect }) => {
 
   const handlePlayMusicLater = (index, single) => {
     if (selectedList.value.length && !single) {
-      addTempPlayList(selectedList.value.map(s => ({ listId: LIST_IDS.DOWNLOAD, musicInfo: s })))
+      addTempPlayList(selectedList.value.map((s) => ({ listId: LIST_IDS.DOWNLOAD, musicInfo: s })))
       removeAllSelect()
     } else {
       addTempPlayList([{ listId: LIST_IDS.DOWNLOAD, musicInfo: list.value[index] }])

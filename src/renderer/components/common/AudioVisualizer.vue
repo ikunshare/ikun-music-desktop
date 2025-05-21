@@ -27,7 +27,7 @@ import { isPlay } from '@renderer/store/player/state'
 //   happy_new_year: 'rgba(192,57,43,.1)',
 // }
 
-const getBarWidth = canvasWidth => {
+const getBarWidth = (canvasWidth) => {
   let barWidth = (canvasWidth / 128) * 2.5
   const width = canvasWidth / 86
   const diffWidth = barWidth - width
@@ -36,7 +36,9 @@ const getBarWidth = canvasWidth => {
   // barWidth = newBarWidth
   return diffWidth > 32
     ? canvasWidth / 128 // 4k屏、超宽屏直接显示所有频谱条
-    : diffWidth > 12 ? width : barWidth
+    : diffWidth > 12
+      ? width
+      : barWidth
 }
 export default {
   setup() {
@@ -62,7 +64,9 @@ export default {
 
     // const theme = useRefGetter('theme')
     // const setting = useRefGetter('setting')
-    let themeColor = getComputedStyle(document.documentElement).getPropertyValue('--color-primary-light-200-alpha-800')
+    let themeColor = getComputedStyle(document.documentElement).getPropertyValue(
+      '--color-primary-light-200-alpha-800'
+    )
     // watch(theme, theme => {
     //   themeColor = themes[theme || 'green']
     // })
@@ -79,7 +83,7 @@ export default {
 
       for (let i = 0; i < bufferLength; i++) {
         mult = Math.floor(i / maxNum)
-        num = mult % 2 === 0 ? (i - maxNum * mult) : (maxNum - (i - maxNum * mult))
+        num = mult % 2 === 0 ? i - maxNum * mult : maxNum - (i - maxNum * mult)
         let spectrum = num > 90 ? 0 : dataArray[num + 20]
         frequencyAvg += spectrum * 1.2
       }
@@ -129,7 +133,7 @@ export default {
       canvas.height = canvas.clientHeight
       WIDTH = canvas.width
       HEIGHT = canvas.height
-      MAX_HEIGHT = Math.round(HEIGHT * 0.4 / 255 * 10000) / 10000
+      MAX_HEIGHT = Math.round(((HEIGHT * 0.4) / 255) * 10000) / 10000
       // console.log(MAX_HEIGHT)
       barWidth = getBarWidth(WIDTH)
     }
@@ -153,7 +157,7 @@ export default {
       canvas.height = canvas.clientHeight
       WIDTH = canvas.width
       HEIGHT = canvas.height
-      MAX_HEIGHT = Math.round(HEIGHT * 0.4 / 255 * 10000) / 10000
+      MAX_HEIGHT = Math.round(((HEIGHT * 0.4) / 255) * 10000) / 10000
       // console.log(MAX_HEIGHT)
       if (isPlay.value) handlePlay()
     })

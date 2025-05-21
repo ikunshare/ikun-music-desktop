@@ -4,15 +4,15 @@ const tar = require('tar')
 
 const libDir = path.join(__dirname, 'lib')
 
-const getGzipFiles = async() => {
+const getGzipFiles = async () => {
   const names = await fs.promises.readdir(libDir)
   // for (const name of names) {
   //   if (name.endsWith('.node')) await fs.promises.unlink(path.join(libDir, name))
   // }
-  return names.filter(name => name.endsWith('.gz'))
+  return names.filter((name) => name.endsWith('.gz'))
 }
 
-const unzip = async(filePath) => {
+const unzip = async (filePath) => {
   const targetDir = filePath.replace('.tar.gz', '')
   if (fs.existsSync(targetDir)) await fs.promises.rm(targetDir, { recursive: true })
   await fs.promises.mkdir(targetDir)
@@ -24,11 +24,8 @@ const unzip = async(filePath) => {
   return targetDir
 }
 
-const files = [
-  'qrc_decode',
-  'better_sqlite3',
-]
-const moveFile = async(filePath) => {
+const files = ['qrc_decode', 'better_sqlite3']
+const moveFile = async (filePath) => {
   const name = 'electron-' + path.basename(filePath).split('-electron-')[1]
   for (const fileName of files) {
     if (fileName == 'better_sqlite3' && !name.includes('linux')) continue
@@ -39,7 +36,7 @@ const moveFile = async(filePath) => {
   await fs.promises.rm(filePath, { recursive: true })
 }
 
-const run = async() => {
+const run = async () => {
   const files = await getGzipFiles()
   for (const name of files) {
     await moveFile(await unzip(path.join(libDir, name)))
@@ -50,4 +47,3 @@ const run = async() => {
 }
 
 run()
-

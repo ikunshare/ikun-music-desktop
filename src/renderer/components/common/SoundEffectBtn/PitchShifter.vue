@@ -3,14 +3,26 @@
     <div class="player__sound_effect_title" :class="$style.header">
       <h3>
         {{ $t('player__sound_effect_pitch_shifter') }}
-        <svg-icon class="help-icon" name="information-slab-circle-outline" :aria-label="$t('player__sound_effect_pitch_shifter_tip')" />
+        <svg-icon
+          class="help-icon"
+          name="information-slab-circle-outline"
+          :aria-label="$t('player__sound_effect_pitch_shifter_tip')"
+        />
       </h3>
-      <base-btn min @click="handleSetPreset(1)">{{ $t('player__sound_effect_pitch_shifter_reset_btn') }}</base-btn>
+      <base-btn min @click="handleSetPreset(1)">{{
+        $t('player__sound_effect_pitch_shifter_reset_btn')
+      }}</base-btn>
     </div>
     <div :class="$style.eqList">
       <div :class="$style.eqItem">
         <span :class="$style.label">{{ playbackRate.toFixed(2) }}x</span>
-        <base-slider-bar :class="$style.slider" :value="playbackRate * 100" :min="50" :max="150" @change="handleUpdatePlaybackRate" />
+        <base-slider-bar
+          :class="$style.slider"
+          :value="playbackRate * 100"
+          :min="50"
+          :max="150"
+          @change="handleUpdatePlaybackRate"
+        />
       </div>
     </div>
     <!-- <div :class="$style.saveList">
@@ -35,12 +47,11 @@ import { appSetting, saveMediaDeviceId, updateSetting } from '@renderer/store/se
 //   speed: 25,
 // })
 
-
 const playbackRate = computed(() => appSetting['player.soundEffect.pitchShifter.playbackRate'])
 
-const handleSetPreset = async(value) => {
+const handleSetPreset = async (value) => {
   if (appSetting['player.mediaDeviceId'] != 'default') {
-    await setMediaDeviceId('default').catch(_ => _)
+    await setMediaDeviceId('default').catch((_) => _)
     saveMediaDeviceId('default')
   }
   updateSetting({ 'player.soundEffect.pitchShifter.playbackRate': value })
@@ -56,7 +67,6 @@ const handleUpdatePlaybackRate = (value) => {
   void handleSetPreset(value)
 }
 
-
 // const userPresetList = ref([])
 
 // const handleRemovePreset = id => {
@@ -68,8 +78,6 @@ const handleUpdatePlaybackRate = (value) => {
 //     userPresetList.value = list
 //   })
 // })
-
-
 </script>
 
 <style lang="less" module>
@@ -153,5 +161,4 @@ const handleUpdatePlaybackRate = (value) => {
   margin-top: 10px;
   gap: 10px;
 }
-
 </style>

@@ -1,7 +1,6 @@
 // Fork from https://github.com/claus/flac-metadata
 // 在 flac-metadata 的基础上修复与改进标签与封面写入逻辑
 
-
 const Transform = require('stream').Transform
 
 const MetaDataBlock = require('./lib/MetaDataBlock')
@@ -48,7 +47,9 @@ class Processor extends Transform {
     this.tasks = 0
 
     if (!(this instanceof Processor)) return new Processor(options)
-    if (options && !!options.parseMetaDataBlocks) { this.parseMetaDataBlocks = true }
+    if (options && !!options.parseMetaDataBlocks) {
+      this.parseMetaDataBlocks = true
+    }
   }
 
   writeMeta({ vorbis, picture }) {
@@ -80,8 +81,13 @@ class Processor extends Transform {
     function _safePush(minCapacity, persist, validate) {
       let slice
       let chunkAvailable = chunkLen - chunkPos
-      let isDone = (chunkAvailable + this.bufPos >= minCapacity)
-      validate = (typeof validate === 'function') ? validate : function() { return true }
+      let isDone = chunkAvailable + this.bufPos >= minCapacity
+      validate =
+        typeof validate === 'function'
+          ? validate
+          : function () {
+              return true
+            }
       if (isDone) {
         // Enough data available
         if (persist) {
@@ -116,7 +122,7 @@ class Processor extends Transform {
         this.bufPos += chunkLen - chunkPos
       }
       return isDone
-    };
+    }
     let safePush = _safePush.bind(this)
 
     while (!isChunkProcessed) {
@@ -168,7 +174,7 @@ class Processor extends Transform {
   }
 
   _validateMarker(slice, isDone) {
-    this.isFlac = (slice.toString('utf8', 0) === 'fLaC')
+    this.isFlac = slice.toString('utf8', 0) === 'fLaC'
     // TODO: completely bail out if file is not a FLAC?
     return true
   }
@@ -177,7 +183,7 @@ class Processor extends Transform {
     // Parse MDB header
     let header = slice.readUInt32BE(0)
     let type = (header >>> 24) & 0x7f
-    this.mdbLast = (((header >>> 24) & 0x80) !== 0)
+    this.mdbLast = ((header >>> 24) & 0x80) !== 0
     this.mdbLen = header & 0xffffff
     // Create appropriate MDB object
     // (data is injected later in _validateMDB, if parseMetaDataBlocks option is set to true)
@@ -257,7 +263,13 @@ class Processor extends Transform {
     if (this.waitWriteVorbis == null) return
     let isLast = this.mdbLast && this.tasks === 1
     this.tasks--
-    this.push(MetaDataBlockVorbisComment.create(isLast, this.waitWriteVorbis.vendor, this.waitWriteVorbis.comments).publish())
+    this.push(
+      MetaDataBlockVorbisComment.create(
+        isLast,
+        this.waitWriteVorbis.vendor,
+        this.waitWriteVorbis.comments
+      ).publish()
+    )
     this.waitWriteVorbis = null
   }
 
@@ -267,12 +279,16 @@ class Processor extends Transform {
     this.tasks--
     this.push(
       MetaDataBlockPicture.create(
-        isLast, this.waitWritePicture.pictureType,
-        this.waitWritePicture.mimeType, this.waitWritePicture.description,
-        this.waitWritePicture.width, this.waitWritePicture.height,
-        this.waitWritePicture.bitsPerPixel, this.waitWritePicture.colors,
-        this.waitWritePicture.pictureData,
-      ).publish(),
+        isLast,
+        this.waitWritePicture.pictureType,
+        this.waitWritePicture.mimeType,
+        this.waitWritePicture.description,
+        this.waitWritePicture.width,
+        this.waitWritePicture.height,
+        this.waitWritePicture.bitsPerPixel,
+        this.waitWritePicture.colors,
+        this.waitWritePicture.pictureData
+      ).publish()
     )
     this.waitWritePicture = null
   }

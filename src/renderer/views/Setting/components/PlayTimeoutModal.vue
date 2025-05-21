@@ -63,7 +63,8 @@ export default {
     const handleConfirm = () => {
       let time = verify()
       if (time == '') return
-      if (appSetting['player.waitPlayEndStopTime'] != time) updateSetting({ 'player.waitPlayEndStopTime': time })
+      if (appSetting['player.waitPlayEndStopTime'] != time)
+        updateSetting({ 'player.waitPlayEndStopTime': time })
       startTimeoutStop(time * 60)
       handleCloseModal()
     }
@@ -79,7 +80,6 @@ export default {
   },
 }
 </script>
-
 
 <style lang="less" module>
 @import '@renderer/assets/styles/layout.less';
@@ -145,5 +145,4 @@ export default {
 .ruleLink {
   .mixin-ellipsis-1;
 }
-
 </style>

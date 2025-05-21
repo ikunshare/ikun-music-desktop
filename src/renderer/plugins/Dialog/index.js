@@ -1,7 +1,6 @@
 import Dialog from './Dialog.vue'
 import { createApp } from 'vue'
 
-
 const defaultOptions = {
   message: '',
   teleport: '#root',
@@ -11,9 +10,13 @@ const defaultOptions = {
   selection: false,
 }
 
-export const dialog = function(options) {
+export const dialog = function (options) {
   const { message, showCancel, cancelButtonText, confirmButtonText, teleport, selection } =
-    Object.assign({}, defaultOptions, typeof options == 'string' ? { message: options } : options || {})
+    Object.assign(
+      {},
+      defaultOptions,
+      typeof options == 'string' ? { message: options } : options || {}
+    )
   return new Promise((resolve, reject) => {
     let app = createApp(Dialog, {
       afterLeave() {
@@ -48,11 +51,12 @@ export const dialog = function(options) {
   })
 }
 
-dialog.confirm = options => dialog(
-  typeof options == 'string'
-    ? { message: options, showCancel: true }
-    : { ...options, showCancel: true },
-)
+dialog.confirm = (options) =>
+  dialog(
+    typeof options == 'string'
+      ? { message: options, showCancel: true }
+      : { ...options, showCancel: true }
+  )
 
 const dialogPlugin = {
   install(Vue, options) {

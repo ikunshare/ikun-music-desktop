@@ -1,7 +1,11 @@
 <template>
   <material-modal :show="show" :bg-close="bgClose" :teleport="teleport" @close="handleClose">
     <main :class="$style.main">
-      <h2>{{ $t('download__multiple_tip', { len: list.length }) }}<br>{{ $t('download__multiple_tip2') }}</h2>
+      <h2>
+        {{ $t('download__multiple_tip', { len: list.length }) }}<br />{{
+          $t('download__multiple_tip2')
+        }}
+      </h2>
 
       <template v-if="qualityOptions.length <= 4">
         <base-btn
@@ -17,11 +21,7 @@
       <template v-else>
         <div :class="$style.selectWrapper">
           <select v-model="selectedQuality" :class="$style.select">
-            <option
-              v-for="quality in qualityOptions"
-              :key="quality.value"
-              :value="quality.value"
-            >
+            <option v-for="quality in qualityOptions" :key="quality.value" :value="quality.value">
               {{ quality.label }}
             </option>
           </select>
@@ -79,7 +79,11 @@ export default {
   },
   methods: {
     handleClick(quality) {
-      void createDownloadTasks(this.list.filter(item => item.source != 'local'), quality, this.listId)
+      void createDownloadTasks(
+        this.list.filter((item) => item.source != 'local'),
+        quality,
+        this.listId
+      )
       this.handleClose()
       this.$emit('confirm')
     },

@@ -1,4 +1,3 @@
-
 // const key = 'karakal@123Qcomyidongtiantianhaoting'
 const DELTA = 2654435769n
 const MIN_LENGTH = 32
@@ -15,14 +14,13 @@ const keyArr = [
   28992395054481524n,
 ]
 
-
 const teaDecrypt = (data, key) => {
   const length = data.length
   const lengthBitint = BigInt(length)
   if (length >= 1) {
     // let j = data[data.length - 1];
     let j2 = data[0]
-    let j3 = toLong((6n + (52n / lengthBitint)) * DELTA)
+    let j3 = toLong((6n + 52n / lengthBitint) * DELTA)
     while (true) {
       let j4 = j3
       if (j4 == 0n) break
@@ -31,14 +29,30 @@ const teaDecrypt = (data, key) => {
       while (true) {
         j6--
         if (j6 > 0n) {
-          let j7 = data[(j6 - 1n)]
+          let j7 = data[j6 - 1n]
           let i = j6
-          j2 = toLong(data[i] - (toLong(toLong(j2 ^ j4) + toLong(j7 ^ key[toLong(toLong(3n & j6) ^ j5)])) ^ toLong(toLong(toLong(j7 >> 5n) ^ toLong(j2 << 2n)) + toLong(toLong(j2 >> 3n) ^ toLong(j7 << 4n)))))
+          j2 = toLong(
+            data[i] -
+              (toLong(toLong(j2 ^ j4) + toLong(j7 ^ key[toLong(toLong(3n & j6) ^ j5)])) ^
+                toLong(
+                  toLong(toLong(j7 >> 5n) ^ toLong(j2 << 2n)) +
+                    toLong(toLong(j2 >> 3n) ^ toLong(j7 << 4n))
+                ))
+          )
           data[i] = j2
         } else break
       }
       let j8 = data[lengthBitint - 1n]
-      j2 = toLong(data[0n] - toLong(toLong(toLong(key[toLong(toLong(j6 & 3n) ^ j5)] ^ j8) + toLong(j2 ^ j4)) ^ toLong(toLong(toLong(j8 >> 5n) ^ toLong(j2 << 2n)) + toLong(toLong(j2 >> 3n) ^ toLong(j8 << 4n)))))
+      j2 = toLong(
+        data[0n] -
+          toLong(
+            toLong(toLong(key[toLong(toLong(j6 & 3n) ^ j5)] ^ j8) + toLong(j2 ^ j4)) ^
+              toLong(
+                toLong(toLong(j8 >> 5n) ^ toLong(j2 << 2n)) +
+                  toLong(toLong(j2 >> 3n) ^ toLong(j8 << 4n))
+              )
+          )
+      )
       data[0] = j2
       j3 = toLong(j4 - DELTA)
     }
@@ -56,18 +70,17 @@ const longArrToString = (data) => {
 const longToBytes = (l) => {
   const result = Buffer.alloc(8)
   for (let i = 0; i < 8; i++) {
-    result[i] = parseInt(l & 0xFFn)
+    result[i] = parseInt(l & 0xffn)
     l >>= 8n
   }
   return result
 }
 
-
 const toBigintArray = (data) => {
   const length = Math.floor(data.length / 16)
   const jArr = Array(length)
   for (let i = 0; i < length; i++) {
-    jArr[i] = toLong(data.substring(i * 16, (i * 16) + 16))
+    jArr[i] = toLong(data.substring(i * 16, i * 16 + 16))
   }
   return jArr
 }
@@ -75,7 +88,7 @@ const toBigintArray = (data) => {
 // https://github.com/ikunshare/ikun-music-desktop/issues/445#issuecomment-1139338682
 const MAX = 9223372036854775807n
 const MIN = -9223372036854775808n
-const toLong = str => {
+const toLong = (str) => {
   const num = typeof str == 'string' ? BigInt('0x' + str) : str
   if (num > MAX) return toLong(num - (1n << 64n))
   else if (num < MIN) return toLong(num + (1n << 64n))
@@ -89,7 +102,7 @@ export const decrypt = (data) => {
   // console.log(teaDecrypt(toBigintArray(data), keyArr))
   // console.log(longArrToString(teaDecrypt(toBigintArray(data), keyArr)))
   // console.log(toByteArray(teaDecrypt(toBigintArray(data), keyArr)))
-  return (data == null || data.length < MIN_LENGTH)
+  return data == null || data.length < MIN_LENGTH
     ? data
     : longArrToString(teaDecrypt(toBigintArray(data), keyArr))
 }
@@ -101,4 +114,3 @@ export const decrypt = (data) => {
 // console.log(toByteArray([6048138644744000495n]))
 // console.log(toByteArray([16325999628386395n]))
 // console.log(toLong(90994076459972177136n))
-

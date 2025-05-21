@@ -1,22 +1,23 @@
 import { httpFetch } from '../../request'
 import { weapi } from './utils/crypto'
 import { formatPlayTime } from '../../index'
-import { getMusicQualityInfo } from './quality_detail'
-
+import { getBatchMusicQualityInfo } from './quality_detail'
 
 export default {
   getSinger(singers) {
     let arr = []
-    singers?.forEach(singer => {
+    singers?.forEach((singer) => {
       arr.push(singer.name)
     })
     return arr.join('、')
   },
-  filterList({ songs, privileges }) {
-    // console.log(songs, privileges)
+  async filterList({ songs, privileges }) {
     const list = []
+    const idList = songs.map((item) => item.id)
+    const qualityInfoMap = await getBatchMusicQualityInfo(idList)
+
     songs.forEach((item, index) => {
-      const { types, _types } = getMusicQualityInfo(item.id)
+      const { types, _types } = qualityInfoMap[item.id] || { types: [], _types: {} }
 
       if (item.pc) {
         list.push({
@@ -52,7 +53,6 @@ export default {
         })
       }
     })
-    // console.log(list)
     return list
   },
   async getList(ids = [], retryNum = 0) {
@@ -61,17 +61,17 @@ export default {
     const requestObj = httpFetch('https://music.163.com/weapi/v3/song/detail', {
       method: 'post',
       headers: {
-        'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36',
+        'User-Agent':
+          'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36',
         origin: 'https://music.163.com',
       },
       form: weapi({
-        c: '[' + ids.map(id => ('{"id":' + id + '}')).join(',') + ']',
+        c: '[' + ids.map((id) => '{"id":' + id + '}').join(',') + ']',
         ids: '[' + ids.join(',') + ']',
       }),
     })
     const { body, statusCode } = await requestObj.promise
     if (statusCode != 200 || body.code !== 200) throw new Error('获取歌曲详情失败')
-    // console.log(body)
-    return { source: 'wy', list: this.filterList(body) }
+    return { source: 'wy', list: await this.filterList(body) }
   },
 }

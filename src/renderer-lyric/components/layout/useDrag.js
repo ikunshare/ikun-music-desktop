@@ -20,12 +20,12 @@ export default () => {
     // https://github.com/ikunshare/ikun-music-desktop/issues/2244
     if (isWin) setWindowResizeable(false)
   }
-  const handleLyricMouseDown = event => {
+  const handleLyricMouseDown = (event) => {
     console.log(event.target, event.currentTarget)
     if (event.target !== event.currentTarget) return
     handleLyricDown(event.target, event.clientX, event.clientY)
   }
-  const handleLyricTouchStart = event => {
+  const handleLyricTouchStart = (event) => {
     if (event.changedTouches.length) {
       const touch = event.changedTouches[0]
       if (touch.target !== touch.currentTarget) return
@@ -56,7 +56,7 @@ export default () => {
       })
     }
   }
-  const handleMouseMsMove = event => {
+  const handleMouseMsMove = (event) => {
     handleMove(event.clientX, event.clientY)
   }
   const handleTouchMove = (e) => {

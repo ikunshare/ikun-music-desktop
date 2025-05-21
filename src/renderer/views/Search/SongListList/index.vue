@@ -1,6 +1,11 @@
 <template>
   <div :class="$style.container">
-    <SongList ref="listRef" :list-info="listInfo" :visible-source="sourceId == 'all'" @toggle-page="togglePage" />
+    <SongList
+      ref="listRef"
+      :list-info="listInfo"
+      :visible-source="sourceId == 'all'"
+      @toggle-page="togglePage"
+    />
   </div>
 </template>
 
@@ -20,24 +25,27 @@ const props = defineProps<Props>()
 const router = useRouter()
 const route = useRoute()
 
-const {
-  listRef,
-  listInfo,
-  search,
-} = useList()
+const { listRef, listInfo, search } = useList()
 
-watch(() => [props.sourceId, props.page], ([sourceId, page]) => {
-  setTimeout(() => {
-    search(searchText.value, sourceId as SearchSource, page as number || 1)
-  })
-})
-watch(searchText, (searchText) => {
-  setTimeout(() => {
-    search(searchText, props.sourceId, props.page)
-  })
-}, {
-  immediate: true,
-})
+watch(
+  () => [props.sourceId, props.page],
+  ([sourceId, page]) => {
+    setTimeout(() => {
+      search(searchText.value, sourceId as SearchSource, (page as number) || 1)
+    })
+  }
+)
+watch(
+  searchText,
+  (searchText) => {
+    setTimeout(() => {
+      search(searchText, props.sourceId, props.page)
+    })
+  },
+  {
+    immediate: true,
+  }
+)
 
 const togglePage = (page: number) => {
   void router.replace({
@@ -49,10 +57,7 @@ const togglePage = (page: number) => {
   })
   // search(searchText.value, props.sourceId, page)
 }
-
-
 </script>
-
 
 <style lang="less" module>
 .container {
@@ -69,5 +74,4 @@ const togglePage = (page: number) => {
 //   height: 100%;
 //   flex: auto;
 // }
-
 </style>

@@ -1,5 +1,10 @@
 <template>
-  <material-modal :show="modelValue" bg-close="bg-close" teleport="#view" @close="$emit('update:modelValue', false)">
+  <material-modal
+    :show="modelValue"
+    bg-close="bg-close"
+    teleport="#view"
+    @close="$emit('update:modelValue', false)"
+  >
     <main :class="$style.main">
       <h2>{{ $t('theme_selector_modal__title') }}</h2>
       <div class="scroll" :class="$style.content">
@@ -7,9 +12,12 @@
           <h3>{{ $t('theme_selector_modal__light_title') }}</h3>
           <ul :class="$style.theme">
             <li
-              v-for="theme in themeInfo.themeLights" :key="theme.id"
-              :style="theme.styles" :aria-label="theme.name"
-              :class="[{[$style.active]: appSetting['theme.lightId'] == theme.id}]" @click="setLightId(theme.id)"
+              v-for="theme in themeInfo.themeLights"
+              :key="theme.id"
+              :style="theme.styles"
+              :aria-label="theme.name"
+              :class="[{ [$style.active]: appSetting['theme.lightId'] == theme.id }]"
+              @click="setLightId(theme.id)"
             >
               <span :class="$style.bg" />
               <label>{{ theme.name }}</label>
@@ -20,9 +28,12 @@
           <h3>{{ $t('theme_selector_modal__dark_title') }}</h3>
           <ul :class="$style.theme">
             <li
-              v-for="theme in themeInfo.themeDarks" :key="theme.id"
-              :style="theme.styles" :aria-label="theme.name"
-              :class="[{[$style.active]: appSetting['theme.darkId'] == theme.id}]" @click="setDarkId(theme.id)"
+              v-for="theme in themeInfo.themeDarks"
+              :key="theme.id"
+              :style="theme.styles"
+              :aria-label="theme.name"
+              :class="[{ [$style.active]: appSetting['theme.darkId'] == theme.id }]"
+              @click="setDarkId(theme.id)"
             >
               <span :class="$style.bg" />
               <label>{{ theme.name }}</label>
@@ -58,60 +69,67 @@ export default {
     })
     let dataPath = ''
 
-    watch(() => props.modelValue, (val) => {
-      if (!val) return
-      getThemes((info) => {
-      // console.log(info)
-        const themes = [...info.themes, ...info.userThemes]
-        const lights = []
-        const darks = themes.filter(t => {
-          if (t.isDark) return true
-          lights.push(t)
-          return false
+    watch(
+      () => props.modelValue,
+      (val) => {
+        if (!val) return
+        getThemes((info) => {
+          // console.log(info)
+          const themes = [...info.themes, ...info.userThemes]
+          const lights = []
+          const darks = themes.filter((t) => {
+            if (t.isDark) return true
+            lights.push(t)
+            return false
+          })
+          dataPath = info.dataPath
+          themeInfo.themeLights = lights.map((t) => {
+            return {
+              id: t.id,
+              // @ts-expect-error
+              name: t.isCustom ? t.name : window.i18n.t('theme_' + t.id),
+              styles: {
+                '--color-primary-theme': t.config.themeColors['--color-theme'],
+                '--background-image-theme': t.isCustom
+                  ? t.config.extInfo['--background-image'] == 'none'
+                    ? 'none'
+                    : buildBgUrl(t.config.extInfo['--background-image'], info.dataPath)
+                  : t.config.extInfo['--background-image'],
+              },
+            }
+          })
+          themeInfo.themeDarks = markRaw(
+            darks.map((t) => {
+              return {
+                id: t.id,
+                // @ts-expect-error
+                name: t.isCustom ? t.name : window.i18n.t('theme_' + t.id),
+                styles: {
+                  '--color-primary-theme': t.config.themeColors['--color-theme'],
+                  '--background-image-theme': t.isCustom
+                    ? t.config.extInfo['--background-image'] == 'none'
+                      ? 'none'
+                      : buildBgUrl(t.config.extInfo['--background-image'], info.dataPath)
+                    : t.config.extInfo['--background-image'],
+                },
+              }
+            })
+          )
         })
-        dataPath = info.dataPath
-        themeInfo.themeLights = lights.map(t => {
-          return {
-            id: t.id,
-            // @ts-expect-error
-            name: t.isCustom ? t.name : window.i18n.t('theme_' + t.id),
-            styles: {
-              '--color-primary-theme': t.config.themeColors['--color-theme'],
-              '--background-image-theme': t.isCustom
-                ? t.config.extInfo['--background-image'] == 'none'
-                  ? 'none'
-                  : buildBgUrl(t.config.extInfo['--background-image'], info.dataPath)
-                : t.config.extInfo['--background-image'],
-            },
-          }
-        })
-        themeInfo.themeDarks = markRaw(darks.map(t => {
-          return {
-            id: t.id,
-            // @ts-expect-error
-            name: t.isCustom ? t.name : window.i18n.t('theme_' + t.id),
-            styles: {
-              '--color-primary-theme': t.config.themeColors['--color-theme'],
-              '--background-image-theme': t.isCustom
-                ? t.config.extInfo['--background-image'] == 'none'
-                  ? 'none'
-                  : buildBgUrl(t.config.extInfo['--background-image'], info.dataPath)
-                : t.config.extInfo['--background-image'],
-            },
-          }
-        }))
-      })
-    })
+      }
+    )
 
     const setLightId = (id) => {
       if (appSetting['theme.lightId'] == id) return
       updateSetting({ 'theme.lightId': id })
-      if (appSetting['theme.id'] == 'auto') applyTheme('auto', id, appSetting['theme.darkId'], dataPath)
+      if (appSetting['theme.id'] == 'auto')
+        applyTheme('auto', id, appSetting['theme.darkId'], dataPath)
     }
     const setDarkId = (id) => {
       if (appSetting['theme.darkId'] == id) return
       updateSetting({ 'theme.darkId': id })
-      if (appSetting['theme.id'] == 'auto') applyTheme('auto', appSetting['theme.lightId'], id, dataPath)
+      if (appSetting['theme.id'] == 'auto')
+        applyTheme('auto', appSetting['theme.lightId'], id, dataPath)
     }
     return {
       appSetting,
@@ -171,7 +189,7 @@ export default {
     cursor: pointer;
     // color: var(--color-primary);
     margin-right: 4px;
-    transition: color .3s ease;
+    transition: color 0.3s ease;
     margin-bottom: 15px;
     width: 86px;
 
@@ -193,7 +211,7 @@ export default {
       margin-bottom: 5px;
       border: 2px solid transparent;
       padding: 2px;
-      transition: border-color .3s ease;
+      transition: border-color 0.3s ease;
       border-radius: 5px;
       &:after {
         display: block;
@@ -229,5 +247,4 @@ export default {
   //   }
   // }
 }
-
 </style>

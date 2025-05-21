@@ -1,7 +1,4 @@
-/* eslint-disable no-var */
-
 const WEBAUDIO_BLOCK_SIZE = 128
-
 
 /** Overlap-Add Node */
 class OLAProcessor extends globalThis.AudioWorkletProcessor {
@@ -24,7 +21,6 @@ class OLAProcessor extends globalThis.AudioWorkletProcessor {
     this.nbOverlaps2x = this.nbOverlaps * 2
     this.fakeEmptyInputs = [new Array(2).fill(new Float32Array(WEBAUDIO_BLOCK_SIZE))]
 
-
     // pre-allocate input buffers (will be reallocated if needed)
     this.inputBuffers = new Array(this.nbInputs)
     this.inputBuffersHead = new Array(this.nbInputs)
@@ -41,7 +37,7 @@ class OLAProcessor extends globalThis.AudioWorkletProcessor {
       this.allocateOutputChannels(i, 2)
     }
 
-    this.port.onmessage = (e) => this.keepReturnTrue = false
+    this.port.onmessage = (e) => (this.keepReturnTrue = false)
   }
 
   /** Handles dynamic reallocation of input/output channels buffer
@@ -49,7 +45,7 @@ class OLAProcessor extends globalThis.AudioWorkletProcessor {
   reallocateChannelsIfNeeded(inputs, outputs, force) {
     for (var i = 0; i < this.nbInputs; i++) {
       let nbChannels = inputs[i].length
-      if (force || (nbChannels != this.inputBuffers[i].length)) {
+      if (force || nbChannels != this.inputBuffers[i].length) {
         this.allocateInputChannels(i, nbChannels)
         // console.log("reallocateChannelsIfNeeded");
       }
@@ -57,7 +53,7 @@ class OLAProcessor extends globalThis.AudioWorkletProcessor {
 
     for (i = 0; i < this.nbOutputs; i++) {
       let nbChannels = outputs[i].length
-      if (force || (nbChannels != this.outputBuffers[i].length)) {
+      if (force || nbChannels != this.outputBuffers[i].length) {
         this.allocateOutputChannels(i, nbChannels)
         // console.log("reallocateChannelsIfNeeded");
       }
@@ -79,7 +75,10 @@ class OLAProcessor extends globalThis.AudioWorkletProcessor {
     this.inputBuffersHead[inputIndex] = new Array(nbChannels)
     this.inputBuffersToSend[inputIndex] = new Array(nbChannels)
     for (i = 0; i < nbChannels; i++) {
-      this.inputBuffersHead[inputIndex][i] = this.inputBuffers[inputIndex][i].subarray(0, this.blockSize)
+      this.inputBuffersHead[inputIndex][i] = this.inputBuffers[inputIndex][i].subarray(
+        0,
+        this.blockSize
+      )
       this.inputBuffersToSend[inputIndex][i] = new Float32Array(this.blockSize)
     }
   }

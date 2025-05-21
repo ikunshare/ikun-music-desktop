@@ -3,7 +3,6 @@ import { requestMsg } from '../../message'
 import { timeout } from '../options'
 import { dnsLookup } from '../utils'
 
-
 const kw_quality_format = {
   '128k': { e: '128kmp3', f: 'mp3' },
   '320k': { e: '320kmp3', f: 'mp3' },
@@ -25,7 +24,7 @@ const api_mobi = {
       .map(([k, v]) => `${k}=${v}`)
       .join('&')
     console.log(queryString)
-    const requestObj = httpFetch(`https://nmsublist.kuwo.cn/mobi.s?${queryString}`, {
+    const requestObj = httpFetch(`https://mobi.kuwo.cn/mobi.s?${queryString}`, {
       method: 'get',
       headers: {
         'User-Agent': 'okhttp/3.10.0',
@@ -37,8 +36,10 @@ const api_mobi = {
     requestObj.promise = requestObj.promise.then(({ statusCode, body }) => {
       if (statusCode != 200) return Promise.reject(new Error(requestMsg.fail))
       switch (body.code) {
-        case 200: return Promise.resolve({ type, url: body.data.surl })
-        default: return Promise.reject(new Error('获取URL失败'))
+        case 200:
+          return Promise.resolve({ type, url: body.data.surl })
+        default:
+          return Promise.reject(new Error('获取URL失败'))
       }
     })
     return requestObj

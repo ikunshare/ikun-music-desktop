@@ -17,7 +17,6 @@ div(:class="$style.header")
         use(xlink:href="#icon-window-close-2")
 </template>
 
-
 <script setup>
 import { onMounted, onBeforeUnmount, ref, useCssModule } from '@common/utils/vueTools'
 import { isFullscreen } from '@renderer/store'
@@ -34,7 +33,7 @@ const handle_focus = () => {
     node.classList.remove(cssModule.hover)
   }
 }
-const getBtnEl = (el) => el.tagName == 'BUTTON' || !el ? el : getBtnEl(el.parentNode)
+const getBtnEl = (el) => (el.tagName == 'BUTTON' || !el ? el : getBtnEl(el.parentNode))
 const handle_mouseover = (event) => {
   const btn = getBtnEl(event.target)
   if (!btn) return
@@ -45,7 +44,6 @@ const handle_mouseout = (event) => {
   if (!btn) return
   btn.classList.remove(cssModule.hover)
 }
-
 
 onMounted(() => {
   window.app_event.on('focus', handle_focus)
@@ -70,21 +68,20 @@ const fullscreenExit = () => {
     isFullscreen.value = fullscreen
   })
 }
-
 </script>
-
 
 <style lang="less" module>
 @import '@renderer/assets/styles/layout.less';
 
-@control-btn-width: @height-toolbar * .26;
+@control-btn-width: @height-toolbar * 0.26;
 
 :global(.fullscreen) {
   .header {
     -webkit-app-region: no-drag;
     align-self: flex-start;
     .controBtn {
-      .close, .min {
+      .close,
+      .min {
         display: none;
       }
       .fullscreenExit {
@@ -142,5 +139,4 @@ const fullscreenExit = () => {
     }
   }
 }
-
 </style>

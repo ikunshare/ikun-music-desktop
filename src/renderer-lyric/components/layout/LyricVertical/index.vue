@@ -2,7 +2,10 @@
   <div
     ref="dom_lyric"
     :class="classNames"
-    :style="lrcStyles" @wheel="handleWheel" @mousedown="handleLyricMouseDown" @touchstart="handleLyricTouchStart"
+    :style="lrcStyles"
+    @wheel="handleWheel"
+    @mousedown="handleLyricMouseDown"
+    @touchstart="handleLyricTouchStart"
   >
     <div :class="$style.lyricSpace" />
     <div ref="dom_lyric_text" />
@@ -38,7 +41,8 @@ export default {
       opacity: setting['desktopLyric.style.opacity'] / 100,
       textAlign: setting['desktopLyric.style.align'],
       '--line-gap': Math.ceil(setting['desktopLyric.style.lineGap'] * 1.06) + 'px',
-      '--line-extended-gap': Math.ceil(setting['desktopLyric.style.lineGap'] * 1.06 / 8).toFixed(2) + 'px',
+      '--line-extended-gap':
+        Math.ceil((setting['desktopLyric.style.lineGap'] * 1.06) / 8).toFixed(2) + 'px',
     }))
     const isComputeWidth = computed(() => {
       return setting['desktopLyric.style.isZoomActiveLrc'] && !setting['desktopLyric.isDelayScroll']
@@ -85,7 +89,8 @@ export default {
   }
 
   :global {
-    .font-lrc, .shadow {
+    .font-lrc,
+    .shadow {
       padding: 0.14em 0.07em;
       margin: 0 -0.07em;
     }
@@ -116,7 +121,8 @@ export default {
           transition-property: font-size, color;
         }
       }
-      &.line-mode.active .font-lrc, &.font-mode.played .font-lrc {
+      &.line-mode.active .font-lrc,
+      &.font-mode.played .font-lrc {
         color: var(--color-lyric-played);
       }
       &.font-mode .extended .font-lrc {
@@ -134,7 +140,11 @@ export default {
           font-size: 1em;
           background-repeat: no-repeat;
           background-color: var(--color-lyric-unplay);
-          background-image: -webkit-linear-gradient(top, var(--color-lyric-played), var(--color-lyric-played));
+          background-image: -webkit-linear-gradient(
+            top,
+            var(--color-lyric-played),
+            var(--color-lyric-played)
+          );
           -webkit-text-fill-color: transparent;
           -webkit-background-clip: text;
           background-size: 0 100%;
@@ -156,7 +166,8 @@ export default {
     //   .stroke(1px, rgba(0, 0, 0, 0.05));
     //   // text-shadow: 1px 0 2px rgba(0, 0, 0, 0.30), 1px 0 1px rgba(0, 0, 0, 0.20);
     // }
-    .line-mode .font-lrc, .extended .font-lrc {
+    .line-mode .font-lrc,
+    .extended .font-lrc {
       // text-shadow: 0 0 2px rgba(0, 0, 0, 0.7), 0 0 2px rgba(0, 0, 0, 0.3), 0 0 1px rgba(0, 0, 0, 0.3);
       // .stroke2(rgba(0, 0, 0, 0.14));
       .stroke4(var(--color-lyric-shadow));
@@ -170,8 +181,6 @@ export default {
       transition: font-size @transition-slow;
       // text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3),  1px 1px 1px rgba(0, 0, 0, 0.3);
     }
-
-
   }
   // p {
   //   padding: 8px 0;
@@ -231,7 +240,7 @@ export default {
     .line-content {
       &.active {
         .extended {
-          font-size: .94em;
+          font-size: 0.94em;
         }
         .line {
           font-size: 1.2em;
@@ -242,7 +251,8 @@ export default {
 }
 .ellipsis {
   :global {
-    .font-lrc, .shadow {
+    .font-lrc,
+    .shadow {
       display: -webkit-box !important;
       .mixin-ellipsis(1);
     }
@@ -275,5 +285,4 @@ export default {
 //   display: flex;
 //   align-items: center;
 // }
-
 </style>

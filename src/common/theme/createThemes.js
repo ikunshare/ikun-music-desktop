@@ -284,7 +284,6 @@ const defaultThemes = [
       '--background-image-position': 'center',
       '--background-image-size': 'cover',
 
-
       '--color-btn-hide': '#3bc2b2',
       '--color-btn-min': '#85c43b',
       '--color-btn-close': '#fab4a0',
@@ -333,7 +332,6 @@ const defaultThemes = [
       '--background-image-position': 'center',
       '--background-image-size': 'cover',
 
-
       '--color-btn-hide': 'rgba(183, 212, 208, 1)',
       '--color-btn-min': 'rgba(200, 214, 183, 1)',
       '--color-btn-close': 'rgba(218, 195, 188, 1)',
@@ -381,4 +379,3 @@ const themes = defaultThemes.map(({ config: { primary, font, ...extInfo }, ...th
 })
 
 fs.writeFileSync(path.join(__dirname, 'index.json'), JSON.stringify(themes, null, 2))
-

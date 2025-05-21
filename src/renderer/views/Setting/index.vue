@@ -4,12 +4,19 @@
       <ul :class="$style.tocList" role="toolbar">
         <li v-for="h2 in tocList" :key="h2.id" :class="$style.tocListItem" role="presentation">
           <h2
-            :class="[$style.tocH2, {[$style.active]: avtiveComponentName == h2.id }]"
-            role="tab" :aria-selected="avtiveComponentName == h2.id"
-            :aria-label="h2.title" ignore-tip @click="toggleTab(h2.id)"
+            :class="[$style.tocH2, { [$style.active]: avtiveComponentName == h2.id }]"
+            role="tab"
+            :aria-selected="avtiveComponentName == h2.id"
+            :aria-label="h2.title"
+            ignore-tip
+            @click="toggleTab(h2.id)"
           >
             <transition name="list-active">
-              <svg-icon v-if="avtiveComponentName == h2.id" name="angle-right-solid" :class="$style.activeIcon" />
+              <svg-icon
+                v-if="avtiveComponentName == h2.id"
+                name="angle-right-solid"
+                :class="$style.activeIcon"
+              />
             </transition>
             {{ h2.title }}
           </h2>
@@ -116,11 +123,13 @@ export default {
       ]
     })
 
-    const avtiveComponentName = ref(route.query.name && tocList.value.some(t => t.id == route.query.name)
-      ? route.query.name
-      : tocList.value[0].id)
+    const avtiveComponentName = ref(
+      route.query.name && tocList.value.some((t) => t.id == route.query.name)
+        ? route.query.name
+        : tocList.value[0].id
+    )
 
-    const toggleTab = id => {
+    const toggleTab = (id) => {
       avtiveComponentName.value = id
       void nextTick(() => {
         dom_content_ref.value?.scrollTo({
@@ -209,8 +218,8 @@ export default {
   }
 }
 .activeIcon {
-  height: .9em;
-  width: .9em;
+  height: 0.9em;
+  width: 0.9em;
   margin-left: -0.45em;
   vertical-align: -0.05em;
 }
@@ -254,7 +263,6 @@ export default {
       > div {
         padding: 0 15px;
       }
-
     }
     h3 {
       font-size: 12px;
@@ -301,7 +309,6 @@ export default {
 //   }
 // }
 
-
 // :global(dt):target, :global(h3):target {
 //   animation: highlight 1s ease;
 // }
@@ -310,6 +317,4 @@ export default {
 //   from { background: yellow; }
 //   to { background: transparent; }
 // }
-
 </style>
-

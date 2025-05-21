@@ -12,9 +12,7 @@ import { appSetting } from '@renderer/store/setting'
 
 import ControlBtns from './ControlBtns.vue'
 import NavBar from './NavBar.vue'
-
 </script>
-
 
 <style lang="less" module>
 @import '@renderer/assets/styles/layout.less';
@@ -44,12 +42,11 @@ import NavBar from './NavBar.vue'
   padding: 0 13%;
   height: 50px;
   color: var(--color-nav-font);
-  opacity: .8;
+  opacity: 0.8;
   flex: none;
   text-align: center;
   line-height: 50px;
   font-weight: bold;
   // -webkit-app-region: no-drag;
 }
-
 </style>

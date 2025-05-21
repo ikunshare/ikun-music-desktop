@@ -72,7 +72,7 @@ export class SnapshotDataManage {
     let client = this.snapshotInfo.clients[clientId]
     if (!client) return
     if (client.snapshotKey) this.clientSnapshotKeys.splice(this.clientSnapshotKeys.indexOf(client.snapshotKey), 1)
-    // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+
     delete this.snapshotInfo.clients[clientId]
     this.saveSnapshotInfoThrottle()
   }

@@ -47,7 +47,9 @@ export default {
 
     const syncDevices = computed(() => {
       return sync.server.status.devices.length
-        ? sync.server.status.devices.map(d => `${d.deviceName} (${d.clientId.substring(0, 5)})`).join(', ')
+        ? sync.server.status.devices
+            .map((d) => `${d.deviceName} (${d.clientId.substring(0, 5)})`)
+            .join(', ')
         : ''
     })
 
@@ -55,7 +57,7 @@ export default {
       void sendSyncAction({ action: 'generate_code' })
     }
 
-    const setSyncServerPort = debounce(port => {
+    const setSyncServerPort = debounce((port) => {
       updateSetting({ 'sync.server.port': port.trim() })
     }, 500)
 
@@ -74,14 +76,14 @@ export default {
 
 <style lang="less" module>
 @import '@renderer/assets/styles/layout.less';
-.portInput[disabled], .hostInput[disabled] {
-  opacity: .8 !important;
+.portInput[disabled],
+.hostInput[disabled] {
+  opacity: 0.8 !important;
 }
 
 .hostInput {
   min-width: 380px;
 }
-
 
 .list {
   // background-color: @color-search-form-background;
@@ -91,7 +93,7 @@ export default {
   .listItem {
     position: relative;
     padding: 15px 10px 15px 15px;
-    transition: .3s ease;
+    transition: 0.3s ease;
     transition-property: background-color, opacity;
     line-height: 1.3;
     // overflow: hidden;
@@ -108,7 +110,7 @@ export default {
     //   border-bottom-right-radius: 4px;
     // }
     &.fetching {
-      opacity: .5;
+      opacity: 0.5;
     }
   }
 }
@@ -171,5 +173,4 @@ export default {
     background-color: var(--color-primary-font-active);
   }
 }
-
 </style>

@@ -18,12 +18,12 @@ export default ({ props, list, selectedList, removeAllSelect }) => {
     })
   }
 
-  const sortMusic = num => {
+  const sortMusic = (num) => {
     num = Math.min(num, list.value.length)
     updateListMusicsPosition({
       listId: props.listId,
       position: num - 1,
-      ids: (selectedNum.value ? [...selectedList.value] : [musicInfo.value]).map(m => m.id),
+      ids: (selectedNum.value ? [...selectedList.value] : [musicInfo.value]).map((m) => m.id),
     })
     removeAllSelect()
     isShowMusicSortModal.value = false

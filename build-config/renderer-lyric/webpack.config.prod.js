@@ -12,7 +12,6 @@ const buildConfig = require('../webpack-build-config')
 // let whiteListedModules = ['vue']
 // let whiteListedModules = ['vue', 'vue-router', 'vuex', 'vue-i18n']
 
-
 module.exports = merge(baseConfig, {
   mode: 'production',
   devtool: 'source-map',
@@ -40,10 +39,7 @@ module.exports = merge(baseConfig, {
   ],
   optimization: {
     minimize: buildConfig.minimize,
-    minimizer: [
-      new TerserPlugin(),
-      new CssMinimizerPlugin(),
-    ],
+    minimizer: [new TerserPlugin(), new CssMinimizerPlugin()],
   },
   performance: {
     maxEntrypointSize: 1024 * 1024 * 10,
@@ -55,5 +51,3 @@ module.exports = merge(baseConfig, {
     __filename: false,
   },
 })
-
-

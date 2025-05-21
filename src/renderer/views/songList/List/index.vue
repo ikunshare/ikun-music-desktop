@@ -5,8 +5,17 @@
         <tag-list :source="source" :tag-id="tagId" :sort-id="sortId" />
         <sort-tab :source="source" :tag-id="tagId" :sort-id="sortId" />
       </div>
-      <base-btn :class="$style.btn" outline min @click="visibleOpenSongListModal = true">{{ $t('songlist__import_input_show_btn') }}</base-btn>
-      <base-selection :model-value="source" :class="$style.select" :list="sourceList" item-key="id" item-name="name" @update:model-value="handleToggleSource" />
+      <base-btn :class="$style.btn" outline min @click="visibleOpenSongListModal = true">{{
+        $t('songlist__import_input_show_btn')
+      }}</base-btn>
+      <base-selection
+        :model-value="source"
+        :class="$style.select"
+        :list="sourceList"
+        item-key="id"
+        item-name="name"
+        @update:model-value="handleToggleSource"
+      />
     </div>
     <list-view :source="source" :tag-id="tagId" :sort-id="sortId" :page="page" />
     <open-list-modal v-model="visibleOpenSongListModal" :source-list="sourceList" />
@@ -29,7 +38,6 @@ const tagId = ref<string>('')
 const sortId = ref<string>('')
 const page = ref<number>(1)
 
-
 interface Query {
   source?: string
   tagId?: string
@@ -37,7 +45,12 @@ interface Query {
   page?: string
 }
 
-const verifyQueryParams = async function(this: any, to: { query: Query, path: string }, from: any, next: (route?: { path: string, query: Query }) => void) {
+const verifyQueryParams = async function (
+  this: any,
+  to: { query: Query; path: string },
+  from: any,
+  next: (route?: { path: string; query: Query }) => void
+) {
   let _source = to.query.source
   let _tagId = to.query.tagId
   let _sortId = to.query.sortId
@@ -74,7 +87,6 @@ const verifyQueryParams = async function(this: any, to: { query: Query, path: st
   void setSongListSetting({ source: _source, tagId: _tagId, sortId: _sortId })
 }
 
-
 export default {
   components: {
     TagList,
@@ -88,7 +100,7 @@ export default {
     const visibleOpenSongListModal = ref(false)
 
     const sourceList = computed(() => {
-      return sources.map(s => ({ id: s, name: sourceNames.value[s] }))
+      return sources.map((s) => ({ id: s, name: sourceNames.value[s] }))
     })
     const router = useRouter()
     const route = useRoute()
@@ -149,7 +161,6 @@ export default {
   }
 }
 
-
 .select {
   font-size: 12px;
   width: auto;
@@ -161,7 +172,6 @@ export default {
       opacity: 1;
     }
   }
-
 
   :global {
     .label-content {
@@ -185,7 +195,7 @@ export default {
     // }
     .icon {
       svg {
-        width: .8em;
+        width: 0.8em;
       }
       // opacity: .6;
       // transition: color @transition-fast;
@@ -194,7 +204,7 @@ export default {
 
     .selection-list {
       max-height: 500px;
-      box-shadow: 0 1px 4px 0 rgba(0,0,0,.2);
+      box-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.2);
       li {
         // background-color: var(--color-main-background);
         text-align: center;
@@ -210,5 +220,4 @@ export default {
     }
   }
 }
-
 </style>

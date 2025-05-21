@@ -1,9 +1,21 @@
 <template>
-  <material-modal :show="props.modelValue" teleport="#view" width="60%" @close="emit('update:model-value', $event)" @after-enter="$refs.input.focus()">
+  <material-modal
+    :show="props.modelValue"
+    teleport="#view"
+    width="60%"
+    @close="emit('update:model-value', $event)"
+    @after-enter="$refs.input.focus()"
+  >
     <main class="scroll" :class="$style.main">
       <h2>{{ $t('songlist__import_input_title') }}</h2>
       <div :class="$style.inputContent">
-        <base-selection v-model="source" :class="$style.select" :list="props.sourceList" item-key="id" item-name="name" />
+        <base-selection
+          v-model="source"
+          :class="$style.select"
+          :list="props.sourceList"
+          item-key="id"
+          item-name="name"
+        />
         <base-input
           ref="input"
           v-model.trim="text"
@@ -23,12 +35,19 @@
               <span
                 class="hover underline"
                 aria-label="https://ikunshare.github.io/lx-music-doc/desktop/faq/cannot-open-songlist"
-                @click="openUrl('https://ikunshare.github.io/lx-music-doc/desktop/faq/cannot-open-songlist')"
-              >FAQ</span>
+                @click="
+                  openUrl(
+                    'https://ikunshare.github.io/lx-music-doc/desktop/faq/cannot-open-songlist'
+                  )
+                "
+                >FAQ</span
+              >
             </li>
           </ul>
         </div>
-        <base-btn :class="$style.btn" @click="handleSubmit">{{ $t('songlist__import_input_btn_confirm') }}</base-btn>
+        <base-btn :class="$style.btn" @click="handleSubmit">{{
+          $t('songlist__import_input_btn_confirm')
+        }}</base-btn>
       </div>
     </main>
   </material-modal>
@@ -56,11 +75,14 @@ const route = useRoute()
 const text = ref('')
 const source = ref('')
 
-watch(() => props.modelValue, (visible) => {
-  if (!visible) return
-  source.value = openSongListInputInfo.source || route.query.source
-  // text.value = openSongListInputInfo.text
-})
+watch(
+  () => props.modelValue,
+  (visible) => {
+    if (!visible) return
+    source.value = openSongListInputInfo.source || route.query.source
+    // text.value = openSongListInputInfo.text
+  }
+)
 
 const handleSubmit = () => {
   if (!text.value.length) return
@@ -74,9 +96,7 @@ const handleSubmit = () => {
     },
   })
 }
-
 </script>
-
 
 <style lang="less" module>
 @import '@renderer/assets/styles/layout.less';
@@ -165,6 +185,4 @@ const handleSubmit = () => {
   min-width: 80px;
   // .mixin-ellipsis-1;
 }
-
-
 </style>

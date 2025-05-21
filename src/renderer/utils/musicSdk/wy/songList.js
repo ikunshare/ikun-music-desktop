@@ -28,7 +28,10 @@ export default {
     if (retryNum > 2) throw new Error('link try max num')
 
     const requestObj_listDetailLink = httpFetch(link)
-    const { headers: { location }, statusCode } = await requestObj_listDetailLink.promise
+    const {
+      headers: { location },
+      statusCode,
+    } = await requestObj_listDetailLink.promise
     if (statusCode > 400) return this.handleParseId(link, ++retryNum)
     const url = location == null ? link : location
     return this.regExps.listDetailLink.test(url)
@@ -43,7 +46,7 @@ export default {
       id = url
       cookie = `MUSIC_U=${token}`
     }
-    if ((/[?&:/]/.test(id))) {
+    if (/[?&:/]/.test(id)) {
       if (this.regExps.listDetailLink.test(id)) {
         id = id.replace(this.regExps.listDetailLink, '$1')
       } else if (this.regExps.listDetailLink2.test(id)) {
@@ -63,7 +66,8 @@ export default {
     const requestObj_listDetail = httpFetch('https://music.163.com/api/linux/forward', {
       method: 'post',
       headers: {
-        'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36',
+        'User-Agent':
+          'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36',
         Cookie: this.cookie,
       },
       form: linuxapi({
@@ -77,12 +81,17 @@ export default {
       }),
     })
     const { statusCode, body } = await requestObj_listDetail.promise
-    if (statusCode !== 200 || body.code !== this.successCode) return this.getListDetail(id, page, ++tryNum)
+    if (statusCode !== 200 || body.code !== this.successCode)
+      return this.getListDetail(id, page, ++tryNum)
     let limit = 1000
     let rangeStart = (page - 1) * limit
     let list
     try {
-      list = (await musicDetailApi.getList(body.playlist.trackIds.slice(rangeStart, limit * page).map(trackId => trackId.id))).list
+      list = (
+        await musicDetailApi.getList(
+          body.playlist.trackIds.slice(rangeStart, limit * page).map((trackId) => trackId.id)
+        )
+      ).list
     } catch (err) {
       console.log(err)
       if (err.message == 'try max num') {
@@ -175,7 +184,7 @@ export default {
     })
   },
   filterList(rawData) {
-    return rawData.map(item => ({
+    return rawData.map((item) => ({
       play_count: formatPlayCount(item.playCount),
       id: String(item.id),
       author: item.creator.nickname,
@@ -238,7 +247,7 @@ export default {
     })
   },
   filterHotTagInfo(rawList) {
-    return rawList.map(item => ({
+    return rawList.map((item) => ({
       id: item.playlistTag.name,
       name: item.playlistTag.name,
       source: 'wy',
@@ -246,7 +255,11 @@ export default {
   },
 
   getTags() {
-    return Promise.all([this.getTag(), this.getHotTag()]).then(([tags, hotTag]) => ({ tags, hotTag, source: 'wy' }))
+    return Promise.all([this.getTag(), this.getHotTag()]).then(([tags, hotTag]) => ({
+      tags,
+      hotTag,
+      source: 'wy',
+    }))
   },
 
   async getDetailPageUrl(rawId) {
@@ -261,15 +274,14 @@ export default {
       limit,
       total: page == 1,
       offset: limit * (page - 1),
+    }).promise.then(({ body }) => {
+      if (body.code != this.successCode) throw new Error('filed')
+      return {
+        list: this.filterList(body.result.playlists),
+        limit,
+        total: body.result.playlistCount,
+        source: 'wy',
+      }
     })
-      .promise.then(({ body }) => {
-        if (body.code != this.successCode) throw new Error('filed')
-        return {
-          list: this.filterList(body.result.playlists),
-          limit,
-          total: body.result.playlistCount,
-          source: 'wy',
-        }
-      })
   },
 }

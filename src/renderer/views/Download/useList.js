@@ -50,7 +50,9 @@ export default ({ listRef, list, listAll }) => {
 
   let lastSelectIndex = -1
   const listItemHeight = computed(() => {
-    return Math.ceil((isFullscreen.value ? getFontSizeWithScreen() : appSetting['common.fontSize']) * 2.3)
+    return Math.ceil(
+      (isFullscreen.value ? getFontSizeWithScreen() : appSetting['common.fontSize']) * 2.3
+    )
   })
 
   const removeAllSelect = () => {
@@ -62,7 +64,7 @@ export default ({ listRef, list, listAll }) => {
   }
   const keyEvent = useKeyEvent({ handleSelectAllData, listRef })
 
-  const handleSelectData = clickIndex => {
+  const handleSelectData = (clickIndex) => {
     if (keyEvent.isShiftDown) {
       if (selectedList.value.length) {
         removeAllSelect()

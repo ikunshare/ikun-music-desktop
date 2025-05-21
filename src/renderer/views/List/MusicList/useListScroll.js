@@ -15,11 +15,11 @@ export default ({ props, listRef, list, handleRestoreScroll }) => {
     listRef.value.scrollToIndex(index, -150, isAnimation, callback)
   }
 
-  const restoreScroll = async(index, isAnimation) => {
+  const restoreScroll = async (index, isAnimation) => {
     // console.log(index, isAnimation)
     if (!list.value.length) return
     if (index == null) {
-      let location = await getListPosition(props.listId) || 0
+      let location = (await getListPosition(props.listId)) || 0
       if (appSetting['list.isSaveScrollLocation'] && location != null) {
         listRef.value?.scrollTo(location)
       }

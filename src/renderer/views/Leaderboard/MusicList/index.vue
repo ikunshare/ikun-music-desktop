@@ -18,7 +18,6 @@
 import { watch } from '@common/utils/vueTools'
 import useList from './useList'
 
-
 const props = defineProps<{
   source: LX.OnlineSource
   boardId?: string
@@ -26,20 +25,18 @@ const props = defineProps<{
 
 const emit = defineEmits(['show-menu'])
 
-const {
-  listRef,
-  listDetailInfo,
-  getList,
-  handlePlayList,
-} = useList()
+const { listRef, listDetailInfo, getList, handlePlayList } = useList()
 
-watch(() => props.boardId, (boardId) => {
-  if (!boardId) return
-  getList(boardId, 1)
-}, {
-  immediate: true,
-})
-
+watch(
+  () => props.boardId,
+  (boardId) => {
+    if (!boardId) return
+    getList(boardId, 1)
+  },
+  {
+    immediate: true,
+  }
+)
 
 const hideListsMenu = () => {
   emit('show-menu')
@@ -54,10 +51,7 @@ const hideMenu = () => {
 }
 
 defineExpose({ hideMenu })
-
-
 </script>
-
 
 <style lang="less" module>
 .container {
@@ -73,5 +67,4 @@ defineExpose({ hideMenu })
   height: 100%;
   flex: auto;
 }
-
 </style>

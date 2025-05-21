@@ -1,12 +1,42 @@
 <template>
   <div v-show="!isFullscreen" ref="dom_btns" :class="$style.controlBtn">
-    <button type="button" :class="[$style.btn, $style.close]" :aria-label="$t('close')" ignore-tip :title="$t('close')" @click="closeWindow">
-      <svg :class="$style.controlBtniIcon" version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="100%" viewBox="0 0 24 24" space="preserve">
+    <button
+      type="button"
+      :class="[$style.btn, $style.close]"
+      :aria-label="$t('close')"
+      ignore-tip
+      :title="$t('close')"
+      @click="closeWindow"
+    >
+      <svg
+        :class="$style.controlBtniIcon"
+        version="1.1"
+        xmlns="http://www.w3.org/2000/svg"
+        xlink="http://www.w3.org/1999/xlink"
+        width="100%"
+        viewBox="0 0 24 24"
+        space="preserve"
+      >
         <use xlink:href="#icon-window-close" />
       </svg>
     </button>
-    <button type="button" :class="[$style.btn, $style.min]" :aria-label="$t('min')" ignore-tip :title="$t('min')" @click="minWindow">
-      <svg :class="$style.controlBtniIcon" version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="100%" viewBox="0 0 24 24" space="preserve">
+    <button
+      type="button"
+      :class="[$style.btn, $style.min]"
+      :aria-label="$t('min')"
+      ignore-tip
+      :title="$t('min')"
+      @click="minWindow"
+    >
+      <svg
+        :class="$style.controlBtniIcon"
+        version="1.1"
+        xmlns="http://www.w3.org/2000/svg"
+        xlink="http://www.w3.org/1999/xlink"
+        width="100%"
+        viewBox="0 0 24 24"
+        space="preserve"
+      >
         <use xlink:href="#icon-window-minimize" />
       </svg>
     </button>
@@ -34,7 +64,6 @@ const handle_mouseleave = () => {
   dom_btns.value.classList.remove(cssModule.hover)
 }
 
-
 onMounted(() => {
   window.app_event.on('focus', handle_focus)
   dom_btns.value.addEventListener('mouseenter', handle_mouseenter)
@@ -45,13 +74,12 @@ onBeforeUnmount(() => {
   dom_btns.value.removeEventListener('mouseenter', handle_mouseenter)
   dom_btns.value.removeEventListener('mouseleave', handle_mouseleave)
 })
-
 </script>
 
 <style lang="less" module>
 @import '@renderer/assets/styles/layout.less';
 
-@control-btn-width: @height-toolbar * .26;
+@control-btn-width: @height-toolbar * 0.26;
 @control-btn-height: 6%;
 .controlBtn {
   box-sizing: border-box;
@@ -62,15 +90,14 @@ onBeforeUnmount(() => {
   width: 100%;
   height: @control-btn-height;
   -webkit-app-region: no-drag;
-  opacity: .5;
+  opacity: 0.5;
   transition: opacity @transition-normal;
   &.hover {
-    opacity: .8;
+    opacity: 0.8;
     .controlBtniIcon {
       opacity: 1;
     }
   }
-
 }
 .btn {
   position: relative;
@@ -102,6 +129,4 @@ onBeforeUnmount(() => {
   opacity: 0;
   transition: opacity 0.2s ease-in-out;
 }
-
-
 </style>

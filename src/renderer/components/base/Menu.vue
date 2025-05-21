@@ -1,6 +1,12 @@
 <template>
   <teleport to="#root">
-    <ul ref="dom_menu" :class="$style.list" :style="menuStyles" role="toolbar" :aria-hidden="!modelValue">
+    <ul
+      ref="dom_menu"
+      :class="$style.list"
+      :style="menuStyles"
+      role="toolbar"
+      :aria-hidden="!modelValue"
+    >
       <li
         v-for="item in menus"
         v-show="!item.hide && (item.action == 'download' ? appSetting['download.enable'] : true)"
@@ -24,7 +30,6 @@ import { computed } from '@common/utils/vueTools'
 import useMenuLocation from '@renderer/utils/compositions/useMenuLocation'
 
 import { appSetting } from '@renderer/store/setting'
-
 
 export default {
   name: 'MenuToolBar',
@@ -79,7 +84,6 @@ export default {
 }
 </script>
 
-
 <style lang="less" module>
 @import '@renderer/assets/styles/layout.less';
 
@@ -89,11 +93,11 @@ export default {
   opacity: 0;
   transform: scale(0);
   transform-origin: 0 0 0;
-  transition: .14s ease;
+  transition: 0.14s ease;
   transition-property: transform, opacity;
   border-radius: @radius-border;
   background-color: var(--color-content-background);
-  box-shadow: 0 1px 8px 0 rgba(0,0,0,.2);
+  box-shadow: 0 1px 8px 0 rgba(0, 0, 0, 0.2);
   z-index: 10;
   overflow: hidden;
   // will-change: transform;
@@ -121,11 +125,10 @@ export default {
 
   &[disabled] {
     cursor: default;
-    opacity: .4;
+    opacity: 0.4;
     &:hover {
       background: none !important;
     }
   }
 }
-
 </style>

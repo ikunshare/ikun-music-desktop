@@ -84,16 +84,16 @@ export default {
         title: t('setting__download_select_save_path'),
         defaultPath: appSetting['download.savePath'],
         properties: ['openDirectory'],
-      }).then(result => {
+      }).then((result) => {
         if (result.canceled) return
         updateSetting({ 'download.savePath': result.filePaths[0] })
       })
     }
 
     const maxNums = new Array(6).fill(null).map((_, i) => ({ id: i + 1 }))
-    const handleUpdateMaxNum = async({ id }) => {
+    const handleUpdateMaxNum = async ({ id }) => {
       if (id > 3) {
-        if (!await dialog.confirm(window.i18n.t('setting__download_max_num_tip'))) return
+        if (!(await dialog.confirm(window.i18n.t('setting__download_max_num_tip')))) return
       }
       updateSetting({ 'download.maxDownloadNum': id })
     }

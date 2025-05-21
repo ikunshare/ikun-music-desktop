@@ -1,5 +1,11 @@
 <template>
-  <material-modal :show="visible" teleport="#view" bg-close @close="closeModal" @after-leave="handleAfterLeave">
+  <material-modal
+    :show="visible"
+    teleport="#view"
+    bg-close
+    @close="closeModal"
+    @after-leave="handleAfterLeave"
+  >
     <main class="scroll" :class="$style.main">
       <div :class="$style.header">
         <h2>{{ listName }}</h2>
@@ -9,32 +15,58 @@
         <ul :class="$style.list">
           <li :class="$style.listItem">
             <base-checkbox
-              id="list_sort_modal_field_name" v-model="sortField" name="list_sort_modal_field" :aria-label="$t('list_sort_modal_by_name')"
-              need="need" value="name" :disabled="disabledSortFislds" :label="$t('list_sort_modal_by_name')"
+              id="list_sort_modal_field_name"
+              v-model="sortField"
+              name="list_sort_modal_field"
+              :aria-label="$t('list_sort_modal_by_name')"
+              need="need"
+              value="name"
+              :disabled="disabledSortFislds"
+              :label="$t('list_sort_modal_by_name')"
             />
           </li>
           <li :class="$style.listItem">
             <base-checkbox
-              id="list_sort_modal_field_singer" v-model="sortField" name="list_sort_modal_field"
-              need="need" value="singer" :disabled="disabledSortFislds" :label="$t('list_sort_modal_by_singer')"
+              id="list_sort_modal_field_singer"
+              v-model="sortField"
+              name="list_sort_modal_field"
+              need="need"
+              value="singer"
+              :disabled="disabledSortFislds"
+              :label="$t('list_sort_modal_by_singer')"
             />
           </li>
           <li :class="$style.listItem">
             <base-checkbox
-              id="list_sort_modal_field_album" v-model="sortField" name="list_sort_modal_field"
-              need="need" value="albumName" :disabled="disabledSortFislds" :label="$t('list_sort_modal_by_album')"
+              id="list_sort_modal_field_album"
+              v-model="sortField"
+              name="list_sort_modal_field"
+              need="need"
+              value="albumName"
+              :disabled="disabledSortFislds"
+              :label="$t('list_sort_modal_by_album')"
             />
           </li>
           <li :class="$style.listItem">
             <base-checkbox
-              id="list_sort_modal_field_time" v-model="sortField" name="list_sort_modal_field"
-              need="need" value="interval" :disabled="disabledSortFislds" :label="$t('list_sort_modal_by_time')"
+              id="list_sort_modal_field_time"
+              v-model="sortField"
+              name="list_sort_modal_field"
+              need="need"
+              value="interval"
+              :disabled="disabledSortFislds"
+              :label="$t('list_sort_modal_by_time')"
             />
           </li>
           <li :class="$style.listItem">
             <base-checkbox
-              id="list_sort_modal_field_source" v-model="sortField" name="list_sort_modal_field"
-              need="need" value="source" :disabled="disabledSortFislds" :label="$t('list_sort_modal_by_source')"
+              id="list_sort_modal_field_source"
+              v-model="sortField"
+              name="list_sort_modal_field"
+              need="need"
+              value="source"
+              :disabled="disabledSortFislds"
+              :label="$t('list_sort_modal_by_source')"
             />
           </li>
         </ul>
@@ -44,20 +76,32 @@
         <ul :class="$style.list">
           <li :class="$style.listItem">
             <base-checkbox
-              id="list_sort_modal_type_up" v-model="sortType" name="list_sort_modal_type"
-              need="need" value="up" :label="$t('list_sort_modal_by_up')"
+              id="list_sort_modal_type_up"
+              v-model="sortType"
+              name="list_sort_modal_type"
+              need="need"
+              value="up"
+              :label="$t('list_sort_modal_by_up')"
             />
           </li>
           <li :class="$style.listItem">
             <base-checkbox
-              id="list_sort_modal_type_down" v-model="sortType" name="list_sort_modal_type"
-              need="need" value="down" :label="$t('list_sort_modal_by_down')"
+              id="list_sort_modal_type_down"
+              v-model="sortType"
+              name="list_sort_modal_type"
+              need="need"
+              value="down"
+              :label="$t('list_sort_modal_by_down')"
             />
           </li>
           <li :class="$style.listItem">
             <base-checkbox
-              id="list_sort_modal_type_random" v-model="sortType" name="list_sort_modal_type"
-              need="need" value="random" :label="$t('list_sort_modal_by_random')"
+              id="list_sort_modal_type_random"
+              v-model="sortType"
+              name="list_sort_modal_type"
+              need="need"
+              value="random"
+              :label="$t('list_sort_modal_by_random')"
             />
           </li>
         </ul>
@@ -77,14 +121,14 @@ import { getListMusics, updateListMusicsPosition } from '@renderer/store/list/ac
 import { useI18n } from '@root/lang'
 import { LIST_IDS } from '@common/constants'
 
-
 export default {
   props: {
     visible: {
       type: Boolean,
       default: false,
     },
-    listInfo: { // { id: '', name: '' }
+    listInfo: {
+      // { id: '', name: '' }
       type: Object,
       required: true,
     },
@@ -104,7 +148,7 @@ export default {
     const verify = () => {
       return !!sortType.value && (!!sortField.value || sortType.value == 'random')
     }
-    const handleSort = async() => {
+    const handleSort = async () => {
       if (!verify()) return
       // if (!await dialog.confirm({
       //   message: t('list_sort_modal_tip_confirm'),
@@ -113,11 +157,20 @@ export default {
       // })) return
 
       let list = [...(await getListMusics(props.listInfo.id))]
-      list = await window.lx.worker.main.sortListMusicInfo(list, sortType.value, sortField.value, window.i18n.locale)
+      list = await window.lx.worker.main.sortListMusicInfo(
+        list,
+        sortType.value,
+        sortField.value,
+        window.i18n.locale
+      )
       console.log(sortType.value, sortField.value)
 
       closeModal()
-      void updateListMusicsPosition({ listId: props.listInfo.id, position: 0, ids: list.map(m => m.id) })
+      void updateListMusicsPosition({
+        listId: props.listInfo.id,
+        position: 0,
+        ids: list.map((m) => m.id),
+      })
     }
 
     const listName = computed(() => {
@@ -147,7 +200,6 @@ export default {
   },
 }
 </script>
-
 
 <style lang="less" module>
 @import '@renderer/assets/styles/layout.less';
@@ -200,10 +252,8 @@ export default {
   min-width: 70px;
   // .mixin-ellipsis-1;
 
-  +.btn {
+  + .btn {
     margin-left: 10px;
   }
 }
-
-
 </style>

@@ -11,7 +11,7 @@
     @change="$emit('change', $event.target.value.trim())"
     @keyup.enter="$emit('submit', $event.target.value.trim())"
     @contextmenu="handleContextMenu"
-  >
+  />
 </template>
 
 <script>
@@ -76,7 +76,10 @@ export default {
       str = str.replace(/\s+/g, ' ')
       const text = dom_input.value
       // if (dom_input.selectionStart == dom_input.selectionEnd) {
-      const value = text.substring(0, dom_input.selectionStart) + str + text.substring(dom_input.selectionEnd, text.length)
+      const value =
+        text.substring(0, dom_input.selectionStart) +
+        str +
+        text.substring(dom_input.selectionEnd, text.length)
       event.target.value = value
       this.$emit('update:modelValue', value)
       // } else {
@@ -86,7 +89,6 @@ export default {
   },
 }
 </script>
-
 
 <style lang="less" module>
 @import '@renderer/assets/styles/layout.less';
@@ -109,10 +111,11 @@ export default {
   }
 
   &[disabled] {
-    opacity: .4;
+    opacity: 0.4;
   }
 
-  &:hover, &:focus {
+  &:hover,
+  &:focus {
     background-color: var(--color-primary-background-hover);
   }
   &:active {
@@ -124,5 +127,4 @@ export default {
   padding: 3px 8px;
   font-size: 12px;
 }
-
 </style>

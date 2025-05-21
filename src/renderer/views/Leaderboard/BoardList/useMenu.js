@@ -2,10 +2,7 @@ import { computed, ref, reactive, nextTick } from '@common/utils/vueTools'
 import { useI18n } from '@renderer/plugins/i18n'
 import { addSongListDetail, playSongListDetail } from '../action'
 
-export default ({
-  emit,
-  list,
-}) => {
+export default ({ emit, list }) => {
   // const menuControl = reactive({
   //   play: true,
   //   collect: true,
@@ -29,7 +26,6 @@ export default ({
     ]
   })
 
-
   const showMenu = (event, index) => {
     menuLocation.x = event.pageX
     menuLocation.y = event.pageY
@@ -44,7 +40,6 @@ export default ({
   const hideMenu = () => {
     isShowMenu.value = false
   }
-
 
   const menuClick = (action, index, source) => {
     // console.log(action)

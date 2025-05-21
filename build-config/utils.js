@@ -3,7 +3,7 @@ const cssLoaderConfig = require('./css-loader.config')
 const chalk = require('chalk')
 
 // merge css-loader
-exports.mergeCSSLoader = beforeLoader => {
+exports.mergeCSSLoader = (beforeLoader) => {
   const loader = [
     // 这里匹配 `<style module>`
     {
@@ -55,12 +55,15 @@ exports.logStats = (proc, data) => {
   log += '\n'
 
   if (typeof data === 'object') {
-    data.toString({
-      colors: true,
-      chunks: false,
-    }).split(/\r?\n/).forEach(line => {
-      log += '  ' + line + '\n'
-    })
+    data
+      .toString({
+        colors: true,
+        chunks: false,
+      })
+      .split(/\r?\n/)
+      .forEach((line) => {
+        log += '  ' + line + '\n'
+      })
   } else {
     log += `  ${data}\n`
   }

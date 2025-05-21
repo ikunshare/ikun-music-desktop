@@ -1,6 +1,12 @@
 <template>
-  <Modal :show="visible" :close-btn="false" :teleport="teleport" @close="handleCancel" @after-leave="afterLeave">
-    <main class="scroll" :class="[$style.main, { 'select': selection }]">{{ message }}</main>
+  <Modal
+    :show="visible"
+    :close-btn="false"
+    :teleport="teleport"
+    @close="handleCancel"
+    @after-leave="afterLeave"
+  >
+    <main class="scroll" :class="[$style.main, { select: selection }]">{{ message }}</main>
     <footer :class="$style.footer">
       <Btn v-if="showCancel" :class="$style.btn" @click="handleCancel">{{ cancelBtnText }}</Btn>
       <Btn :class="$style.btn" @click="handleComfirm">{{ confirmBtnText }}</Btn>
@@ -62,16 +68,13 @@ export default {
     el.parentNode.removeChild(el)
   },
   methods: {
-    handleCancel() {
-    },
-    handleComfirm() {
-    },
+    handleCancel() {},
+    handleComfirm() {},
   },
 }
 </script>
 
 <style lang="less" module>
-
 .main {
   flex: auto;
   min-height: 40px;

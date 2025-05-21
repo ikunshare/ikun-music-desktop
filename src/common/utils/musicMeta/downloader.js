@@ -17,20 +17,19 @@ const sendRequest = (url, proxy) => {
     path: urlParse.pathname + urlParse.search,
     agent: getRequestAgent(url, proxy),
     headers: {
-      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36',
+      'User-Agent':
+        'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36',
     },
   }
 
   // console.log(httpOptions)
-  return url.protocol === 'https:'
-    ? https.request(httpOptions)
-    : http.request(httpOptions)
+  return url.protocol === 'https:' ? https.request(httpOptions) : http.request(httpOptions)
 }
 
 module.exports = (url, filePath, proxy) => {
   return new Promise((resolve) => {
     sendRequest(url, proxy)
-      .on('response', response => {
+      .on('response', (response) => {
         // console.log(response.statusCode)
         if (response.statusCode !== 200 && response.statusCode != 206) {
           response.destroy(new Error('failed'))
@@ -47,20 +46,21 @@ module.exports = (url, filePath, proxy) => {
               resolve(true)
             } else {
               resolve(false)
-              fs.unlink(filePath, err => {
+              fs.unlink(filePath, (err) => {
                 if (err) console.log(err.message)
               })
             }
-          }).on('error', err => {
+          })
+          .on('error', (err) => {
             // console.log('response error')
             if (err) console.log(err.message)
-            fs.unlink(filePath, err => {
+            fs.unlink(filePath, (err) => {
               if (err) console.log(err.message)
             })
             resolve(false)
           })
       })
-      .on('error', err => {
+      .on('error', (err) => {
         if (err) console.log(err.message)
         // delete meta.APIC
         // handleWriteMeta(meta, filePath)

@@ -1,7 +1,9 @@
 <template>
   <material-modal :show="modelValue" max-height="90%" teleport="#view" @close="handleCancel">
     <main :class="$style.main">
-      <h2>{{ themeId ? $t('theme_edit_modal__title_edit') : $t('theme_edit_modal__title_add') }}</h2>
+      <h2>
+        {{ themeId ? $t('theme_edit_modal__title_edit') : $t('theme_edit_modal__title_add') }}
+      </h2>
       <div class="scroll" :class="$style.content">
         <div :class="[$style.group, $style.base]">
           <div :class="$style.groupContent">
@@ -26,11 +28,25 @@
               <div :class="$style.label">{{ $t('theme_edit_modal__main_bg') }}</div>
             </div>
             <div :class="[$style.item, $style.bg]">
-              <div :class="[$style.bgImg, {[$style.hasBg]: !!bgImg}]" @click="selectBgImg">
-                <img v-if="bgImg" loading="lazy" decoding="async" :class="$style.img" :src="bgImg" alt="Background Image">
+              <div :class="[$style.bgImg, { [$style.hasBg]: !!bgImg }]" @click="selectBgImg">
+                <img
+                  v-if="bgImg"
+                  loading="lazy"
+                  decoding="async"
+                  :class="$style.img"
+                  :src="bgImg"
+                  alt="Background Image"
+                />
                 <svg-icon v-else :class="$style.icon" name="plus" />
                 <button :class="$style.removeBtn" type="button" @click.stop="removeBgImg">
-                  <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" height="100%" viewBox="0 0 212.982 212.982" space="preserve">
+                  <svg
+                    version="1.1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    xlink="http://www.w3.org/1999/xlink"
+                    height="100%"
+                    viewBox="0 0 212.982 212.982"
+                    space="preserve"
+                  >
                     <use xlink:href="#icon-delete" />
                   </svg>
                 </button>
@@ -67,17 +83,41 @@
               <span>{{ $t('theme_edit_modal__control_btn') }}</span>
               <div :class="$style.controlBtn">
                 <button type="button" :class="$style.hide">
-                  <svg :class="$style.controlBtnIcon" version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="80%" viewBox="0 0 30.727 30.727" space="preserve">
+                  <svg
+                    :class="$style.controlBtnIcon"
+                    version="1.1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    xlink="http://www.w3.org/1999/xlink"
+                    width="80%"
+                    viewBox="0 0 30.727 30.727"
+                    space="preserve"
+                  >
                     <use xlink:href="#icon-window-hide" />
                   </svg>
                 </button>
                 <button type="button" :class="$style.min">
-                  <svg :class="$style.controlBtnIcon" version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="100%" viewBox="0 0 24 24" space="preserve">
+                  <svg
+                    :class="$style.controlBtnIcon"
+                    version="1.1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    xlink="http://www.w3.org/1999/xlink"
+                    width="100%"
+                    viewBox="0 0 24 24"
+                    space="preserve"
+                  >
                     <use xlink:href="#icon-window-minimize" />
                   </svg>
                 </button>
                 <button type="button" :class="$style.close">
-                  <svg :class="$style.controlBtnIcon" version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="100%" viewBox="0 0 24 24" space="preserve">
+                  <svg
+                    :class="$style.controlBtnIcon"
+                    version="1.1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    xlink="http://www.w3.org/1999/xlink"
+                    width="100%"
+                    viewBox="0 0 24 24"
+                    space="preserve"
+                  >
                     <use xlink:href="#icon-window-close" />
                   </svg>
                 </button>
@@ -101,19 +141,45 @@
         </div>
       </div>
       <div :class="$style.footer">
-        <div :class="$style.subContent" style="flex-wrap: wrap;">
-          <base-input v-model="themeName" :class="$style.input" :placeholder="$t('theme_selector_modal__theme_name')" />
-          <div :class="$style.subContent" style="flex-wrap: wrap;">
-            <base-checkbox id="theme_edit_modal__dark" v-model="isDark" :class="$style.checkbox" :label="$t('theme_edit_modal__dark')" @change="handleDark" />
-            <div :class="$style.subContent" style="flex-wrap: wrap;">
-              <base-checkbox id="theme_edit_modal__dark_font" v-model="isDarkFont" :class="$style.checkbox" :label="$t('theme_edit_modal__dark_font')" @change="handleDarkFont" />
-              <base-checkbox id="theme_edit_modal__preview" v-model="preview" :class="$style.checkbox" :label="$t('theme_edit_modal__preview')" @change="handlePreview" />
+        <div :class="$style.subContent" style="flex-wrap: wrap">
+          <base-input
+            v-model="themeName"
+            :class="$style.input"
+            :placeholder="$t('theme_selector_modal__theme_name')"
+          />
+          <div :class="$style.subContent" style="flex-wrap: wrap">
+            <base-checkbox
+              id="theme_edit_modal__dark"
+              v-model="isDark"
+              :class="$style.checkbox"
+              :label="$t('theme_edit_modal__dark')"
+              @change="handleDark"
+            />
+            <div :class="$style.subContent" style="flex-wrap: wrap">
+              <base-checkbox
+                id="theme_edit_modal__dark_font"
+                v-model="isDarkFont"
+                :class="$style.checkbox"
+                :label="$t('theme_edit_modal__dark_font')"
+                @change="handleDarkFont"
+              />
+              <base-checkbox
+                id="theme_edit_modal__preview"
+                v-model="preview"
+                :class="$style.checkbox"
+                :label="$t('theme_edit_modal__preview')"
+                @change="handlePreview"
+              />
             </div>
           </div>
         </div>
-        <div :class="$style.subContent" style="flex: none;">
-          <base-btn v-if="themeId" :class="$style.btn" @click="handleRemove">{{ $t('theme_edit_modal__remove') }}</base-btn>
-          <base-btn v-if="themeId" :class="$style.btn" @click="handleSaveNew">{{ $t('theme_edit_modal__save_new') }}</base-btn>
+        <div :class="$style.subContent" style="flex: none">
+          <base-btn v-if="themeId" :class="$style.btn" @click="handleRemove">{{
+            $t('theme_edit_modal__remove')
+          }}</base-btn>
+          <base-btn v-if="themeId" :class="$style.btn" @click="handleSaveNew">{{
+            $t('theme_edit_modal__save_new')
+          }}</base-btn>
           <!-- <base-btn :class="$style.btn" @click="handleCancel">{{ $t('btn_cancel') }}</base-btn> -->
           <base-btn :class="$style.btn" @click="handleSubmit">{{ $t('btn_save') }}</base-btn>
         </div>
@@ -123,7 +189,16 @@
 </template>
 
 <script>
-import { joinPath, extname, copyFile, checkPath, createDir, removeFile, moveFile, basename } from '@common/utils/nodejs'
+import {
+  joinPath,
+  extname,
+  copyFile,
+  checkPath,
+  createDir,
+  removeFile,
+  moveFile,
+  basename,
+} from '@common/utils/nodejs'
 import { nextTick, ref, watch } from '@common/utils/vueTools'
 import { applyTheme, buildThemeColors, getThemes, copyTheme } from '@renderer/store/utils'
 import { isUrl, encodePath } from '@common/utils/common'
@@ -145,7 +220,6 @@ import { appSetting, updateSetting } from '@renderer/store/setting'
 import { removeTheme, saveTheme, showSelectDialog } from '@renderer/utils/ipc'
 import { dialog } from '@renderer/plugins/Dialog'
 import { themeInfo } from '@renderer/store'
-
 
 export default {
   name: 'ThemeSelectorModal',
@@ -202,14 +276,34 @@ export default {
     const { primary_color_ref, initMainColor, destroyMainColor } = useMainColor()
     const { font_color_ref, initFontColor, destroyFontColor } = useFontColor()
     const { app_bg_color_ref, initAppBgColor, destroyAppBgColor, setAppBgColor } = useAppBgColor()
-    const { aside_font_color_ref, initAsideFontColor, destroyAsideFontColor, setAsideFontColor } = useAsideFontColor()
-    const { main_bg_color_ref, initMainBgColor, destroyMainBgColor, setMainBgColor } = useMainBgColor()
-    const { badge_primary_color_ref, initBadgePrimaryColor, destroyBadgePrimaryColor, setBadgePrimaryColor } = useBadgePrimaryColor()
-    const { badge_secondary_color_ref, initBadgeSecondaryColor, destroyBadgeSecondaryColor, setBadgeSecondaryColor } = useBadgeSecondaryColor()
-    const { badge_tertiary_color_ref, initBadgeTertiaryColor, destroyBadgeTertiaryColor, setBadgeTertiaryColor } = useBadgeTertiaryColor()
-    const { close_btn_color_ref, initCloseBtnColor, destroyCloseBtnColor, setCloseBtnColor } = useCloseBtnColor()
-    const { min_btn_color_ref, initMinBtnColor, destroyMinBtnColor, setMinBtnColor } = useMinBtnColor()
-    const { hide_btn_color_ref, initHideBtnColor, destroyHideBtnColor, setHideBtnColor } = useHideBtnColor()
+    const { aside_font_color_ref, initAsideFontColor, destroyAsideFontColor, setAsideFontColor } =
+      useAsideFontColor()
+    const { main_bg_color_ref, initMainBgColor, destroyMainBgColor, setMainBgColor } =
+      useMainBgColor()
+    const {
+      badge_primary_color_ref,
+      initBadgePrimaryColor,
+      destroyBadgePrimaryColor,
+      setBadgePrimaryColor,
+    } = useBadgePrimaryColor()
+    const {
+      badge_secondary_color_ref,
+      initBadgeSecondaryColor,
+      destroyBadgeSecondaryColor,
+      setBadgeSecondaryColor,
+    } = useBadgeSecondaryColor()
+    const {
+      badge_tertiary_color_ref,
+      initBadgeTertiaryColor,
+      destroyBadgeTertiaryColor,
+      setBadgeTertiaryColor,
+    } = useBadgeTertiaryColor()
+    const { close_btn_color_ref, initCloseBtnColor, destroyCloseBtnColor, setCloseBtnColor } =
+      useCloseBtnColor()
+    const { min_btn_color_ref, initMinBtnColor, destroyMinBtnColor, setMinBtnColor } =
+      useMinBtnColor()
+    const { hide_btn_color_ref, initHideBtnColor, destroyHideBtnColor, setHideBtnColor } =
+      useHideBtnColor()
 
     let appBgColorOrigin
     let appBgColor
@@ -232,15 +326,24 @@ export default {
 
     const applyPrimaryColor = (color, fontColor, isDark, isDarkFont) => {
       theme.config.themeColors = createThemeColors(color, fontColor, isDark, isDarkFont)
-      if (theme.config.extInfo['--color-app-background'].startsWith('var')) setAppBgColor(getColor(appBgColorOrigin, theme))
-      if (theme.config.extInfo['--color-nav-font'].startsWith('var')) setAsideFontColor(getColor(asideFontColorOrigin, theme))
-      if (theme.config.extInfo['--color-main-background'].startsWith('var')) setMainBgColor(getColor(mainBgColorOrigin, theme))
-      if (theme.config.extInfo['--color-badge-primary'].startsWith('var')) setBadgePrimaryColor(getColor(badgePrimaryColorOrigin, theme))
-      if (theme.config.extInfo['--color-badge-secondary'].startsWith('var')) setBadgeSecondaryColor(getColor(badgeSecondaryColorOrigin, theme))
-      if (theme.config.extInfo['--color-badge-tertiary'].startsWith('var')) setBadgeTertiaryColor(getColor(badgeTertiaryColorOrigin, theme))
-      if (theme.config.extInfo['--color-btn-close'].startsWith('var')) setCloseBtnColor(getColor(closeBtnColorOrigin, theme))
-      if (theme.config.extInfo['--color-btn-min'].startsWith('var')) setMinBtnColor(getColor(minBtnColorOrigin, theme))
-      if (theme.config.extInfo['--color-btn-hide'].startsWith('var')) setHideBtnColor(getColor(hideBtnColorOrigin, theme))
+      if (theme.config.extInfo['--color-app-background'].startsWith('var'))
+        setAppBgColor(getColor(appBgColorOrigin, theme))
+      if (theme.config.extInfo['--color-nav-font'].startsWith('var'))
+        setAsideFontColor(getColor(asideFontColorOrigin, theme))
+      if (theme.config.extInfo['--color-main-background'].startsWith('var'))
+        setMainBgColor(getColor(mainBgColorOrigin, theme))
+      if (theme.config.extInfo['--color-badge-primary'].startsWith('var'))
+        setBadgePrimaryColor(getColor(badgePrimaryColorOrigin, theme))
+      if (theme.config.extInfo['--color-badge-secondary'].startsWith('var'))
+        setBadgeSecondaryColor(getColor(badgeSecondaryColorOrigin, theme))
+      if (theme.config.extInfo['--color-badge-tertiary'].startsWith('var'))
+        setBadgeTertiaryColor(getColor(badgeTertiaryColorOrigin, theme))
+      if (theme.config.extInfo['--color-btn-close'].startsWith('var'))
+        setCloseBtnColor(getColor(closeBtnColorOrigin, theme))
+      if (theme.config.extInfo['--color-btn-min'].startsWith('var'))
+        setMinBtnColor(getColor(minBtnColorOrigin, theme))
+      if (theme.config.extInfo['--color-btn-hide'].startsWith('var'))
+        setHideBtnColor(getColor(hideBtnColorOrigin, theme))
 
       createPreview()
     }
@@ -283,48 +386,124 @@ export default {
       hideBtnColor = getColor(hideBtnColorOrigin, theme)
 
       initMainColor(theme.config.themeColors['--color-primary'], (color) => {
-        applyPrimaryColor(color, theme.config.themeColors['--color-1000'], theme.isDark, theme.isDarkFont)
+        applyPrimaryColor(
+          color,
+          theme.config.themeColors['--color-1000'],
+          theme.isDark,
+          theme.isDarkFont
+        )
       })
-      initFontColor(theme.config.themeColors['--color-1000'] ?? (isDark ? 'rgb(229, 229, 229)' : 'rgb(33, 33, 33)'), (color) => {
-        applyPrimaryColor(theme.config.themeColors['--color-primary'], color, theme.isDark, theme.isDarkFont)
-      })
-      initAppBgColor(appBgColor, (color) => {
-        // console.log('appBgColor', color)
-        theme.config.extInfo['--color-app-background'] = color == appBgColor ? appBgColorOrigin : color
-        createPreview()
-      }, () => { setAppBgColor(getColor(appBgColorOrigin, theme)) })
-      initAsideFontColor(asideFontColor, (color) => {
-        theme.config.extInfo['--color-nav-font'] = color == asideFontColor ? asideFontColorOrigin : color
-        createPreview()
-      }, () => { setAsideFontColor(getColor(asideFontColorOrigin, theme)) })
-      initMainBgColor(mainBgColor, (color) => {
-        theme.config.extInfo['--color-main-background'] = color == mainBgColor ? mainBgColorOrigin : color
-        createPreview()
-      }, () => { setMainBgColor(getColor(mainBgColorOrigin, theme)) })
-      initBadgePrimaryColor(badgePrimaryColor, (color) => {
-        theme.config.extInfo['--color-badge-primary'] = color == badgePrimaryColor ? badgePrimaryColorOrigin : color
-        createPreview()
-      }, () => { setBadgePrimaryColor(getColor(badgePrimaryColorOrigin, theme)) })
-      initBadgeSecondaryColor(badgeSecondaryColor, (color) => {
-        theme.config.extInfo['--color-badge-secondary'] = color == badgeSecondaryColor ? badgeSecondaryColorOrigin : color
-        createPreview()
-      }, () => { setBadgeSecondaryColor(getColor(badgeSecondaryColorOrigin, theme)) })
-      initBadgeTertiaryColor(badgeTertiaryColor, (color) => {
-        theme.config.extInfo['--color-badge-tertiary'] = color == badgeTertiaryColor ? badgeTertiaryColorOrigin : color
-        createPreview()
-      }, () => { setBadgeTertiaryColor(getColor(badgeTertiaryColorOrigin, theme)) })
-      initCloseBtnColor(closeBtnColor, (color) => {
-        theme.config.extInfo['--color-btn-close'] = color == closeBtnColor ? closeBtnColorOrigin : color
-        createPreview()
-      }, () => { setCloseBtnColor(getColor(closeBtnColorOrigin, theme)) })
-      initMinBtnColor(minBtnColor, (color) => {
-        theme.config.extInfo['--color-btn-min'] = color == minBtnColor ? minBtnColorOrigin : color
-        createPreview()
-      }, () => { setMinBtnColor(getColor(minBtnColorOrigin, theme)) })
-      initHideBtnColor(hideBtnColor, (color) => {
-        theme.config.extInfo['--color-btn-hide'] = color == hideBtnColor ? hideBtnColorOrigin : color
-        createPreview()
-      }, () => { setHideBtnColor(getColor(hideBtnColorOrigin, theme)) })
+      initFontColor(
+        theme.config.themeColors['--color-1000'] ??
+          (isDark ? 'rgb(229, 229, 229)' : 'rgb(33, 33, 33)'),
+        (color) => {
+          applyPrimaryColor(
+            theme.config.themeColors['--color-primary'],
+            color,
+            theme.isDark,
+            theme.isDarkFont
+          )
+        }
+      )
+      initAppBgColor(
+        appBgColor,
+        (color) => {
+          // console.log('appBgColor', color)
+          theme.config.extInfo['--color-app-background'] =
+            color == appBgColor ? appBgColorOrigin : color
+          createPreview()
+        },
+        () => {
+          setAppBgColor(getColor(appBgColorOrigin, theme))
+        }
+      )
+      initAsideFontColor(
+        asideFontColor,
+        (color) => {
+          theme.config.extInfo['--color-nav-font'] =
+            color == asideFontColor ? asideFontColorOrigin : color
+          createPreview()
+        },
+        () => {
+          setAsideFontColor(getColor(asideFontColorOrigin, theme))
+        }
+      )
+      initMainBgColor(
+        mainBgColor,
+        (color) => {
+          theme.config.extInfo['--color-main-background'] =
+            color == mainBgColor ? mainBgColorOrigin : color
+          createPreview()
+        },
+        () => {
+          setMainBgColor(getColor(mainBgColorOrigin, theme))
+        }
+      )
+      initBadgePrimaryColor(
+        badgePrimaryColor,
+        (color) => {
+          theme.config.extInfo['--color-badge-primary'] =
+            color == badgePrimaryColor ? badgePrimaryColorOrigin : color
+          createPreview()
+        },
+        () => {
+          setBadgePrimaryColor(getColor(badgePrimaryColorOrigin, theme))
+        }
+      )
+      initBadgeSecondaryColor(
+        badgeSecondaryColor,
+        (color) => {
+          theme.config.extInfo['--color-badge-secondary'] =
+            color == badgeSecondaryColor ? badgeSecondaryColorOrigin : color
+          createPreview()
+        },
+        () => {
+          setBadgeSecondaryColor(getColor(badgeSecondaryColorOrigin, theme))
+        }
+      )
+      initBadgeTertiaryColor(
+        badgeTertiaryColor,
+        (color) => {
+          theme.config.extInfo['--color-badge-tertiary'] =
+            color == badgeTertiaryColor ? badgeTertiaryColorOrigin : color
+          createPreview()
+        },
+        () => {
+          setBadgeTertiaryColor(getColor(badgeTertiaryColorOrigin, theme))
+        }
+      )
+      initCloseBtnColor(
+        closeBtnColor,
+        (color) => {
+          theme.config.extInfo['--color-btn-close'] =
+            color == closeBtnColor ? closeBtnColorOrigin : color
+          createPreview()
+        },
+        () => {
+          setCloseBtnColor(getColor(closeBtnColorOrigin, theme))
+        }
+      )
+      initMinBtnColor(
+        minBtnColor,
+        (color) => {
+          theme.config.extInfo['--color-btn-min'] = color == minBtnColor ? minBtnColorOrigin : color
+          createPreview()
+        },
+        () => {
+          setMinBtnColor(getColor(minBtnColorOrigin, theme))
+        }
+      )
+      initHideBtnColor(
+        hideBtnColor,
+        (color) => {
+          theme.config.extInfo['--color-btn-hide'] =
+            color == hideBtnColor ? hideBtnColorOrigin : color
+          createPreview()
+        },
+        () => {
+          setHideBtnColor(getColor(hideBtnColorOrigin, theme))
+        }
+      )
 
       createPreview()
     }
@@ -342,32 +521,35 @@ export default {
       destroyHideBtnColor()
     }
 
-    watch(() => props.modelValue, (visible) => {
-      void nextTick(() => {
-        getThemes(({ themes, userThemes }) => {
-          if (visible) {
-            if (props.themeId) {
-              const theme = userThemes.find(t => t.id == props.themeId)
-              if (theme) {
-                initColors(copyTheme(theme))
-                return
+    watch(
+      () => props.modelValue,
+      (visible) => {
+        void nextTick(() => {
+          getThemes(({ themes, userThemes }) => {
+            if (visible) {
+              if (props.themeId) {
+                const theme = userThemes.find((t) => t.id == props.themeId)
+                if (theme) {
+                  initColors(copyTheme(theme))
+                  return
+                }
               }
+              const theme = copyTheme(themes[0])
+              theme.id = 'user_theme_' + Date.now()
+              theme.name = ''
+              theme.isCustom = true
+              initColors(theme)
+            } else {
+              destroyColors()
+              // 移除临时保存的背景
+              if (currentBgPath) removeFile(currentBgPath).catch((_) => _)
             }
-            const theme = copyTheme(themes[0])
-            theme.id = 'user_theme_' + Date.now()
-            theme.name = ''
-            theme.isCustom = true
-            initColors(theme)
-          } else {
-            destroyColors()
-            // 移除临时保存的背景
-            if (currentBgPath) removeFile(currentBgPath).catch(_ => _)
-          }
+          })
         })
-      })
-    })
+      }
+    )
 
-    const selectBgImg = async() => {
+    const selectBgImg = async () => {
       const result = await showSelectDialog({
         title: window.i18n.t('theme_edit_modal__select_bg_file'),
         properties: ['openFile'],
@@ -375,9 +557,19 @@ export default {
           {
             name: 'Image File',
             extensions: [
-              'jpg', 'jpeg', 'jfif', 'pjpeg',
-              'pjp', 'png', 'apng', 'avif', 'gif', 'svg',
-              'webp', 'bmp'],
+              'jpg',
+              'jpeg',
+              'jfif',
+              'pjpeg',
+              'pjp',
+              'png',
+              'apng',
+              'avif',
+              'gif',
+              'svg',
+              'webp',
+              'bmp',
+            ],
           },
         ],
       })
@@ -386,7 +578,7 @@ export default {
       const fileName = `${theme.id}_${Date.now()}${extname(path)}`
       const tempDir = joinPath(themeInfo.dataPath, 'temp')
       const bgPath = joinPath(tempDir, fileName)
-      if (!await checkPath(tempDir)) await createDir(tempDir)
+      if (!(await checkPath(tempDir))) await createDir(tempDir)
       await copyFile(path, bgPath)
       currentBgPath = bgImgRaw = bgPath
       bgImg.value = encodePath(bgImgRaw)
@@ -394,7 +586,7 @@ export default {
 
       createPreview()
     }
-    const removeBgImg = async() => {
+    const removeBgImg = async () => {
       if (currentBgPath) {
         void removeFile(currentBgPath)
         currentBgPath = ''
@@ -406,11 +598,21 @@ export default {
     }
     const handleDark = (val) => {
       theme.isDark = val
-      applyPrimaryColor(theme.config.themeColors['--color-primary'], theme.config.themeColors['--color-1000'], theme.isDark, theme.isDarkFont)
+      applyPrimaryColor(
+        theme.config.themeColors['--color-primary'],
+        theme.config.themeColors['--color-1000'],
+        theme.isDark,
+        theme.isDarkFont
+      )
     }
     const handleDarkFont = (val) => {
       theme.isDarkFont = val
-      applyPrimaryColor(theme.config.themeColors['--color-primary'], theme.config.themeColors['--color-1000'], theme.isDark, theme.isDarkFont)
+      applyPrimaryColor(
+        theme.config.themeColors['--color-primary'],
+        theme.config.themeColors['--color-1000'],
+        theme.isDark,
+        theme.isDarkFont
+      )
     }
     /**
      * 预览主题
@@ -420,7 +622,12 @@ export default {
       if (val) {
         createPreview()
       } else {
-        applyTheme(appSetting['theme.id'], appSetting['theme.lightId'], appSetting['theme.darkId'], themeInfo.dataPath)
+        applyTheme(
+          appSetting['theme.id'],
+          appSetting['theme.lightId'],
+          appSetting['theme.darkId'],
+          themeInfo.dataPath
+        )
       }
     }
     const handleCancel = () => {
@@ -428,7 +635,7 @@ export default {
       emit('update:modelValue', false)
     }
     // 保存
-    const handleSubmit = async() => {
+    const handleSubmit = async () => {
       if (!themeName.value) return
       theme.name = themeName.value.substring(0, 20)
       // 保存新背景
@@ -438,11 +645,14 @@ export default {
         theme.config.extInfo['--background-image'] = name
       }
       // 移除旧背景
-      if (originBgName &&
+      if (
+        originBgName &&
         theme.config.extInfo['--background-image'] != originBgName &&
-        !isUrl(theme.config.extInfo['--background-image'])) void removeFile(joinPath(themeInfo.dataPath, originBgName))
+        !isUrl(theme.config.extInfo['--background-image'])
+      )
+        void removeFile(joinPath(themeInfo.dataPath, originBgName))
       if (props.themeId) {
-        const index = themeInfo.userThemes.findIndex(t => t.id == theme.id)
+        const index = themeInfo.userThemes.findIndex((t) => t.id == theme.id)
         if (index > -1) themeInfo.userThemes.splice(index, 1, theme)
       } else themeInfo.userThemes.push(theme)
       handlePreview(false)
@@ -451,7 +661,7 @@ export default {
       emit('update:modelValue', false)
     }
     // 删除
-    const handleRemove = async() => {
+    const handleRemove = async () => {
       const confirm = await dialog.confirm({
         message: window.i18n.t('theme_edit_modal__remove_tip'),
         cancelButtonText: window.i18n.t('cancel_button_text'),
@@ -478,7 +688,7 @@ export default {
       if (isRequireUpdateSetting) updateSetting(newSetting)
       if (originBgName) void removeFile(joinPath(themeInfo.dataPath, originBgName))
       await removeTheme(props.themeId)
-      const index = themeInfo.userThemes.findIndex(t => t.id == theme.id)
+      const index = themeInfo.userThemes.findIndex((t) => t.id == theme.id)
       console.log(index)
       if (index > -1) themeInfo.userThemes.splice(index, 1)
       handlePreview(false)
@@ -486,7 +696,7 @@ export default {
       emit('update:modelValue', false)
     }
     // 另存为
-    const handleSaveNew = async() => {
+    const handleSaveNew = async () => {
       if (!themeName.value) return
       theme.name = themeName.value.substring(0, 20)
       theme.id = 'user_theme_' + Date.now()
@@ -579,7 +789,6 @@ export default {
   flex-flow: column nowrap;
 }
 .group {
-
 }
 .groupTitle {
   padding: 20px 20px 0;
@@ -616,7 +825,7 @@ export default {
   transition-property: background-color, opacity !important;
   box-shadow: 0 0 3px var(--color-primary-light-100-alpha-300);
   &:hover {
-    opacity: .7;
+    opacity: 0.7;
   }
 }
 .label {
@@ -634,8 +843,8 @@ export default {
 .bgImg {
   width: 100%;
   height: 60px;
-  border: 1Px dashed var(--color-primary-light-100-alpha-300);
-  transition: .3s ease;
+  border: 1px dashed var(--color-primary-light-100-alpha-300);
+  transition: 0.3s ease;
   transition-property: border, color;
   box-sizing: border-box;
   border: 1px dashed var(--color-primary-light-100-alpha-300);
@@ -650,7 +859,7 @@ export default {
   transition-property: background-color, opacity !important;
   overflow: hidden;
   &:hover {
-    opacity: .7;
+    opacity: 0.7;
   }
 
   &.hasBg {
@@ -681,7 +890,7 @@ export default {
     display: none;
 
     svg {
-      height: .7em;
+      height: 0.7em;
     }
 
     &:hover {
@@ -699,7 +908,7 @@ export default {
   }
 }
 
-@control-btn-width: @height-toolbar * .26;
+@control-btn-width: @height-toolbar * 0.26;
 .controlBtn {
   display: flex;
   -webkit-app-region: no-drag;
@@ -708,9 +917,9 @@ export default {
   flex-direction: row-reverse;
   // height: @height-toolbar * .7;
   transition: opacity @transition-normal;
-  opacity: .5;
+  opacity: 0.5;
   &:hover {
-    opacity: .8;
+    opacity: 0.8;
     .controlBtnIcon {
       opacity: 1;
     }
@@ -738,7 +947,8 @@ export default {
     &.hide {
       background-color: var(--color-btn-hide);
     }
-    &.min, &.fullscreenExit {
+    &.min,
+    &.fullscreenExit {
       background-color: var(--color-btn-min);
     }
     // &.max {
@@ -790,7 +1000,6 @@ export default {
   }
 }
 
-
 .btn {
   // box-sizing: border-box;
   // margin-left: 15px;
@@ -801,5 +1010,4 @@ export default {
   min-width: 70px;
   // .mixin-ellipsis-1;
 }
-
 </style>

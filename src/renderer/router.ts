@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
+
 // import Vue from 'vue'
 import { createRouter, createWebHashHistory } from 'vue-router'
 

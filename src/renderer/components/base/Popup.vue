@@ -1,7 +1,7 @@
 <template>
   <component :is="Teleport" to="#root">
     <div
-      :class="[$style.popup, {[$style.top]: isShowTop}, {[$style.active]: props.visible}]"
+      :class="[$style.popup, { [$style.top]: isShowTop }, { [$style.active]: props.visible }]"
       :style="popupStyle"
       :aria-hidden="!props.visible"
       @click.stop
@@ -20,11 +20,7 @@
 import { ref, watch, onMounted, onBeforeUnmount, reactive } from '@common/utils/vueTools'
 
 // https://github.com/vuejs/core/issues/2855#issuecomment-768388962
-import {
-  Teleport as teleport_,
-  type TeleportProps,
-  type VNodeProps,
-} from 'vue'
+import { Teleport as teleport_, type TeleportProps, type VNodeProps } from 'vue'
 const Teleport = teleport_ as new () => {
   $props: VNodeProps & TeleportProps
 }
@@ -56,38 +52,44 @@ const arrowHeight = 9
 const arrowWidth = 8
 const sidePadding = 50
 
-watch(() => props.visible, (visible) => {
-  if (!visible || !dom_content.value || !props.btnEl) return
-  const rect = props.btnEl.getBoundingClientRect()
-  const maxHeight = document.body.clientHeight
-  const elTop = rect.top - window.lx.rootOffset
-  const bottomTopVal = elTop + rect.height
-  const contentHeight = dom_content.value.scrollHeight + arrowHeight + sidePadding
-  if (bottomTopVal + contentHeight < maxHeight || (contentHeight > elTop && elTop <= maxHeight - bottomTopVal)) {
-    isShowTop.value = false
-    popupStyle.top = bottomTopVal + arrowHeight + 'px'
-    popupStyle.maxHeight = maxHeight - bottomTopVal - arrowHeight - sidePadding + 'px'
-  } else {
-    isShowTop.value = true
-    let maxContentHeight = elTop - arrowHeight - sidePadding
-    popupStyle.top = (elTop - (elTop < contentHeight ? elTop : contentHeight) + sidePadding) + 'px'
-    popupStyle.maxHeight = maxContentHeight + 'px'
-  }
+watch(
+  () => props.visible,
+  (visible) => {
+    if (!visible || !dom_content.value || !props.btnEl) return
+    const rect = props.btnEl.getBoundingClientRect()
+    const maxHeight = document.body.clientHeight
+    const elTop = rect.top - window.lx.rootOffset
+    const bottomTopVal = elTop + rect.height
+    const contentHeight = dom_content.value.scrollHeight + arrowHeight + sidePadding
+    if (
+      bottomTopVal + contentHeight < maxHeight ||
+      (contentHeight > elTop && elTop <= maxHeight - bottomTopVal)
+    ) {
+      isShowTop.value = false
+      popupStyle.top = bottomTopVal + arrowHeight + 'px'
+      popupStyle.maxHeight = maxHeight - bottomTopVal - arrowHeight - sidePadding + 'px'
+    } else {
+      isShowTop.value = true
+      let maxContentHeight = elTop - arrowHeight - sidePadding
+      popupStyle.top = elTop - (elTop < contentHeight ? elTop : contentHeight) + sidePadding + 'px'
+      popupStyle.maxHeight = maxContentHeight + 'px'
+    }
 
-  const maxWidth = document.body.clientWidth - 20
-  let center = dom_content.value.clientWidth / 2
-  let left = rect.left + rect.width / 2 - window.lx.rootOffset - center
-  if (left < sidePadding) {
-    center -= sidePadding - left
-    left = sidePadding
-  } else if (left + dom_content.value.clientWidth > maxWidth) {
-    let newLeft = maxWidth - dom_content.value.clientWidth
-    center = center + left - newLeft
-    left = newLeft
+    const maxWidth = document.body.clientWidth - 20
+    let center = dom_content.value.clientWidth / 2
+    let left = rect.left + rect.width / 2 - window.lx.rootOffset - center
+    if (left < sidePadding) {
+      center -= sidePadding - left
+      left = sidePadding
+    } else if (left + dom_content.value.clientWidth > maxWidth) {
+      let newLeft = maxWidth - dom_content.value.clientWidth
+      center = center + left - newLeft
+      left = newLeft
+    }
+    popupStyle.left = left + 'px'
+    popupStyle['--arrow-left'] = center - arrowWidth + 'px'
   }
-  popupStyle.left = left + 'px'
-  popupStyle['--arrow-left'] = center - arrowWidth + 'px'
-})
+)
 
 const handleHide = (evt?: MouseEvent) => {
   // if (evt && (evt.target as HTMLElement)?.parentNode != dom_content.value && props.visible) return emit('update:visible', false)
@@ -99,7 +101,6 @@ const handleHide = (evt?: MouseEvent) => {
   // }, 50)
 }
 
-
 onMounted(() => {
   document.addEventListener('click', handleHide)
 })
@@ -107,9 +108,7 @@ onMounted(() => {
 onBeforeUnmount(() => {
   document.removeEventListener('click', handleHide)
 })
-
 </script>
-
 
 <style lang="less" module>
 @import '@renderer/assets/styles/layout.less';
@@ -124,18 +123,18 @@ onBeforeUnmount(() => {
   border-radius: 4px;
   background-color: var(--color-content-background);
   opacity: 0;
-  transform: scale(.8);
+  transform: scale(0.8);
   transform-origin: 50% 0 0;
-  transition: .16s ease;
+  transition: 0.16s ease;
   transition-property: transform, opacity;
   max-height: 250px;
   z-index: 10;
   pointer-events: none;
-  filter: drop-shadow(0px 0px 3px rgba(0, 0, 0, .12));
+  filter: drop-shadow(0px 0px 3px rgba(0, 0, 0, 0.12));
   display: flex;
 
   &:before {
-    content: " ";
+    content: ' ';
     position: absolute;
     top: -6px;
     left: var(--arrow-left);
@@ -153,7 +152,7 @@ onBeforeUnmount(() => {
   }
 
   &.top {
-    filter: drop-shadow(0px 1px 3px rgba(0, 0, 0, .12));
+    filter: drop-shadow(0px 1px 3px rgba(0, 0, 0, 0.12));
     transform-origin: 50% 100% 0;
 
     &:before {
@@ -168,5 +167,4 @@ onBeforeUnmount(() => {
   box-sizing: border-box;
   // box-shadow: 0 0 4px rgba(0, 0, 0, .2);
 }
-
 </style>

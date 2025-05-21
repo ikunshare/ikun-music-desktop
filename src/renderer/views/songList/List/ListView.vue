@@ -9,7 +9,6 @@ import { getAndSetList } from '@renderer/store/songList/action'
 import { useRouter, useRoute, onBeforeRouteLeave } from '@common/utils/vueRouter'
 import SongList from './components/SongList.vue'
 
-
 const props = defineProps<{
   source: LX.OnlineSource
   tagId: string
@@ -17,16 +16,23 @@ const props = defineProps<{
   page: number
 }>()
 
-
 const list_ref = ref<any>(null)
 
 const router = useRouter()
 const route = useRoute()
 
-const getListData = async(source: LX.OnlineSource, tabId: string, sortId: string, page: number) => {
+const getListData = async (
+  source: LX.OnlineSource,
+  tabId: string,
+  sortId: string,
+  page: number
+) => {
   // console.log(source, tabId, sortId, page)
   await getAndSetList(source, tabId, sortId, page).then(() => {
-    if (listInfo.key == window.lx.songListInfo.songlistKey && window.lx.songListInfo.songlistPosition) {
+    if (
+      listInfo.key == window.lx.songListInfo.songlistKey &&
+      window.lx.songListInfo.songlistPosition
+    ) {
       void nextTick(() => {
         list_ref.value?.scrollTo(window.lx.songListInfo.songlistPosition)
       })
@@ -51,23 +57,25 @@ const togglePage = (page: number) => {
   // getListData(props.source, props.tagId, props.sortId ?? '', page)
 }
 
-watch(() => [props.source, props.tagId, props.sortId, props.page], ([source, tagId, sortId, page]) => {
-  // const source = (await getLeaderboardSetting()).source as LX.OnlineSource
-  // console.log(source, tagId, sortId)
-  if (!source || !sortId) return
-  // console.log(source, tagId, sortId, page)
-  void getListData(source as LX.OnlineSource, tagId as string, sortId as string, page as number)
-}, {
-  immediate: true,
-})
+watch(
+  () => [props.source, props.tagId, props.sortId, props.page],
+  ([source, tagId, sortId, page]) => {
+    // const source = (await getLeaderboardSetting()).source as LX.OnlineSource
+    // console.log(source, tagId, sortId)
+    if (!source || !sortId) return
+    // console.log(source, tagId, sortId, page)
+    void getListData(source as LX.OnlineSource, tagId as string, sortId as string, page as number)
+  },
+  {
+    immediate: true,
+  }
+)
 
 onBeforeRouteLeave(() => {
   window.lx.songListInfo.songlistKey = listInfo.key
   if (list_ref.value) window.lx.songListInfo.songlistPosition = list_ref.value.getScrollTop()
 })
-
 </script>
-
 
 <style lang="less" module>
 @import '@renderer/assets/styles/layout.less';
@@ -105,7 +113,7 @@ onBeforeRouteLeave(() => {
   cursor: pointer;
   transition: opacity @transition-normal;
   &:hover {
-    opacity: .7;
+    opacity: 0.7;
   }
 }
 .left {
@@ -117,7 +125,7 @@ onBeforeRouteLeave(() => {
   background-size: cover;
   border-radius: 4px;
   overflow: hidden;
-  opacity: .9;
+  opacity: 0.9;
 
   img {
     object-fit: cover;
@@ -183,5 +191,4 @@ onBeforeRouteLeave(() => {
     color: var(--color-font-label);
   }
 }
-
 </style>

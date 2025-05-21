@@ -38,7 +38,8 @@ const eapiRequest = (url, data) => {
   return httpFetch('https://interface3.music.163.com/eapi/song/lyric/v1', {
     method: 'post',
     headers: {
-      'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36',
+      'User-Agent':
+        'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.90 Safari/537.36',
       origin: 'https://music.163.com',
       // cookie: 'os=pc; deviceId=A9C064BB4584D038B1565B58CB05F95290998EE8B025AA2D07AE; osver=Microsoft-Windows-10-Home-China-build-19043-64bit; appver=2.5.2.197409; channel=netease; MUSIC_A=37a11f2eb9de9930cad479b2ad495b0e4c982367fb6f909d9a3f18f876c6b49faddb3081250c4980dd7e19d4bd9bf384e004602712cf2b2b8efaafaab164268a00b47359f85f22705cc95cb6180f3aee40f5be1ebf3148d888aa2d90636647d0c3061cd18d77b7a0; __csrf=05b50d54082694f945d7de75c210ef94; mode=Z7M-KP5(7)GZ; NMTID=00OZLp2VVgq9QdwokUgq3XNfOddQyIAAAF_6i8eJg; ntes_kaola_ad=1',
     },
@@ -65,7 +66,9 @@ const parseTools = {
     if (Number.isNaN(timeMs)) return ''
     let ms = timeMs % 1000
     timeMs /= 1000
-    let m = parseInt(timeMs / 60).toString().padStart(2, '0')
+    let m = parseInt(timeMs / 60)
+      .toString()
+      .padStart(2, '0')
     timeMs %= 60
     let s = parseInt(timeMs).toString().padStart(2, '0')
     return `[${m}:${s}.${ms}]`
@@ -95,7 +98,7 @@ const parseTools = {
 
       let times = words.match(this.rxps.wordTimeAll)
       if (!times) continue
-      times = times.map(time => {
+      times = times.map((time) => {
         const result = /\((\d+),(\d+),\d+\)/.exec(time)
         return `<${Math.max(parseInt(result[1]) - startMsTime, 0)},${result[2]}>`
       })
@@ -114,12 +117,12 @@ const parseTools = {
     str = str.replace(/\r/g, '')
     if (!str) return null
     const lines = str.split('\n')
-    return lines.map(line => {
+    return lines.map((line) => {
       if (!this.rxps.info.test(line)) return line
       try {
         const info = JSON.parse(line)
         const timeTag = this.msFormat(info.t)
-        return timeTag ? `${timeTag}${info.c.map(t => t.tx).join('')}` : ''
+        return timeTag ? `${timeTag}${info.c.map((t) => t.tx).join('')}` : ''
       } catch {
         return ''
       }
@@ -193,7 +196,7 @@ const parseTools = {
         }
 
         const timeRxp = /^\[[\d:.]+\]/
-        const headers = lines.filter(l => timeRxp.test(l)).join('\n')
+        const headers = lines.filter((l) => timeRxp.test(l)).join('\n')
         info.lyric = `${headers}\n${result.lyric}`
         info.lxlyric = result.lxlyric
         return info
@@ -215,7 +218,6 @@ const parseTools = {
     return info
   },
 }
-
 
 // https://github.com/Binaryify/NeteaseCloudMusicApi/pull/1523/files
 // export default songmid => {
@@ -255,7 +257,10 @@ const fixTimeLabel = (lrc, tlrc, romalrc) => {
     if (newLrc != lrc || newTlrc != tlrc) {
       lrc = newLrc
       tlrc = newTlrc
-      if (romalrc) romalrc = romalrc.replace(/\[(\d{2}:\d{2}):(\d{2,3})]/g, '[$1.$2]').replace(/\[(\d{2}:\d{2}\.\d{2})0]/g, '[$1]')
+      if (romalrc)
+        romalrc = romalrc
+          .replace(/\[(\d{2}:\d{2}):(\d{2,3})]/g, '[$1.$2]')
+          .replace(/\[(\d{2}:\d{2}\.\d{2})0]/g, '[$1]')
     }
   }
 
@@ -263,7 +268,7 @@ const fixTimeLabel = (lrc, tlrc, romalrc) => {
 }
 
 // https://github.com/Binaryify/NeteaseCloudMusicApi/blob/master/module/lyric_new.js
-export default songmid => {
+export default (songmid) => {
   const requestObj = eapiRequest('/api/song/lyric/v1', {
     id: songmid,
     cp: false,
@@ -279,7 +284,14 @@ export default songmid => {
     // console.log(body)
     if (body.code !== 200 || !body?.lrc?.lyric) return Promise.reject(new Error('Get lyric failed'))
     const fixTimeLabelLrc = fixTimeLabel(body.lrc.lyric, body.tlyric?.lyric, body.romalrc?.lyric)
-    const info = parseTools.parse(body.yrc?.lyric, body.ytlrc?.lyric, body.yromalrc?.lyric, fixTimeLabelLrc.lrc, fixTimeLabelLrc.tlrc, fixTimeLabelLrc.romalrc)
+    const info = parseTools.parse(
+      body.yrc?.lyric,
+      body.ytlrc?.lyric,
+      body.yromalrc?.lyric,
+      fixTimeLabelLrc.lrc,
+      fixTimeLabelLrc.tlrc,
+      fixTimeLabelLrc.romalrc
+    )
     // console.log(info)
     if (!info.lyric) return Promise.reject(new Error('Get lyric failed'))
     return info

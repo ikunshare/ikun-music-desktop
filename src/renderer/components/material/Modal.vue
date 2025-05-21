@@ -2,12 +2,28 @@
   <teleport :to="teleport">
     <div v-if="showModal" ref="dom_container" :class="$style.container">
       <transition enter-active-class="animated fadeIn" leave-active-class="animated fadeOut">
-        <div v-show="showContent" :class="[$style.modal, {[$style.filter]: filter}]" @click="bgClose && close()">
-          <transition :enter-active-class="inClass" :leave-active-class="outClass" @after-enter="$emit('after-enter', $event)" @after-leave="handleAfterLeave">
+        <div
+          v-show="showContent"
+          :class="[$style.modal, { [$style.filter]: filter }]"
+          @click="bgClose && close()"
+        >
+          <transition
+            :enter-active-class="inClass"
+            :leave-active-class="outClass"
+            @after-enter="$emit('after-enter', $event)"
+            @after-leave="handleAfterLeave"
+          >
             <div v-show="showContent" :class="$style.content" :style="contentStyle" @click.stop>
               <header :class="$style.header">
                 <button v-if="closeBtn" type="button" @click="close">
-                  <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" height="100%" viewBox="0 0 212.982 212.982" space="preserve">
+                  <svg
+                    version="1.1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    xlink="http://www.w3.org/1999/xlink"
+                    height="100%"
+                    viewBox="0 0 212.982 212.982"
+                    space="preserve"
+                  >
                     <use xlink:href="#icon-delete" />
                   </svg>
                 </button>
@@ -70,11 +86,23 @@ export default {
   data() {
     return {
       animates: [
-        [['jackInTheBox', 'flipInX', 'flipInY', 'lightSpeedIn'], ['flipOutX', 'flipOutY', 'lightSpeedOut']],
+        [
+          ['jackInTheBox', 'flipInX', 'flipInY', 'lightSpeedIn'],
+          ['flipOutX', 'flipOutY', 'lightSpeedOut'],
+        ],
         // [['jackInTheBox', 'lightSpeedIn'], ['lightSpeedOut']],
-        [['rotateInDownLeft', 'rotateInDownRight', 'rotateInUpLeft', 'rotateInUpRight'], ['rotateOutDownLeft', 'rotateOutDownRight', 'rotateOutUpLeft', 'rotateOutUpRight']],
-        [['jackInTheBox', 'zoomInDown', 'zoomInUp'], ['zoomOutDown', 'zoomOutUp']],
-        [['slideInDown', 'slideInLeft', 'slideInRight', 'slideInUp'], ['slideOutDown', 'slideOutLeft', 'slideOutRight', 'slideOutUp']],
+        [
+          ['rotateInDownLeft', 'rotateInDownRight', 'rotateInUpLeft', 'rotateInUpRight'],
+          ['rotateOutDownLeft', 'rotateOutDownRight', 'rotateOutUpLeft', 'rotateOutUpRight'],
+        ],
+        [
+          ['jackInTheBox', 'zoomInDown', 'zoomInUp'],
+          ['zoomOutDown', 'zoomOutUp'],
+        ],
+        [
+          ['slideInDown', 'slideInLeft', 'slideInRight', 'slideInUp'],
+          ['slideOutDown', 'slideOutLeft', 'slideOutRight', 'slideOutUp'],
+        ],
 
         // ['flipInX', 'flipOutX'],
         // ['flipInY', 'flipOutY'],
@@ -225,7 +253,6 @@ export default {
 }
 </script>
 
-
 <style lang="less" module>
 @import '@renderer/assets/styles/layout.less';
 
@@ -270,7 +297,7 @@ export default {
 .content {
   position: relative;
   border-radius: 4px;
-  box-shadow: 0 0 4px rgba(0, 0, 0, .25);
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.25);
   overflow: hidden;
   // max-height: 80%;
   // max-width: 76%;
@@ -301,7 +328,7 @@ export default {
     line-height: 0;
 
     svg {
-      height: .7em;
+      height: 0.7em;
     }
 
     &:hover {
@@ -312,5 +339,4 @@ export default {
     }
   }
 }
-
 </style>

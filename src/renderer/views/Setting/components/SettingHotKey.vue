@@ -33,20 +33,23 @@ import { allHotKeys, hotKeySetEnable, hotKeySetConfig, hotKeyGetStatus } from '@
 import { isMac } from '@common/utils'
 import { useI18n } from '@renderer/plugins/i18n'
 
-
 const formatHotKeyName = (name) => {
   if (name.includes('arrow')) {
-    name = name.replace(/arrow(left|right|up|down)/, s => {
+    name = name.replace(/arrow(left|right|up|down)/, (s) => {
       switch (s) {
-        case 'arrowleft': return '←'
-        case 'arrowright': return '→'
-        case 'arrowup': return '↑'
-        case 'arrowdown': return '↓'
+        case 'arrowleft':
+          return '←'
+        case 'arrowright':
+          return '→'
+        case 'arrowup':
+          return '↑'
+        case 'arrowdown':
+          return '↓'
       }
     })
   }
   if (name.includes('mod')) name = name.replace('mod', isMac ? 'Command' : 'Ctrl')
-  name = name.replace(/(\+|^)[a-z]/g, l => l.toUpperCase())
+  name = name.replace(/(\+|^)[a-z]/g, (l) => l.toUpperCase())
   if (name.length > 1) name = name.replace(/\+/g, ' + ')
   return name
 }
@@ -80,7 +83,7 @@ export default {
     const initHotKeyConfig = () => {
       let config = {}
       for (const [type, typeInfo] of Object.entries(current_hot_key.value)) {
-        let configInfo = config[type] = {}
+        let configInfo = (config[type] = {})
         for (const [key, info] of Object.entries(typeInfo.keys)) {
           if (!info.name) continue
           configInfo[info.name] = shallowReactive({
@@ -93,7 +96,7 @@ export default {
     }
 
     const handleHotKeyFocus = (event, info, type) => {
-      setTimeout(async() => {
+      setTimeout(async () => {
         await hotKeySetEnable(false)
         window.lx.isEditingHotKey = true
         isEditHotKey = true
@@ -105,7 +108,7 @@ export default {
     }
 
     const handleHotKeyBlur = (event, info, type) => {
-      setTimeout(async() => {
+      setTimeout(async () => {
         await hotKeySetEnable(true)
         window.lx.isEditingHotKey = false
         isEditHotKey = false
@@ -134,7 +137,7 @@ export default {
         if (config) {
           if (config.key == newHotKey) return
           originKey = config.key
-          // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+
           delete current_hot_key.value[type].keys[config.key]
         } else if (!newHotKey) return
 
@@ -144,7 +147,7 @@ export default {
             config = tempInfo.keys[newHotKey]
             if (config) {
               console.log(newHotKey, info, config, info.name, config.name)
-              // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+
               delete current_hot_key.value[tempType].keys[newHotKey]
               break
             }
@@ -190,14 +193,14 @@ export default {
     //     current_hot_key.value[type] = info
     //   }
     // }
-    const handleHotKeySaveConfig = async() => {
+    const handleHotKeySaveConfig = async () => {
       // console.log(this.current_hot_key)
       await hotKeySetConfig({
         action: 'config',
         data: toRaw(current_hot_key.value),
       })
     }
-    const handleEnableHotKey = async() => {
+    const handleEnableHotKey = async () => {
       await hotKeySetConfig({
         action: 'enable',
         data: current_hot_key.value.global.enable,
@@ -205,8 +208,8 @@ export default {
       await handleHotKeySaveConfig()
       await getHotKeyStatus()
     }
-    const getHotKeyStatus = async() => {
-      return hotKeyGetStatus().then(status => {
+    const getHotKeyStatus = async () => {
+      return hotKeyGetStatus().then((status) => {
         // console.log(status)
         hotKeyStatus.value = status
         return status
@@ -306,5 +309,4 @@ export default {
 //     z-index: 1;
 //   }
 // }
-
 </style>

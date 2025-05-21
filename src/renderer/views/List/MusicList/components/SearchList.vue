@@ -1,31 +1,66 @@
 <template>
   <teleport to="#view">
     <div v-show="isShow" ref="dom_container" :class="$style.container">
-      <transition enter-active-class="animated-fast zoomIn" leave-active-class="animated zoomOut" @after-leave="handleAnimated">
+      <transition
+        enter-active-class="animated-fast zoomIn"
+        leave-active-class="animated zoomOut"
+        @after-leave="handleAnimated"
+      >
         <div v-show="visible" :class="$style.search">
           <div :class="$style.form">
             <input
-              ref="dom_input" v-model.trim="text" class="ignore-esc" :placeholder="placeholder" @input="handleDelaySearch"
-              @keydown.arrow-down.arrow-up.prevent @keyup.arrow-down.prevent.exact="handleKeyDown" @keyup.arrow-up.prevent.exact="handleKeyUp"
+              ref="dom_input"
+              v-model.trim="text"
+              class="ignore-esc"
+              :placeholder="placeholder"
+              @input="handleDelaySearch"
+              @keydown.arrow-down.arrow-up.prevent
+              @keyup.arrow-down.prevent.exact="handleKeyDown"
+              @keyup.arrow-up.prevent.exact="handleKeyUp"
               @keyup.enter="handleTemplistClick(selectIndex)"
-              @keyup.escape.prevent.exact="handleKeyEsc" @keydown.control.prevent="handle_key_mod_down" @keydown.meta.prevent="handle_key_mod_down"
-              @keyup.control.prevent="handle_key_mod_up" @keyup.meta.prevent="handle_key_mod_up" @contextmenu="handleContextMenu"
-            >
+              @keyup.escape.prevent.exact="handleKeyEsc"
+              @keydown.control.prevent="handle_key_mod_down"
+              @keydown.meta.prevent="handle_key_mod_down"
+              @keyup.control.prevent="handle_key_mod_up"
+              @keyup.meta.prevent="handle_key_mod_up"
+              @contextmenu="handleContextMenu"
+            />
             <button type="button" @click="handleHide">
               <slot>
-                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" height="70%" viewBox="0 0 212.982 212.982" space="preserve">
+                <svg
+                  version="1.1"
+                  xmlns="http://www.w3.org/2000/svg"
+                  xlink="http://www.w3.org/1999/xlink"
+                  height="70%"
+                  viewBox="0 0 212.982 212.982"
+                  space="preserve"
+                >
                   <use xlink:href="#icon-delete" />
                 </svg>
               </slot>
             </button>
           </div>
-          <div v-if="resultList" ref="dom_scrollContainer" class="scroll" :class="$style.list" :style="listStyle">
+          <div
+            v-if="resultList"
+            ref="dom_scrollContainer"
+            class="scroll"
+            :class="$style.list"
+            :style="listStyle"
+          >
             <ul ref="dom_list">
-              <li v-for="(item, index) in resultList" :key="item.songmid" :class="selectIndex === index ? $style.select : null" @mouseenter="selectIndex = index" @click="handleTemplistClick(index)">
+              <li
+                v-for="(item, index) in resultList"
+                :key="item.songmid"
+                :class="selectIndex === index ? $style.select : null"
+                @mouseenter="selectIndex = index"
+                @click="handleTemplistClick(index)"
+              >
                 <div :class="$style.img" />
                 <div :class="$style.text">
                   <h3 :class="$style.text">{{ item.name }} - {{ item.singer }}</h3>
-                  <h3 v-if="item.meta.albumName" :class="[$style.text, $style.albumName]">{{ item.meta.albumName }}</h3>
+                  <h3 v-if="item.meta.albumName" :class="[$style.text, $style.albumName]">
+                    {{ item.meta.albumName }}
+                  </h3>
                 </div>
                 <div :class="$style.source">{{ item.source }}</div>
               </li>
@@ -122,7 +157,8 @@ export default {
       this.handleSearch()
       this.$nextTick(() => {
         if (!this.listStyle.maxHeight) {
-          this.maxHeight = this.$refs.dom_container.offsetParent.clientHeight - this.$refs.dom_list.offsetTop - 70
+          this.maxHeight =
+            this.$refs.dom_container.offsetParent.clientHeight - this.$refs.dom_list.offsetTop - 70
           this.listStyle.maxHeight = this.maxHeight + 'px'
         }
         this.$refs.dom_input.focus()
@@ -154,7 +190,7 @@ export default {
       if (index < 0) return
       const id = this.resultList[index].id
       this.sendEvent('listClick', {
-        index: this.list.findIndex(m => m.id == id),
+        index: this.list.findIndex((m) => m.id == id),
         isPlay: this.isModDown,
       })
     },
@@ -177,7 +213,8 @@ export default {
     },
     handleKeyUp() {
       if (this.resultList.length) {
-        this.selectIndex = this.selectIndex - 1 < -1 ? this.resultList.length - 1 : this.selectIndex - 1
+        this.selectIndex =
+          this.selectIndex - 1 < -1 ? this.resultList.length - 1 : this.selectIndex - 1
         this.handleScrollList()
       } else if (this.selectIndex > -1) {
         this.selectIndex = -1
@@ -191,7 +228,10 @@ export default {
       let top
       if (offsetTop < scrollTop) {
         top = offsetTop
-      } else if (offsetTop + dom.clientHeight > this.$refs.dom_scrollContainer.clientHeight + scrollTop) {
+      } else if (
+        offsetTop + dom.clientHeight >
+        this.$refs.dom_scrollContainer.clientHeight + scrollTop
+      ) {
         top = offsetTop + dom.clientHeight - this.$refs.dom_scrollContainer.clientHeight
       } else return
       this.$refs.dom_scrollContainer.scrollTo(0, top)
@@ -204,7 +244,10 @@ export default {
       let dom_input = this.$refs.dom_input
       const text = dom_input.value
       // if (dom_input.selectionStart == dom_input.selectionEnd) {
-      const value = text.substring(0, dom_input.selectionStart) + str + text.substring(dom_input.selectionEnd, text.length)
+      const value =
+        text.substring(0, dom_input.selectionStart) +
+        str +
+        text.substring(dom_input.selectionEnd, text.length)
       // event.target.value = value
       this.text = value
       // } else {
@@ -212,13 +255,12 @@ export default {
       // }
     },
     async handleSearch() {
-      if (!this.text.length) return this.resultList = []
+      if (!this.text.length) return (this.resultList = [])
       this.resultList = await window.lx.worker.main.searchListMusic(toRaw(this.list), this.text)
     },
   },
 }
 </script>
-
 
 <style lang="less" module>
 @import '@renderer/assets/styles/layout.less';
@@ -237,22 +279,24 @@ export default {
   position: absolute;
   width: 100%;
   border-radius: 4px;
-  transition: box-shadow .4s ease, background-color @transition-normal;
+  transition:
+    box-shadow 0.4s ease,
+    background-color @transition-normal;
   display: flex;
   flex-flow: column nowrap;
   background-color: var(--color-primary-light-600-alpha-100);
-  box-shadow: 0 1px 2px rgba(0,0,0,0.07),
-                0 2px 4px rgba(0,0,0,0.07),
-                0 4px 8px rgba(0,0,0,0.07),
-                0 8px 16px rgba(0,0,0,0.07),
-                0 16px 32px rgba(0,0,0,0.07),
-                0 32px 64px rgba(0,0,0,0.07);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.07),
+    0 2px 4px rgba(0, 0, 0, 0.07),
+    0 4px 8px rgba(0, 0, 0, 0.07),
+    0 8px 16px rgba(0, 0, 0, 0.07),
+    0 16px 32px rgba(0, 0, 0, 0.07),
+    0 32px 64px rgba(0, 0, 0, 0.07);
 
   &.active {
     .form {
       input {
         border-bottom-left-radius: 0;
-
       }
       button {
         border-bottom-right-radius: 0;
@@ -281,7 +325,7 @@ export default {
       line-height: @height-toolbar * 0.52 + 5px;
       &::placeholder {
         color: var(--color-button-font);
-        font-size: .98em;
+        font-size: 0.98em;
       }
     }
     button {
@@ -296,7 +340,7 @@ export default {
       height: 100%;
       padding: 6px 9px;
       color: var(--color-button-font);
-      transition: background-color .2s ease;
+      transition: background-color 0.2s ease;
       opacity: 0.8;
 
       &:hover {
@@ -310,7 +354,7 @@ export default {
   .list {
     // background-color: @color-search-form-background;
     font-size: 13px;
-    transition: .3s ease;
+    transition: 0.3s ease;
     height: 0;
     transition-property: height;
     position: relative;
@@ -320,7 +364,7 @@ export default {
       position: relative;
       cursor: pointer;
       padding: 8px 5px;
-      transition: background-color .2s ease;
+      transition: background-color 0.2s ease;
       line-height: 1.3;
       // overflow: hidden;
       display: flex;
@@ -360,5 +404,4 @@ export default {
   // transform: rotate(45deg);
   // background-color:
 }
-
 </style>

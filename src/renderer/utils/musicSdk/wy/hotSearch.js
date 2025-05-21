@@ -15,6 +15,6 @@ export default {
     return { source: 'wy', list: this.filterList(body.data.itemList) }
   },
   filterList(rawList) {
-    return rawList.map(item => item.searchWord)
+    return rawList.map((item) => item.searchWord)
   },
 }

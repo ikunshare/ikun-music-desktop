@@ -9,5 +9,4 @@ import { appSetting } from '@renderer/store/setting'
 import MiniWidthProgress from './MiniWidthProgress.vue'
 import FullWidthProgress from './FullWidthProgress.vue'
 import MiddleWidthProgress from './MiddleWidthProgress.vue'
-
 </script>

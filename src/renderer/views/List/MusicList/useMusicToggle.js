@@ -18,7 +18,7 @@ export default (props, list) => {
 
   const toggleSource = (toggleMusicInfo) => {
     const id = musicInfo.value.id
-    const index = list.value.findIndex(m => m.id == id)
+    const index = list.value.findIndex((m) => m.id == id)
     if (index < 0) {
       isShowMusicToggleModal.value = false
       return
@@ -38,7 +38,10 @@ export default (props, list) => {
     ])
     const rawInfo = getListMusicsFromCache(props.listId)[index]
     rawInfo.meta.toggleMusicInfo = toggleMusicInfo
-    if (toggleMusicInfo || (playMusicInfo.listId == props.listId && playMusicInfo.musicInfo?.id == rawInfo.id)) {
+    if (
+      toggleMusicInfo ||
+      (playMusicInfo.listId == props.listId && playMusicInfo.musicInfo?.id == rawInfo.id)
+    ) {
       playList(props.listId, index)
     }
   }

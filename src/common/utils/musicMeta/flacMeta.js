@@ -9,8 +9,8 @@ const FlacProcessor = require('./flac-metadata/index')
 const extReg = /^(\.(?:jpe?g|png)).*$/
 const vendor = 'reference libFLAC 1.2.1 20070917'
 
-const writeMeta = async(filePath, meta, picPath) => {
-  const comments = Object.keys(meta).map(key => `${key.toUpperCase()}=${meta[key] || ''}`)
+const writeMeta = async (filePath, meta, picPath) => {
+  const comments = Object.keys(meta).map((key) => `${key.toUpperCase()}=${meta[key] || ''}`)
   const data = {
     vorbis: {
       vendor,
@@ -47,14 +47,17 @@ const writeMeta = async(filePath, meta, picPath) => {
   const flacProcessor = new FlacProcessor()
   flacProcessor.writeMeta(data)
 
-  reader.pipe(flacProcessor).pipe(writer).on('finish', () => {
-    fs.unlink(filePath, err => {
-      if (err) return console.log(err.message)
-      fs.rename(tempPath, filePath, err => {
-        if (err) console.log(err.message)
+  reader
+    .pipe(flacProcessor)
+    .pipe(writer)
+    .on('finish', () => {
+      fs.unlink(filePath, (err) => {
+        if (err) return console.log(err.message)
+        fs.rename(tempPath, filePath, (err) => {
+          if (err) console.log(err.message)
+        })
       })
     })
-  })
 }
 
 module.exports = (filePath, meta, proxy) => {
@@ -68,14 +71,13 @@ module.exports = (filePath, meta, proxy) => {
   let picPath = filePath.replace(/\.flac$/, '') + (ext ? ext.replace(extReg, '$1') : '.jpg')
 
   if (picUrl.includes('music.126.net')) picUrl += `${picUrl.includes('?') ? '&' : '?'}param=500y500`
-  download(picUrl, picPath, proxy).then(success => {
+  download(picUrl, picPath, proxy).then((success) => {
     if (success) {
       writeMeta(filePath, meta, picPath).finally(() => {
-        fs.unlink(picPath, err => {
+        fs.unlink(picPath, (err) => {
           if (err) console.log(err.message)
         })
       })
     } else writeMeta(filePath, meta)
   })
 }
-

@@ -1,13 +1,11 @@
-/* eslint-disable no-template-curly-in-string */
-
 const builder = require('electron-builder')
 const beforePack = require('./build-before-pack')
 const afterPack = require('./build-after-pack')
 
 /**
-* @type {import('electron-builder').Configuration}
-* @see https://www.electron.build/configuration/configuration
-*/
+ * @type {import('electron-builder').Configuration}
+ * @see https://www.electron.build/configuration/configuration
+ */
 const options = {
   appId: 'com.ikunshare.music.desktop',
   productName: 'ikun-music-desktop',
@@ -15,9 +13,7 @@ const options = {
   afterPack,
   protocols: {
     name: 'lx-music-protocol',
-    schemes: [
-      'lxmusic',
-    ],
+    schemes: ['lxmusic'],
   },
   directories: {
     buildResources: './resources',
@@ -41,9 +37,7 @@ const options = {
   asar: {
     smartUnpack: false,
   },
-  extraResources: [
-    './licenses',
-  ],
+  extraResources: ['./licenses'],
   publish: [
     {
       provider: 'github',
@@ -203,7 +197,8 @@ const createTarget = {
           buildOptions: { win: ['portable'] },
           options: winOptions,
         }
-      default: throw new Error('Unknown package type: ' + packageType)
+      default:
+        throw new Error('Unknown package type: ' + packageType)
     }
   },
   /**
@@ -238,7 +233,8 @@ const createTarget = {
           buildOptions: { linux: ['rpm'] },
           options: linuxOptions,
         }
-      default: throw new Error('Unknown package type: ' + packageType)
+      default:
+        throw new Error('Unknown package type: ' + packageType)
     }
   },
   /**
@@ -255,7 +251,8 @@ const createTarget = {
           buildOptions: { mac: ['dmg'] },
           options: macOptions,
         }
-      default: throw new Error('Unknown package type: ' + packageType)
+      default:
+        throw new Error('Unknown package type: ' + packageType)
     }
   },
 }
@@ -267,7 +264,7 @@ const createTarget = {
  * @param {*} packageType 包类型
  * @param {'onTagOrDraft' | 'always' | 'never'} publishType 发布类型
  */
-const build = async(target, arch, packageType, publishType) => {
+const build = async (target, arch, packageType, publishType) => {
   if (target == 'dir') {
     await builder.build({
       dir: true,

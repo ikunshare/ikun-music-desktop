@@ -1,6 +1,5 @@
 import { ref, reactive } from '@common/utils/vueTools'
 
-
 export default () => {
   const isShowListSortModal = ref(false)
   const sortListInfo = reactive({ id: '', name: '' })

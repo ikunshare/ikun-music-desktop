@@ -432,7 +432,7 @@ export const setMute = (isMute: boolean) => {
 }
 
 export const getCurrentTime = () => {
-  // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+
   return audio?.currentTime || 0
 }
 
@@ -450,7 +450,7 @@ export const setVolume = (volume: number) => {
 }
 
 export const getDuration = () => {
-  // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+
   return audio?.duration || 0
 }
 

@@ -141,7 +141,7 @@ const getIconPath = (id: number) => {
 }
 
 export const createTray = () => {
-  // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+
   if ((tray && !tray.isDestroyed()) || !global.lx.appSetting['tray.enable']) return
 
   // 托盘

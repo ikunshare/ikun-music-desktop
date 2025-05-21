@@ -4,8 +4,16 @@
       <div
         v-show="!isShowLrcSelectContent"
         ref="dom_lyric"
-        :class="['lyric', $style.lyric, { [$style.draging]: isMsDown }, { [$style.lrcActiveZoom]: isZoomActiveLrc }]" :style="lrcStyles"
-        @wheel="handleWheel" @mousedown="handleLyricMouseDown" @touchstart="handleLyricTouchStart"
+        :class="[
+          'lyric',
+          $style.lyric,
+          { [$style.draging]: isMsDown },
+          { [$style.lrcActiveZoom]: isZoomActiveLrc },
+        ]"
+        :style="lrcStyles"
+        @wheel="handleWheel"
+        @mousedown="handleLyricMouseDown"
+        @touchstart="handleLyricTouchStart"
         @contextmenu.stop="handleShowLyricMenu"
       >
         <div :class="['pre', $style.lyricSpace]" />
@@ -14,28 +22,59 @@
       </div>
     </transition>
     <transition enter-active-class="animated fadeIn" leave-active-class="animated fadeOut">
-      <div v-if="isShowLyricProgressSetting" v-show="isStopScroll && !isShowLrcSelectContent" :class="$style.skip">
+      <div
+        v-if="isShowLyricProgressSetting"
+        v-show="isStopScroll && !isShowLrcSelectContent"
+        :class="$style.skip"
+      >
         <div ref="dom_skip_line" :class="$style.line" />
         <span :class="$style.label">{{ timeStr }}</span>
-        <base-btn :class="$style.skipBtn" @mouseenter="handleSkipMouseEnter" @mouseleave="handleSkipMouseLeave" @click="handleSkipPlay">
-          <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" height="50%" viewBox="0 0 1024 1024" space="preserve">
+        <base-btn
+          :class="$style.skipBtn"
+          @mouseenter="handleSkipMouseEnter"
+          @mouseleave="handleSkipMouseLeave"
+          @click="handleSkipPlay"
+        >
+          <svg
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xlink="http://www.w3.org/1999/xlink"
+            height="50%"
+            viewBox="0 0 1024 1024"
+            space="preserve"
+          >
             <use xlink:href="#icon-play" />
           </svg>
         </base-btn>
       </div>
     </transition>
     <transition enter-active-class="animated fadeIn" leave-active-class="animated fadeOut">
-      <div v-if="isShowLrcSelectContent" ref="dom_lrc_select_content" tabindex="-1" :class="[$style.lyricSelectContent, 'select', 'scroll', 'lyricSelectContent']" @contextmenu="handleCopySelectText">
-        <div v-for="(info, index) in lyric.lines" :key="index" :class="[$style.lyricSelectline, { [$style.lrcActive]: lyric.line == index }]">
+      <div
+        v-if="isShowLrcSelectContent"
+        ref="dom_lrc_select_content"
+        tabindex="-1"
+        :class="[$style.lyricSelectContent, 'select', 'scroll', 'lyricSelectContent']"
+        @contextmenu="handleCopySelectText"
+      >
+        <div
+          v-for="(info, index) in lyric.lines"
+          :key="index"
+          :class="[$style.lyricSelectline, { [$style.lrcActive]: lyric.line == index }]"
+        >
           <span>{{ info.text }}</span>
           <template v-for="(lrc, i) in info.extendedLyrics" :key="i">
-            <br>
+            <br />
             <span :class="$style.lyricSelectlineExtended">{{ lrc }}</span>
           </template>
         </div>
       </div>
     </transition>
-    <LyricMenu v-model="lyricMenuVisible" :xy="lyricMenuXY" :lyric-info="lyricInfo" @update-lyric="handleUpdateLyric" />
+    <LyricMenu
+      v-model="lyricMenuVisible"
+      :xy="lyricMenuXY"
+      :lyric-info="lyricInfo"
+      @update-lyric="handleUpdateLyric"
+    />
   </div>
 </template>
 
@@ -51,10 +90,16 @@ import {
   musicInfo as playerMusicInfo,
   playMusicInfo,
 } from '@renderer/store/player/state'
+import { setMusicInfo } from '@renderer/store/player/action'
 import {
-  setMusicInfo,
-} from '@renderer/store/player/action'
-import { onMounted, onBeforeUnmount, computed, reactive, ref, nextTick, watch } from '@common/utils/vueTools'
+  onMounted,
+  onBeforeUnmount,
+  computed,
+  reactive,
+  ref,
+  nextTick,
+  watch,
+} from '@common/utils/vueTools'
 import useLyric from '@renderer/utils/compositions/useLyric'
 import LyricMenu from './components/LyricMenu.vue'
 import { appSetting } from '@renderer/store/setting'
@@ -67,7 +112,9 @@ export default {
   },
   setup() {
     const isZoomActiveLrc = computed(() => appSetting['playDetail.isZoomActiveLrc'])
-    const isShowLyricProgressSetting = computed(() => appSetting['playDetail.isShowLyricProgressSetting'])
+    const isShowLyricProgressSetting = computed(
+      () => appSetting['playDetail.isShowLyricProgressSetting']
+    )
 
     const {
       dom_lyric,
@@ -112,7 +159,7 @@ export default {
       lyricInfo.rawlyric = playerMusicInfo.rawlrc
       lyricInfo.musicInfo = playMusicInfo.musicInfo
     }
-    const handleShowLyricMenu = event => {
+    const handleShowLyricMenu = (event) => {
       updateMusicInfo()
       lyricMenuXY.x = event.pageX
       lyricMenuXY.y = event.pageY
@@ -192,7 +239,6 @@ export default {
 }
 </script>
 
-
 <style lang="less" module>
 @import '@renderer/assets/styles/layout.less';
 
@@ -207,7 +253,7 @@ export default {
   height: 100%;
   overflow: hidden;
   font-size: var(--playDetail-lrc-font-size, 16px);
-  -webkit-mask-image: linear-gradient(transparent 0%, #fff 20%,  #fff 80%, transparent 100%);
+  -webkit-mask-image: linear-gradient(transparent 0%, #fff 20%, #fff 80%, transparent 100%);
   cursor: grab;
   &.draging {
     cursor: grabbing;
@@ -234,7 +280,8 @@ export default {
           transition-property: font-size, color;
         }
       }
-      &.line-mode.active .font-lrc, &.font-mode.played .font-lrc {
+      &.line-mode.active .font-lrc,
+      &.font-mode.played .font-lrc {
         color: var(--color-primary-dark-200);
       }
       &.font-mode .extended .font-lrc {
@@ -249,7 +296,11 @@ export default {
           font-size: 1em;
           background-repeat: no-repeat;
           background-color: var(--color-450);
-          background-image: -webkit-linear-gradient(top, var(--color-primary-dark-200), var(--color-primary-dark-200));
+          background-image: -webkit-linear-gradient(
+            top,
+            var(--color-primary-dark-200),
+            var(--color-primary-dark-200)
+          );
           -webkit-text-fill-color: transparent;
           -webkit-background-clip: text;
           background-size: 0 100%;
@@ -274,7 +325,7 @@ export default {
     .line-content {
       &.active {
         .extended {
-          font-size: .94em;
+          font-size: 0.94em;
         }
         .line {
           font-size: 1.1em;
@@ -294,7 +345,7 @@ export default {
   // opacity: .5;
   .line {
     border-top: 2px dotted var(--color-primary-dark-100);
-    opacity: .15;
+    opacity: 0.15;
     margin-right: 30px;
     -webkit-mask-image: linear-gradient(90deg, transparent 0%, transparent 15%, #fff 100%);
   }
@@ -305,7 +356,7 @@ export default {
     line-height: 1.2;
     font-size: 12px;
     color: var(--color-primary-dark-100);
-    opacity: .7;
+    opacity: 0.7;
   }
   .skipBtn {
     position: absolute;
@@ -322,9 +373,9 @@ export default {
     pointer-events: initial;
     transition: @transition-normal;
     transition-property: opacity;
-    opacity: .8;
+    opacity: 0.8;
     &:hover {
-      opacity: .6;
+      opacity: 0.6;
     }
   }
 }
@@ -357,5 +408,4 @@ export default {
 .lyricSpace {
   height: 70%;
 }
-
 </style>

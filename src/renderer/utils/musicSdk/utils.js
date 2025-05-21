@@ -2,21 +2,24 @@ import crypto from 'crypto'
 import dns from 'dns'
 import { decodeName } from '@renderer/utils'
 
-export const toMD5 = str => crypto.createHash('md5').update(str).digest('hex')
-
+export const toMD5 = (str) => crypto.createHash('md5').update(str).digest('hex')
 
 const ipMap = new Map()
-export const getHostIp = hostname => {
+export const getHostIp = (hostname) => {
   const result = ipMap.get(hostname)
   if (typeof result === 'object') return result
   if (result === true) return
   ipMap.set(hostname, true)
-  dns.lookup(hostname, {
-    all: false,
-  }, (err, address, family) => {
-    if (err) return console.log(err)
-    ipMap.set(hostname, { address, family })
-  })
+  dns.lookup(
+    hostname,
+    {
+      all: false,
+    },
+    (err, address, family) => {
+      if (err) return console.log(err)
+      ipMap.set(hostname, { address, family })
+    }
+  )
 }
 
 export const dnsLookup = (hostname, options, callback) => {
@@ -25,7 +28,6 @@ export const dnsLookup = (hostname, options, callback) => {
 
   dns.lookup(hostname, options, callback)
 }
-
 
 /**
  * 格式化歌手
@@ -36,7 +38,7 @@ export const dnsLookup = (hostname, options, callback) => {
 export const formatSingerName = (singers, nameKey = 'name', join = '、') => {
   if (Array.isArray(singers)) {
     const singer = []
-    singers.forEach(item => {
+    singers.forEach((item) => {
       let name = item[nameKey]
       if (!name) return
       singer.push(name)

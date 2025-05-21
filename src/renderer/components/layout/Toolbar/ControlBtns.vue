@@ -1,12 +1,40 @@
 <template>
   <div v-show="!isFullscreen" ref="dom_btns" :class="$style.control">
-    <button type="button" :class="[$style.btn, $style.min]" :aria-label="$t('min')" ignore-tip :title="$t('min')" @click="minWindow">
-      <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" height="60%" viewBox="0 0 24 24" space="preserve">
+    <button
+      type="button"
+      :class="[$style.btn, $style.min]"
+      :aria-label="$t('min')"
+      ignore-tip
+      :title="$t('min')"
+      @click="minWindow"
+    >
+      <svg
+        version="1.1"
+        xmlns="http://www.w3.org/2000/svg"
+        xlink="http://www.w3.org/1999/xlink"
+        height="60%"
+        viewBox="0 0 24 24"
+        space="preserve"
+      >
         <use xlink:href="#icon-window-minimize-2" />
       </svg>
     </button>
-    <button type="button" :class="[$style.btn, $style.close]" :aria-label="$t('close')" ignore-tip :title="$t('close')" @click="closeWindow">
-      <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" height="60%" viewBox="0 0 24 24" space="preserve">
+    <button
+      type="button"
+      :class="[$style.btn, $style.close]"
+      :aria-label="$t('close')"
+      ignore-tip
+      :title="$t('close')"
+      @click="closeWindow"
+    >
+      <svg
+        version="1.1"
+        xmlns="http://www.w3.org/2000/svg"
+        xlink="http://www.w3.org/1999/xlink"
+        height="60%"
+        viewBox="0 0 24 24"
+        space="preserve"
+      >
         <use xlink:href="#icon-window-close-2" />
       </svg>
     </button>
@@ -30,7 +58,7 @@ const handle_focus = () => {
     node.classList.remove(cssModule.hover)
   }
 }
-const getBtnEl = (el) => el.tagName == 'BUTTON' || !el ? el : getBtnEl(el.parentNode)
+const getBtnEl = (el) => (el.tagName == 'BUTTON' || !el ? el : getBtnEl(el.parentNode))
 const handle_mouseover = (event) => {
   const btn = getBtnEl(event.target)
   if (!btn) return
@@ -42,7 +70,6 @@ const handle_mouseout = (event) => {
   btn.classList.remove(cssModule.hover)
 }
 
-
 onMounted(() => {
   window.app_event.on('focus', handle_focus)
   dom_btns.value.addEventListener('mouseover', handle_mouseover)
@@ -53,9 +80,7 @@ onBeforeUnmount(() => {
   dom_btns.value.removeEventListener('mouseover', handle_mouseover)
   dom_btns.value.removeEventListener('mouseout', handle_mouseout)
 })
-
 </script>
-
 
 <style lang="less" module>
 @import '@renderer/assets/styles/layout.less';
@@ -81,7 +106,8 @@ onBeforeUnmount(() => {
     color: var(--color-font-label);
     transition: background-color 0.2s ease-in-out;
     &.hover {
-      &.min, &.max {
+      &.min,
+      &.max {
         background-color: var(--color-button-background-hover);
       }
       &.close {
@@ -90,5 +116,4 @@ onBeforeUnmount(() => {
     }
   }
 }
-
 </style>

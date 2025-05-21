@@ -9,7 +9,6 @@ const baseConfig = require('./webpack.config.base')
 
 // const buildConfig = require('../webpack-build-config')
 
-
 module.exports = merge(baseConfig, {
   mode: 'production',
   devtool: false,

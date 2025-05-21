@@ -1,7 +1,17 @@
 <template>
   <material-popup-btn :class="$style.btnContent">
-    <button :class="[$style.btn, { [$style.active]: playbackRate != 1 }]" :aria-label="`${$t('player__playback_rate')}${playbackRate}x`">
-      <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="100%" viewBox="0 0 24 24" space="preserve">
+    <button
+      :class="[$style.btn, { [$style.active]: playbackRate != 1 }]"
+      :aria-label="`${$t('player__playback_rate')}${playbackRate}x`"
+    >
+      <svg
+        version="1.1"
+        xmlns="http://www.w3.org/2000/svg"
+        xlink="http://www.w3.org/1999/xlink"
+        width="100%"
+        viewBox="0 0 24 24"
+        space="preserve"
+      >
         <use xlink:href="#icon-plex" />
       </svg>
     </button>
@@ -16,10 +26,18 @@
               :label="$t('player__playback_preserves_pitch')"
               @update:model-value="updatePreservesPitch"
             />
-            <base-btn min @click="handleUpdatePlaybackRate(100)">{{ $t('player__playback_rate_reset_btn') }}</base-btn>
+            <base-btn min @click="handleUpdatePlaybackRate(100)">{{
+              $t('player__playback_rate_reset_btn')
+            }}</base-btn>
           </div>
         </div>
-        <base-slider-bar :class="$style.slider" :value="playbackRate * 100" :min="50" :max="200" @change="handleUpdatePlaybackRate" />
+        <base-slider-bar
+          :class="$style.slider"
+          :value="playbackRate * 100"
+          :min="50"
+          :max="200"
+          @change="handleUpdatePlaybackRate"
+        />
       </div>
     </template>
   </material-popup-btn>
@@ -34,7 +52,6 @@ const handleUpdatePlaybackRate = (val) => {
   window.app_event.setPlaybackRate(Math.round(val) / 100)
 }
 
-
 const updatePreservesPitch = (enabled) => {
   updateSetting({ 'player.preservesPitch': enabled })
 }
@@ -48,7 +65,6 @@ const updatePreservesPitch = (enabled) => {
 //         ? '#icon-volume-medium-outline'
 //         : '#icon-volume-high-outline'
 // })
-
 </script>
 
 <style lang="less" module>
@@ -74,12 +90,12 @@ const updatePreservesPitch = (enabled) => {
 
   svg {
     transition: opacity @transition-fast;
-    opacity: .5;
+    opacity: 0.5;
     // filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.2));
   }
   &:hover {
     svg {
-      opacity: .9;
+      opacity: 0.9;
     }
   }
   &:active {
@@ -91,7 +107,7 @@ const updatePreservesPitch = (enabled) => {
   &.active {
     svg {
       color: var(--color-primary);
-      opacity: .8;
+      opacity: 0.8;
     }
   }
 }
@@ -123,6 +139,4 @@ const updatePreservesPitch = (enabled) => {
 .slider {
   width: 100%;
 }
-
-
 </style>

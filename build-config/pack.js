@@ -15,7 +15,6 @@ const okayLog = chalk.bgGreen.white(' OKAY ') + ' '
 
 const { Worker, isMainThread, parentPort } = require('worker_threads')
 
-
 function build() {
   console.time('build')
   del.sync(['dist/**', 'build/**'])
@@ -42,42 +41,50 @@ function build() {
   }
 
   Promise.all([
-    pack(mainConfig).then(result => {
-      results += result + '\n\n'
-      spinners.succeed('main', { text: 'main build success!' })
-    }).catch(err => {
-      spinners.fail('main', { text: 'main build fail :(' })
-      console.log(`\n  ${errorLog}failed to build main process`)
-      console.error(`\n${err}\n`)
-      process.exit(1)
-    }),
-    pack(rendererConfig).then(result => {
-      results += result + '\n\n'
-      spinners.succeed('renderer', { text: 'renderer build success!' })
-    }).catch(err => {
-      spinners.fail('renderer', { text: 'renderer build fail :(' })
-      console.log(`\n  ${errorLog}failed to build renderer process`)
-      console.error(`\n${err}\n`)
-      process.exit(1)
-    }),
-    pack(rendererLyricConfig).then(result => {
-      results += result + '\n\n'
-      spinners.succeed('renderer-lyric', { text: 'renderer-lyric build success!' })
-    }).catch(err => {
-      spinners.fail('renderer-lyric', { text: 'renderer-lyric build fail :(' })
-      console.log(`\n  ${errorLog}failed to build renderer-lyric process`)
-      console.error(`\n${err}\n`)
-      process.exit(1)
-    }),
-    pack(rendererScriptConfig).then(result => {
-      results += result + '\n\n'
-      spinners.succeed('renderer-scripts', { text: 'renderer-scripts build success!' })
-    }).catch(err => {
-      spinners.fail('renderer-scripts', { text: 'renderer-scripts build fail :(' })
-      console.log(`\n  ${errorLog}failed to build renderer-scripts process`)
-      console.error(`\n${err}\n`)
-      process.exit(1)
-    }),
+    pack(mainConfig)
+      .then((result) => {
+        results += result + '\n\n'
+        spinners.succeed('main', { text: 'main build success!' })
+      })
+      .catch((err) => {
+        spinners.fail('main', { text: 'main build fail :(' })
+        console.log(`\n  ${errorLog}failed to build main process`)
+        console.error(`\n${err}\n`)
+        process.exit(1)
+      }),
+    pack(rendererConfig)
+      .then((result) => {
+        results += result + '\n\n'
+        spinners.succeed('renderer', { text: 'renderer build success!' })
+      })
+      .catch((err) => {
+        spinners.fail('renderer', { text: 'renderer build fail :(' })
+        console.log(`\n  ${errorLog}failed to build renderer process`)
+        console.error(`\n${err}\n`)
+        process.exit(1)
+      }),
+    pack(rendererLyricConfig)
+      .then((result) => {
+        results += result + '\n\n'
+        spinners.succeed('renderer-lyric', { text: 'renderer-lyric build success!' })
+      })
+      .catch((err) => {
+        spinners.fail('renderer-lyric', { text: 'renderer-lyric build fail :(' })
+        console.log(`\n  ${errorLog}failed to build renderer-lyric process`)
+        console.error(`\n${err}\n`)
+        process.exit(1)
+      }),
+    pack(rendererScriptConfig)
+      .then((result) => {
+        results += result + '\n\n'
+        spinners.succeed('renderer-scripts', { text: 'renderer-scripts build success!' })
+      })
+      .catch((err) => {
+        spinners.fail('renderer-scripts', { text: 'renderer-scripts build fail :(' })
+        console.log(`\n  ${errorLog}failed to build renderer-scripts process`)
+        console.error(`\n${err}\n`)
+        process.exit(1)
+      }),
   ]).then(handleSuccess)
 }
 
@@ -88,8 +95,10 @@ function pack(config) {
     worker.postMessage({ port: subChannel.port1, config }, [subChannel.port1])
     subChannel.port2.on('message', ({ status, message }) => {
       switch (status) {
-        case 'success': return resolve(message)
-        case 'error': return reject(message)
+        case 'success':
+          return resolve(message)
+        case 'error':
+          return reject(message)
       }
     })
   })
@@ -104,22 +113,25 @@ function runPack(config) {
       else if (stats.hasErrors()) {
         let err = ''
 
-        stats.toString({
-          chunks: false,
-          modules: false,
-          colors: true,
-        })
+        stats
+          .toString({
+            chunks: false,
+            modules: false,
+            colors: true,
+          })
           .split(/\r?\n/)
-          .forEach(line => {
+          .forEach((line) => {
             err += `    ${line}\n`
           })
 
         reject(err)
       } else {
-        resolve(stats.toString({
-          chunks: false,
-          colors: true,
-        }))
+        resolve(
+          stats.toString({
+            chunks: false,
+            colors: true,
+          })
+        )
       }
     })
   })
@@ -129,18 +141,21 @@ if (isMainThread) build()
 else {
   parentPort.once('message', ({ port, config }) => {
     // assert(port instanceof MessagePort)
-    runPack(config).then((result) => {
-      port.postMessage({
-        status: 'success',
-        message: result,
+    runPack(config)
+      .then((result) => {
+        port.postMessage({
+          status: 'success',
+          message: result,
+        })
       })
-    }).catch((err) => {
-      port.postMessage({
-        status: 'error',
-        message: err,
+      .catch((err) => {
+        port.postMessage({
+          status: 'error',
+          message: err,
+        })
       })
-    }).finally(() => {
-      port.close()
-    })
+      .finally(() => {
+        port.close()
+      })
   })
 }

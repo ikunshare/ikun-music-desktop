@@ -48,8 +48,8 @@ class MetaDataBlockVorbisComment extends MetaDataBlock {
     let buffer = Buffer.alloc(4 + size)
 
     let header = size
-    header |= (this.type << 24)
-    header |= (this.isLast ? 0x80000000 : 0)
+    header |= this.type << 24
+    header |= this.isLast ? 0x80000000 : 0
     buffer.writeUInt32BE(header >>> 0, pos)
     pos += 4
     let vendorLen = Buffer.byteLength(this.vendor)

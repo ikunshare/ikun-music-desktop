@@ -6,81 +6,200 @@
         <table>
           <thead>
             <tr v-if="actionButtonsVisible">
-              <th class="num" style="width: 5%;">#</th>
+              <th class="num" style="width: 5%">#</th>
               <th class="nobreak">{{ $t('music_name') }}</th>
-              <th class="nobreak" style="width: 22%;">{{ $t('music_singer') }}</th>
-              <th class="nobreak" style="width: 22%;">{{ $t('music_album') }}</th>
-              <th class="nobreak" style="width: 9%;">{{ $t('music_time') }}</th>
-              <th class="nobreak" style="width: 16%;">{{ $t('action') }}</th>
+              <th class="nobreak" style="width: 22%">{{ $t('music_singer') }}</th>
+              <th class="nobreak" style="width: 22%">{{ $t('music_album') }}</th>
+              <th class="nobreak" style="width: 9%">{{ $t('music_time') }}</th>
+              <th class="nobreak" style="width: 16%">{{ $t('action') }}</th>
             </tr>
             <tr v-else>
-              <th class="num" style="width: 5%;">#</th>
+              <th class="num" style="width: 5%">#</th>
               <th class="nobreak">{{ $t('music_name') }}</th>
-              <th class="nobreak" style="width: 24%;">{{ $t('music_singer') }}</th>
-              <th class="nobreak" style="width: 27%;">{{ $t('music_album') }}</th>
-              <th class="nobreak" style="width: 10%;">{{ $t('music_time') }}</th>
+              <th class="nobreak" style="width: 24%">{{ $t('music_singer') }}</th>
+              <th class="nobreak" style="width: 27%">{{ $t('music_album') }}</th>
+              <th class="nobreak" style="width: 10%">{{ $t('music_time') }}</th>
             </tr>
           </thead>
         </table>
       </div>
       <div :class="$style.content">
         <div v-show="!noItem" ref="dom_listContent" :class="$style.content">
-          <base-virtualized-list v-if="actionButtonsVisible" ref="listRef" :list="list" key-name="id" :item-height="listItemHeight" container-class="scroll" content-class="list" @contextmenu.capture="handleListRightClick">
+          <base-virtualized-list
+            v-if="actionButtonsVisible"
+            ref="listRef"
+            :list="list"
+            key-name="id"
+            :item-height="listItemHeight"
+            container-class="scroll"
+            content-class="list"
+            @contextmenu.capture="handleListRightClick"
+          >
             <template #default="{ item, index }">
               <div
-                class="list-item" :class="[{ selected: rightClickSelectedIndex == index }, { active: selectedList.includes(item) }]"
-                @click="handleListItemClick($event, index)" @contextmenu="handleListItemRightClick($event, index)"
+                class="list-item"
+                :class="[
+                  { selected: rightClickSelectedIndex == index },
+                  { active: selectedList.includes(item) },
+                ]"
+                @click="handleListItemClick($event, index)"
+                @contextmenu="handleListItemRightClick($event, index)"
               >
-                <div class="list-item-cell no-select num" style="flex: 0 0 5%;" @click.stop>{{ index + 1 }}</div>
+                <div class="list-item-cell no-select num" style="flex: 0 0 5%" @click.stop>
+                  {{ index + 1 }}
+                </div>
                 <div class="list-item-cell auto name">
                   <span class="select name" :aria-label="item.name">{{ item.name }}</span>
-                  <span v-if="item.meta._qualitys.master" class="no-select badge badge-theme-primary">{{ $t('tag__lossless_master') }}</span>
-                  <span v-else-if="item.meta._qualitys.atmos_plus" class="no-select badge badge-theme-primary">{{ $t('tag__lossless_atmos_plus') }}</span>
-                  <span v-else-if="item.meta._qualitys.atmos" class="no-select badge badge-theme-primary">{{ $t('tag__lossless_atmos') }}</span>
-                  <span v-else-if="item.meta._qualitys.hires" class="no-select badge badge-theme-primary">{{ $t('tag__lossless_hires') }}</span>
-                  <span v-else-if="item.meta._qualitys.flac" class="no-select badge badge-theme-primary">{{ $t('tag__lossless') }}</span>
-                  <span v-else-if="item.meta._qualitys['320k']" class="no-select badge badge-theme-secondary">{{ $t('tag__high_quality') }}</span>
-                  <span v-if="sourceTag" class="no-select badge badge-theme-tertiary">{{ item.source }}</span>
+                  <span
+                    v-if="item.meta._qualitys.master"
+                    class="no-select badge badge-theme-primary"
+                    >{{ $t('tag__lossless_master') }}</span
+                  >
+                  <span
+                    v-else-if="item.meta._qualitys.atmos_plus"
+                    class="no-select badge badge-theme-primary"
+                    >{{ $t('tag__lossless_atmos_plus') }}</span
+                  >
+                  <span
+                    v-else-if="item.meta._qualitys.atmos"
+                    class="no-select badge badge-theme-primary"
+                    >{{ $t('tag__lossless_atmos') }}</span
+                  >
+                  <span
+                    v-else-if="item.meta._qualitys.hires"
+                    class="no-select badge badge-theme-primary"
+                    >{{ $t('tag__lossless_hires') }}</span
+                  >
+                  <span
+                    v-else-if="item.meta._qualitys.flac"
+                    class="no-select badge badge-theme-primary"
+                    >{{ $t('tag__lossless') }}</span
+                  >
+                  <span
+                    v-else-if="item.meta._qualitys['320k']"
+                    class="no-select badge badge-theme-secondary"
+                    >{{ $t('tag__high_quality') }}</span
+                  >
+                  <span v-if="sourceTag" class="no-select badge badge-theme-tertiary">{{
+                    item.source
+                  }}</span>
                 </div>
-                <div class="list-item-cell" style="flex: 0 0 22%;"><span class="select" :aria-label="item.singer">{{ item.singer }}</span></div>
-                <div class="list-item-cell" style="flex: 0 0 22%;"><span class="select" :aria-label="item.meta.albumName">{{ item.meta.albumName }}</span></div>
-                <div class="list-item-cell" style="flex: 0 0 9%;"><span class="no-select">{{ item.interval || '--/--' }}</span></div>
-                <div class="list-item-cell" style="flex: 0 0 16%; padding-left: 0; padding-right: 0;">
-                  <material-list-buttons :index="index" :remove-btn="false" :download-btn="assertApiSupport(item.source)" :play-btn="checkApiSource ? assertApiSupport(item.source) : true" @btn-click="handleListBtnClick" />
+                <div class="list-item-cell" style="flex: 0 0 22%">
+                  <span class="select" :aria-label="item.singer">{{ item.singer }}</span>
+                </div>
+                <div class="list-item-cell" style="flex: 0 0 22%">
+                  <span class="select" :aria-label="item.meta.albumName">{{
+                    item.meta.albumName
+                  }}</span>
+                </div>
+                <div class="list-item-cell" style="flex: 0 0 9%">
+                  <span class="no-select">{{ item.interval || '--/--' }}</span>
+                </div>
+                <div
+                  class="list-item-cell"
+                  style="flex: 0 0 16%; padding-left: 0; padding-right: 0"
+                >
+                  <material-list-buttons
+                    :index="index"
+                    :remove-btn="false"
+                    :download-btn="assertApiSupport(item.source)"
+                    :play-btn="checkApiSource ? assertApiSupport(item.source) : true"
+                    @btn-click="handleListBtnClick"
+                  />
                 </div>
               </div>
             </template>
             <template #footer>
               <div :class="$style.pagination">
-                <material-pagination :count="total" :limit="limit" :page="page" @btn-click="$emit('togglePage', $event)" />
+                <material-pagination
+                  :count="total"
+                  :limit="limit"
+                  :page="page"
+                  @btn-click="$emit('togglePage', $event)"
+                />
               </div>
             </template>
           </base-virtualized-list>
-          <base-virtualized-list v-else ref="listRef" :list="list" key-name="id" :item-height="listItemHeight" container-class="scroll" content-class="list" @contextmenu.capture="handleListRightClick">
+          <base-virtualized-list
+            v-else
+            ref="listRef"
+            :list="list"
+            key-name="id"
+            :item-height="listItemHeight"
+            container-class="scroll"
+            content-class="list"
+            @contextmenu.capture="handleListRightClick"
+          >
             <template #default="{ item, index }">
               <div
-                class="list-item" :class="[{ selected: rightClickSelectedIndex == index }, { active: selectedList.includes(item) }]"
-                @click="handleListItemClick($event, index)" @contextmenu="handleListItemRightClick($event, index)"
+                class="list-item"
+                :class="[
+                  { selected: rightClickSelectedIndex == index },
+                  { active: selectedList.includes(item) },
+                ]"
+                @click="handleListItemClick($event, index)"
+                @contextmenu="handleListItemRightClick($event, index)"
               >
-                <div class="list-item-cell no-select num" style="flex: 0 0 5%;" @click.stop>{{ index + 1 }}</div>
+                <div class="list-item-cell no-select num" style="flex: 0 0 5%" @click.stop>
+                  {{ index + 1 }}
+                </div>
                 <div class="list-item-cell auto name">
                   <span class="select name" :aria-label="item.name">{{ item.name }}</span>
-                  <span v-if="item.meta._qualitys.master" class="no-select badge badge-theme-primary">{{ $t('tag__lossless_master') }}</span>
-                  <span v-else-if="item.meta._qualitys.atmos_plus" class="no-select badge badge-theme-primary">{{ $t('tag__lossless_atmos_plus') }}</span>
-                  <span v-else-if="item.meta._qualitys.atmos" class="no-select badge badge-theme-primary">{{ $t('tag__lossless_atmos') }}</span>
-                  <span v-else-if="item.meta._qualitys.hires" class="no-select badge badge-theme-primary">{{ $t('tag__lossless_hires') }}</span>
-                  <span v-else-if="item.meta._qualitys.flac" class="no-select badge badge-theme-primary">{{ $t('tag__lossless') }}</span>
-                  <span v-else-if="item.meta._qualitys['320k']" class="no-select badge badge-theme-secondary">{{ $t('tag__high_quality') }}</span>
-                  <span v-if="sourceTag" class="no-select badge badge-theme-tertiary">{{ item.source }}</span>
+                  <span
+                    v-if="item.meta._qualitys.master"
+                    class="no-select badge badge-theme-primary"
+                    >{{ $t('tag__lossless_master') }}</span
+                  >
+                  <span
+                    v-else-if="item.meta._qualitys.atmos_plus"
+                    class="no-select badge badge-theme-primary"
+                    >{{ $t('tag__lossless_atmos_plus') }}</span
+                  >
+                  <span
+                    v-else-if="item.meta._qualitys.atmos"
+                    class="no-select badge badge-theme-primary"
+                    >{{ $t('tag__lossless_atmos') }}</span
+                  >
+                  <span
+                    v-else-if="item.meta._qualitys.hires"
+                    class="no-select badge badge-theme-primary"
+                    >{{ $t('tag__lossless_hires') }}</span
+                  >
+                  <span
+                    v-else-if="item.meta._qualitys.flac"
+                    class="no-select badge badge-theme-primary"
+                    >{{ $t('tag__lossless') }}</span
+                  >
+                  <span
+                    v-else-if="item.meta._qualitys['320k']"
+                    class="no-select badge badge-theme-secondary"
+                    >{{ $t('tag__high_quality') }}</span
+                  >
+                  <span v-if="sourceTag" class="no-select badge badge-theme-tertiary">{{
+                    item.source
+                  }}</span>
                 </div>
-                <div class="list-item-cell" style="flex: 0 0 24%;"><span class="select" :aria-label="item.singer">{{ item.singer }}</span></div>
-                <div class="list-item-cell" style="flex: 0 0 27%;"><span class="select" :aria-label="item.meta.albumName">{{ item.meta.albumName }}</span></div>
-                <div class="list-item-cell" style="flex: 0 0 10%;"><span class="no-select">{{ item.interval || '--/--' }}</span></div>
+                <div class="list-item-cell" style="flex: 0 0 24%">
+                  <span class="select" :aria-label="item.singer">{{ item.singer }}</span>
+                </div>
+                <div class="list-item-cell" style="flex: 0 0 27%">
+                  <span class="select" :aria-label="item.meta.albumName">{{
+                    item.meta.albumName
+                  }}</span>
+                </div>
+                <div class="list-item-cell" style="flex: 0 0 10%">
+                  <span class="no-select">{{ item.interval || '--/--' }}</span>
+                </div>
               </div>
             </template>
             <template #footer>
               <div :class="$style.pagination">
-                <material-pagination :count="total" :limit="limit" :page="page" @btn-click="$emit('togglePage', $event)" />
+                <material-pagination
+                  :count="total"
+                  :limit="limit"
+                  :page="page"
+                  @btn-click="$emit('togglePage', $event)"
+                />
               </div>
             </template>
           </base-virtualized-list>
@@ -96,11 +215,35 @@
     <!-- <material-flow-btn :show="isShowEditBtn && assertApiSupport(source)" :remove-btn="false" @btn-click="handleFlowBtnClick" /> -->
     <!-- <common-download-modal v-model:show="isShowDownload" :music-info="selectedDownloadMusicInfo" teleport="#view" />
     <common-download-multiple-modal v-model:show="isShowDownloadMultiple" :list="selectedList" teleport="#view" @confirm="removeAllSelect" /> -->
-    <common-list-add-modal v-model:show="isShowListAdd" :music-info="selectedAddMusicInfo" teleport="#view" />
-    <common-list-add-multiple-modal v-model:show="isShowListAddMultiple" :music-list="selectedList" teleport="#view" @confirm="removeAllSelect" />
-    <common-download-modal v-model:show="isShowDownload" :music-info="selectedDownloadMusicInfo" teleport="#view" />
-    <common-download-multiple-modal v-model:show="isShowDownloadMultiple" :list="selectedList" teleport="#view" @confirm="removeAllSelect" />
-    <base-menu v-model="isShowItemMenu" :menus="menus" :xy="menuLocation" item-name="name" @menu-click="handleMenuClick" />
+    <common-list-add-modal
+      v-model:show="isShowListAdd"
+      :music-info="selectedAddMusicInfo"
+      teleport="#view"
+    />
+    <common-list-add-multiple-modal
+      v-model:show="isShowListAddMultiple"
+      :music-list="selectedList"
+      teleport="#view"
+      @confirm="removeAllSelect"
+    />
+    <common-download-modal
+      v-model:show="isShowDownload"
+      :music-info="selectedDownloadMusicInfo"
+      teleport="#view"
+    />
+    <common-download-multiple-modal
+      v-model:show="isShowDownloadMultiple"
+      :list="selectedList"
+      teleport="#view"
+      @confirm="removeAllSelect"
+    />
+    <base-menu
+      v-model="isShowItemMenu"
+      :menus="menus"
+      :xy="menuLocation"
+      item-name="name"
+      @menu-click="handleMenuClick"
+    />
   </div>
 </template>
 
@@ -156,25 +299,20 @@ export default {
     const dom_listContent = ref(null)
     const listRef = ref(null)
 
-    const {
+    const { selectedList, listItemHeight, handleSelectData, removeAllSelect } = useList({
+      props,
+      listRef,
+    })
+
+    const { handlePlayMusic, handlePlayMusicLater, doubleClickPlay } = usePlay({
       selectedList,
-      listItemHeight,
-      handleSelectData,
+      props,
       removeAllSelect,
-    } = useList({ props, listRef })
+      emit,
+    })
 
-    const {
-      handlePlayMusic,
-      handlePlayMusicLater,
-      doubleClickPlay,
-    } = usePlay({ selectedList, props, removeAllSelect, emit })
-
-    const {
-      isShowListAdd,
-      isShowListAddMultiple,
-      selectedAddMusicInfo,
-      handleShowMusicAddModal,
-    } = useMusicAdd({ selectedList, props })
+    const { isShowListAdd, isShowListAddMultiple, selectedAddMusicInfo, handleShowMusicAddModal } =
+      useMusicAdd({ selectedList, props })
 
     const {
       isShowDownload,
@@ -183,19 +321,9 @@ export default {
       handleShowDownloadModal,
     } = useMusicDownload({ selectedList, props })
 
-    const {
-      handleSearch,
-      handleOpenMusicDetail,
-      handleDislikeMusic,
-    } = useMusicActions({ props })
+    const { handleSearch, handleOpenMusicDetail, handleDislikeMusic } = useMusicActions({ props })
 
-    const {
-      menus,
-      menuLocation,
-      isShowItemMenu,
-      showMenu,
-      menuClick,
-    } = useMenu({
+    const { menus, menuLocation, isShowItemMenu, showMenu, menuClick } = useMenu({
       props,
       assertApiSupport,
       emit,
@@ -231,7 +359,11 @@ export default {
       window.requestAnimationFrame(() => {
         let str = window.getSelection().toString()
         classList.remove('copying')
-        str = str.split(/\n\n/).map(s => s.replace(/\n/g, '  ')).join('\n').trim()
+        str = str
+          .split(/\n\n/)
+          .map((s) => s.replace(/\n/g, '  '))
+          .join('\n')
+          .trim()
         if (!str.length) return
         clipboardWriteText(str)
       })
@@ -290,7 +422,6 @@ export default {
 }
 </script>
 
-
 <style lang="less" module>
 @import '@renderer/assets/styles/layout.less';
 .songList {
@@ -342,5 +473,4 @@ export default {
     color: var(--color-font-label);
   }
 }
-
 </style>

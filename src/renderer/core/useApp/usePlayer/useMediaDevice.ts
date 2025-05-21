@@ -83,11 +83,11 @@ export default () => {
 
   void getMediaDevice(appSetting['player.mediaDeviceId']).then(async({ deviceId, label }) => setMediaDevice(deviceId, label))
 
-  // eslint-disable-next-line @typescript-eslint/no-misused-promises
+
   navigator.mediaDevices.addEventListener('devicechange', handleMediaListChange)
 
   onBeforeUnmount(() => {
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+
     navigator.mediaDevices.removeEventListener('devicechange', handleMediaListChange)
   })
 }

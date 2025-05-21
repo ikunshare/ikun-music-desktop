@@ -25,9 +25,9 @@ export default {
     })
   },
   handleResult(rawData) {
-    return rawData.map(info => `${info.name} - ${formatSingerName(info.artists, 'name')}`)
+    return rawData.map((info) => `${info.name} - ${formatSingerName(info.artists, 'name')}`)
   },
   async search(str) {
-    return this.tipSearchBySong(str).then(result => this.handleResult(result))
+    return this.tipSearchBySong(str).then((result) => this.handleResult(result))
   },
 }

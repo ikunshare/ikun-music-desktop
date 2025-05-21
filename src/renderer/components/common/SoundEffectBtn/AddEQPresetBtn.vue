@@ -1,7 +1,19 @@
 <template>
-  <base-btn min :class="[$style.newPreset, {[$style.editing]: isEditing}]" :aria-label="$t('player__sound_effect_biquad_filter_save_btn')" @click="handleEditing($event)">
+  <base-btn
+    min
+    :class="[$style.newPreset, { [$style.editing]: isEditing }]"
+    :aria-label="$t('player__sound_effect_biquad_filter_save_btn')"
+    @click="handleEditing($event)"
+  >
     <svg-icon name="plus" />
-    <base-input ref="input" :class="$style.newPresetInput" :value="newPresetName" :placeholder="$t('player__sound_effect_biquad_filter_save_input')" @keyup.enter="handleSave($event)" @blur="handleSave($event)" />
+    <base-input
+      ref="input"
+      :class="$style.newPresetInput"
+      :value="newPresetName"
+      :placeholder="$t('player__sound_effect_biquad_filter_save_input')"
+      @keyup.enter="handleSave($event)"
+      @blur="handleSave($event)"
+    />
   </base-btn>
 </template>
 
@@ -44,7 +56,6 @@ const handleSave = (event) => {
     hz16000: appSetting['player.soundEffect.biquadFilter.hz16000'],
   })
 }
-
 </script>
 
 <style lang="less" module>
@@ -55,7 +66,7 @@ const handleSave = (event) => {
   border: 1px dashed var(--color-primary-font-hover);
   // background-color: var(--color-main-background);
   color: var(--color-primary-font-hover);
-  opacity: .7;
+  opacity: 0.7;
   height: 22px;
 
   &.editing {
@@ -95,5 +106,4 @@ const handleSave = (event) => {
     font-size: 12px;
   }
 }
-
 </style>

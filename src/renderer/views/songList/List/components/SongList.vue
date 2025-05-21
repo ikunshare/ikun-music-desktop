@@ -1,10 +1,20 @@
 <template>
   <div :class="$style.container">
-    <div v-show="!props.listInfo.noItemLabel" ref="dom_list_ref" :class="$style.listContent" class="scroll">
+    <div
+      v-show="!props.listInfo.noItemLabel"
+      ref="dom_list_ref"
+      :class="$style.listContent"
+      class="scroll"
+    >
       <ul>
-        <li v-for="item in props.listInfo.list" :key="item.id" :class="$style.item" @click="toDetail(item)">
+        <li
+          v-for="item in props.listInfo.list"
+          :key="item.id"
+          :class="$style.item"
+          @click="toDetail(item)"
+        >
           <div :class="$style.image">
-            <img :class="$style.img" loading="lazy" decoding="async" :src="item.img">
+            <img :class="$style.img" loading="lazy" decoding="async" :src="item.img" />
           </div>
           <div :class="$style.desc">
             <h4>{{ item.name }}</h4>
@@ -13,16 +23,28 @@
               <p v-if="item.time" :class="$style.time">{{ item.time }}</p>
               <div :class="$style.songlist_info">
                 <span v-if="item.total != null"><svg-icon name="music" />{{ item.total }}</span>
-                <span v-if="item.play_count != null"><svg-icon name="headphones" />{{ item.play_count }}</span>
+                <span v-if="item.play_count != null"
+                  ><svg-icon name="headphones" />{{ item.play_count }}</span
+                >
                 <span v-if="visibleSource">{{ item.source }}</span>
               </div>
             </div>
           </div>
         </li>
-        <li v-for="(i, index) in 6" :key="index" :class="$style.item" style="margin-bottom: 0;height: 0;" />
+        <li
+          v-for="(i, index) in 6"
+          :key="index"
+          :class="$style.item"
+          style="margin-bottom: 0; height: 0"
+        />
       </ul>
       <div :class="$style.pagination">
-        <material-pagination :count="props.listInfo.total" :limit="props.listInfo.limit" :page="props.listInfo.page" @btn-click="togglePage" />
+        <material-pagination
+          :count="props.listInfo.total"
+          :limit="props.listInfo.limit"
+          :page="props.listInfo.page"
+          @btn-click="togglePage"
+        />
       </div>
     </div>
     <transition enter-active-class="animated fadeIn" leave-active-class="animated fadeOut">
@@ -38,13 +60,15 @@ import { ref } from '@common/utils/vueTools'
 import type { ListInfo, ListInfoItem } from '@renderer/store/songList/state'
 import { useRoute, useRouter } from '@common/utils/vueRouter'
 
-
-const props = withDefaults(defineProps<{
-  listInfo: ListInfo
-  visibleSource?: boolean
-}>(), {
-  visibleSource: false,
-})
+const props = withDefaults(
+  defineProps<{
+    listInfo: ListInfo
+    visibleSource?: boolean
+  }>(),
+  {
+    visibleSource: false,
+  }
+)
 
 const router = useRouter()
 const route = useRoute()
@@ -52,7 +76,6 @@ const route = useRoute()
 const dom_list_ref = ref<HTMLElement | null>(null)
 
 const emit = defineEmits(['toggle-page'])
-
 
 const togglePage = (page: number) => {
   emit('toggle-page', page)
@@ -81,10 +104,7 @@ defineExpose({
     return dom_list_ref.value?.scrollTop ?? 0
   },
 })
-
-
 </script>
-
 
 <style lang="less" module>
 @import '@renderer/assets/styles/layout.less';
@@ -125,7 +145,7 @@ defineExpose({
   cursor: pointer;
   transition: opacity @transition-normal;
   &:hover {
-    opacity: .7;
+    opacity: 0.7;
   }
 }
 .image {
@@ -136,10 +156,10 @@ defineExpose({
   background-size: cover;
   border-radius: 4px;
   overflow: hidden;
-  opacity: .9;
+  opacity: 0.9;
   aspect-ratio: 1 / 1;
 
-  box-shadow: 0 0 2px 0 rgba(0,0,0,.2);
+  box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.2);
 }
 .img {
   width: 100%;
@@ -215,5 +235,4 @@ defineExpose({
     color: var(--color-font-label);
   }
 }
-
 </style>

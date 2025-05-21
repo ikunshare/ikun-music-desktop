@@ -12,7 +12,7 @@ const sendListAction = async(wss: LX.Sync.Server.SocketServer, action: LX.Sync.D
   let key = ''
   for (const client of wss.clients) {
     if (!client.moduleReadys?.dislike) continue
-    // eslint-disable-next-line require-atomic-updates
+
     if (!key) key = await userSpace.dislikeManage.createSnapshot()
     void client.remoteQueueDislike.onDislikeSyncAction(action).then(async() => {
       return userSpace.dislikeManage.updateDeviceSnapshotKey(client.keyInfo.clientId, key)

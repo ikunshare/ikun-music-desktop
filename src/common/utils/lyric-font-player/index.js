@@ -19,9 +19,9 @@ export default class Lyric {
     activeLineClassName = 'active',
     shadowContent = false,
     isVertical = false,
-    onPlay = function(line, text) { },
-    onSetLyric = function(lines, offset) { },
-    onUpdateLyric = function(lines) { },
+    onPlay = function (line, text) {},
+    onSetLyric = function (lines, offset) {},
+    onUpdateLyric = function (lines) {},
   }) {
     this.lyric = lyric
     this.extendedLyrics = extendedLyrics
@@ -118,7 +118,7 @@ export default class Lyric {
 
     this._lineFonts = []
     if (this.isLineMode) {
-      this._lines = lyricLines.map(line => {
+      this._lines = lyricLines.map((line) => {
         const fontPlayer = new FontPlayer({
           time: line.time,
           rate: this.rate,
@@ -144,7 +144,7 @@ export default class Lyric {
         }
       })
     } else {
-      this._lines = lyricLines.map(line => {
+      this._lines = lyricLines.map((line) => {
         const fontPlayer = new FontPlayer({
           time: line.time,
           rate: this.rate,

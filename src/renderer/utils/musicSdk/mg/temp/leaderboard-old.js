@@ -2,7 +2,6 @@ import { httpFetch } from '../../../request'
 import { formatPlayTime } from '../../../index'
 // import { sizeFormate } from '../../index'
 
-
 // const boardList = [{ id: 'mg__27553319', name: '咪咕尖叫新歌榜', bangid: '27553319' }, { id: 'mg__27186466', name: '咪咕尖叫热歌榜', bangid: '27186466' }, { id: 'mg__27553408', name: '咪咕尖叫原创榜', bangid: '27553408' }, { id: 'mg__23189800', name: '咪咕港台榜', bangid: '23189800' }, { id: 'mg__23189399', name: '咪咕内地榜', bangid: '23189399' }, { id: 'mg__19190036', name: '咪咕欧美榜', bangid: '19190036' }, { id: 'mg__23189813', name: '咪咕日韩榜', bangid: '23189813' }, { id: 'mg__23190126', name: '咪咕彩铃榜', bangid: '23190126' }, { id: 'mg__15140045', name: '咪咕KTV榜', bangid: '15140045' }, { id: 'mg__15140034', name: '咪咕网络榜', bangid: '15140034' }, { id: 'mg__23217754', name: 'MV榜', bangid: '23217754' }, { id: 'mg__23218151', name: '新专辑榜', bangid: '23218151' }, { id: 'mg__21958042', name: 'iTunes榜', bangid: '21958042' }, { id: 'mg__21975570', name: 'billboard榜', bangid: '21975570' }, { id: 'mg__22272815', name: '台湾Hito中文榜', bangid: '22272815' }, { id: 'mg__22272904', name: '中国TOP排行榜', bangid: '22272904' }, { id: 'mg__22272943', name: '韩国Melon榜', bangid: '22272943' }, { id: 'mg__22273437', name: '英国UK榜', bangid: '22273437' }]
 const boardList = [
   { id: 'mg__27553319', name: '尖叫新歌榜', bangid: '27553319', webId: 'jianjiao_newsong' },
@@ -51,7 +50,7 @@ const boardList = [
 export default {
   limit: 10000,
   getUrl(id, page) {
-    const targetBoard = boardList.find(board => board.bangid == id)
+    const targetBoard = boardList.find((board) => board.bangid == id)
     return `https://music.migu.cn/v3/music/top/${targetBoard.webId}`
     // return `http://m.music.migu.cn/migu/remoting/cms_list_tag?nid=${id}&pageSize=${this.limit}&pageNo=${page - 1}`
   },
@@ -66,7 +65,7 @@ export default {
   },
   getSinger(singers) {
     let arr = []
-    singers.forEach(singer => {
+    singers.forEach((singer) => {
       arr.push(singer.name)
     })
     return arr.join('、')
@@ -77,20 +76,18 @@ export default {
     let intv = 0
     let unit = 1
     while (intvArr.length) {
-      intv += (intvArr.pop()) * unit
+      intv += intvArr.pop() * unit
       unit *= 60
     }
     return parseInt(intv)
   },
-  formateIntv() {
-
-  },
+  formateIntv() {},
   filterData(rawData) {
     // console.log(JSON.stringify(rawData))
     // console.log(rawData)
     let ids = new Set()
     const list = []
-    rawData.forEach(item => {
+    rawData.forEach((item) => {
       if (ids.has(item.copyrightId)) return
       ids.add(item.copyrightId)
 
@@ -138,7 +135,11 @@ export default {
     for (const board of rawList) {
       if (board.template != 'group1') continue
       for (const item of board.itemList) {
-        if ((item.template != 'row1' && item.template != 'grid1' && !item.actionUrl) || !item.actionUrl.includes('rank-info')) continue
+        if (
+          (item.template != 'row1' && item.template != 'grid1' && !item.actionUrl) ||
+          !item.actionUrl.includes('rank-info')
+        )
+          continue
 
         let data = item.displayLogId.param
         list.push({

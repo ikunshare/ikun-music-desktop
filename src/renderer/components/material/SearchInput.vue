@@ -1,6 +1,13 @@
 <template>
   <div :class="$style.container">
-    <div :class="[$style.search, {[$style.active]: focus}, {[$style.big]: big}, {[$style.small]: small}]">
+    <div
+      :class="[
+        $style.search,
+        { [$style.active]: focus },
+        { [$style.big]: big },
+        { [$style.small]: small },
+      ]"
+    >
       <div :class="$style.form">
         <input
           ref="dom_input"
@@ -15,17 +22,31 @@
           @keyup.arrow-down.prevent="handleKeyDown"
           @keyup.arrow-up.prevent="handleKeyUp"
           @contextmenu="handleContextMenu"
-        >
+        />
         <transition enter-active-class="animated zoomIn" leave-active-class="animated zoomOut">
           <button v-show="text" type="button" @click="handleClearList">
-            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" height="100%" viewBox="0 0 24 24" space="preserve">
+            <svg
+              version="1.1"
+              xmlns="http://www.w3.org/2000/svg"
+              xlink="http://www.w3.org/1999/xlink"
+              height="100%"
+              viewBox="0 0 24 24"
+              space="preserve"
+            >
               <use xlink:href="#icon-window-close" />
             </svg>
           </button>
         </transition>
         <button type="button" @click="handleSearch">
           <slot>
-            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" height="100%" viewBox="0 0 30.239 30.239" space="preserve">
+            <svg
+              version="1.1"
+              xmlns="http://www.w3.org/2000/svg"
+              xlink="http://www.w3.org/1999/xlink"
+              height="100%"
+              viewBox="0 0 30.239 30.239"
+              space="preserve"
+            >
               <use xlink:href="#icon-search" />
             </svg>
           </slot>
@@ -36,7 +57,7 @@
           <li
             v-for="(item, index) in list"
             :key="item"
-            :class="{[$style.select]: selectIndex === index }"
+            :class="{ [$style.select]: selectIndex === index }"
             @mouseenter="selectIndex = index"
             @click="handleTemplistClick(index)"
           >
@@ -120,7 +141,6 @@ export default {
     handleRegisterEvent(action) {
       let eventHub = window.key_event
       let name = action == 'on' ? 'on' : 'off'
-      // eslint-disable-next-line @typescript-eslint/unbound-method
       eventHub[name](HOTKEY_COMMON.focusSearchInput.action, this.handleFocusInput)
     },
     handleFocusInput() {
@@ -185,7 +205,10 @@ export default {
       str = str.replace(/\t|\r\n|\n|\r/g, ' ')
       str = str.replace(/\s+/g, ' ')
       let dom_input = this.$refs.dom_input
-      this.text = this.text.substring(0, dom_input.selectionStart) + str + this.text.substring(dom_input.selectionEnd, this.text.length)
+      this.text =
+        this.text.substring(0, dom_input.selectionStart) +
+        str +
+        this.text.substring(dom_input.selectionEnd, this.text.length)
       this.$emit('update:modelValue', this.text)
     },
     handleClearList() {
@@ -196,7 +219,6 @@ export default {
   },
 }
 </script>
-
 
 <style lang="less" module>
 @import '@renderer/assets/styles/layout.less';
@@ -212,18 +234,19 @@ export default {
   position: absolute;
   width: 100%;
   border-radius: @form-radius;
-  transition: box-shadow .4s ease, background-color @transition-normal;
+  transition:
+    box-shadow 0.4s ease,
+    background-color @transition-normal;
   display: flex;
   flex-flow: column nowrap;
   background-color: var(--color-primary-light-300-alpha-700);
 
   &.active {
     background-color: var(--color-primary-light-600-alpha-100);
-    box-shadow: 0 1px 5px 0 rgba(0,0,0,.2);
+    box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.2);
     .form {
       input {
         border-bottom-left-radius: 0;
-
       }
       button {
         border-bottom-right-radius: 0;
@@ -252,7 +275,7 @@ export default {
       line-height: @height-toolbar * 0.52 + 5px;
       &::placeholder {
         color: var(--color-button-font);
-        font-size: .98em;
+        font-size: 0.98em;
       }
     }
     button {
@@ -265,7 +288,7 @@ export default {
       height: 100%;
       padding: 6px 7px;
       color: var(--color-button-font);
-      transition: background-color .2s ease;
+      transition: background-color 0.2s ease;
 
       &:last-child {
         border-top-right-radius: 3px;
@@ -283,14 +306,14 @@ export default {
   .list {
     // background-color: @color-search-form-background;
     font-size: 13px;
-    transition: .3s ease;
+    transition: 0.3s ease;
     height: 0;
     transition-property: height;
     overflow: hidden;
     li {
       cursor: pointer;
       padding: 8px 5px;
-      transition: background-color .2s ease;
+      transition: background-color 0.2s ease;
       line-height: 1.3;
       span {
         .mixin-ellipsis-2;
@@ -319,6 +342,4 @@ export default {
     }
   }
 }
-
-
 </style>

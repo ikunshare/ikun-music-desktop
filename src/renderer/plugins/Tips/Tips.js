@@ -8,7 +8,7 @@ const addAutoCloseTimer = (instance, time) => {
     instance.cancel()
   }, time)
 }
-const clearAutoCloseTimer = instance => {
+const clearAutoCloseTimer = (instance) => {
   if (!instance.autoCloseTimer) return
   clearTimeout(instance.autoCloseTimer)
   instance.autoCloseTimer = null
@@ -42,7 +42,7 @@ export default ({ position, message, autoCloseTime } = {}, props) => {
     instance = null
   }
 
-  instance.setTips = tips => {
+  instance.setTips = (tips) => {
     addAutoCloseTimer(instance, autoCloseTime)
     instance.message = tips
   }
@@ -51,4 +51,3 @@ export default ({ position, message, autoCloseTime } = {}, props) => {
 
   return instance
 }
-

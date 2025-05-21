@@ -139,7 +139,11 @@ export default {
     const showAllTheme = ref(false)
     const defaultThemesRaw = shallowReactive([])
     const defaultThemes = computed(() => {
-      return defaultThemesRaw.map(theme => ({ ...theme, isDefault: true, name: t('theme_' + theme.id) }))
+      return defaultThemesRaw.map((theme) => ({
+        ...theme,
+        isDefault: true,
+        name: t('theme_' + theme.id),
+      }))
     })
     const userThemes = shallowReactive([])
     const allThemes = computed(() => {
@@ -151,14 +155,14 @@ export default {
         ? allThemes.value
         : themeId.value == 'auto'
           ? []
-          : [allThemes.value.find(t => t.id == themeId.value) ?? allThemes.value[0]]
+          : [allThemes.value.find((t) => t.id == themeId.value) ?? allThemes.value[0]]
     })
     const autoTheme = reactive({})
     const updateAutoTheme = (info) => {
       let light = findTheme(info, appSetting['theme.lightId'])
-      light ??= info.themes.find(theme => theme.id == 'green')
+      light ??= info.themes.find((theme) => theme.id == 'green')
       let dark = findTheme(info, appSetting['theme.darkId'])
-      dark ??= info.themes.find(theme => theme.id == 'black')
+      dark ??= info.themes.find((theme) => theme.id == 'black')
       autoTheme['--color-primary-theme-light'] = light.config.themeColors['--color-theme']
       autoTheme['--background-image-theme-light'] = light.isCustom
         ? light.config.extInfo['--background-image'] == 'none'
@@ -178,27 +182,36 @@ export default {
       getThemes((info) => {
         // console.log(info)
         dataPath = info.dataPath
-        defaultThemesRaw.splice(0, defaultThemesRaw.length, ...info.themes.map(t => {
-          return {
-            id: t.id,
-            styles: {
-              '--color-primary-theme': t.config.themeColors['--color-theme'],
-              '--background-image-theme': t.config.extInfo['--background-image'],
-            },
-          }
-        }))
-        userThemes.splice(0, userThemes.length, ...info.userThemes.map(t => {
-          return {
-            id: t.id,
-            name: t.name,
-            styles: {
-              '--color-primary-theme': t.config.themeColors['--color-theme'],
-              '--background-image-theme': t.config.extInfo['--background-image'] == 'none'
-                ? 'none'
-                : buildBgUrl(t.config.extInfo['--background-image'], info.dataPath),
-            },
-          }
-        }))
+        defaultThemesRaw.splice(
+          0,
+          defaultThemesRaw.length,
+          ...info.themes.map((t) => {
+            return {
+              id: t.id,
+              styles: {
+                '--color-primary-theme': t.config.themeColors['--color-theme'],
+                '--background-image-theme': t.config.extInfo['--background-image'],
+              },
+            }
+          })
+        )
+        userThemes.splice(
+          0,
+          userThemes.length,
+          ...info.userThemes.map((t) => {
+            return {
+              id: t.id,
+              name: t.name,
+              styles: {
+                '--color-primary-theme': t.config.themeColors['--color-theme'],
+                '--background-image-theme':
+                  t.config.extInfo['--background-image'] == 'none'
+                    ? 'none'
+                    : buildBgUrl(t.config.extInfo['--background-image'], info.dataPath),
+              },
+            }
+          })
+        )
         updateAutoTheme(info)
       })
     }
@@ -227,9 +240,12 @@ export default {
       updateSetting({ 'theme.id': theme.id })
     }
 
-    watch(() => [appSetting['theme.lightId'], appSetting['theme.darkId']], () => {
-      getThemes(updateAutoTheme)
-    })
+    watch(
+      () => [appSetting['theme.lightId'], appSetting['theme.darkId']],
+      () => {
+        getThemes(updateAutoTheme)
+      }
+    )
     const isShowThemeSelectorModal = ref(false)
     const handleSetThemeAuto = () => {
       if (themeId.value == 'auto') return
@@ -258,17 +274,19 @@ export default {
     }
     const apiSources = computed(() => {
       return [
-        ...apiSourceInfo.map(api => ({
+        ...apiSourceInfo.map((api) => ({
           id: api.id,
           name: api.name,
           label: api.name,
           disabled: api.disabled,
         })),
-        ...userApi.list.map(api => ({
+        ...userApi.list.map((api) => ({
           id: api.id,
           name: api.name,
           label: `${api.name}${api.id == appSetting['common.apiSource'] ? `[${getApiStatus()}]` : ''}`,
-          desc: [/^\d/.test(api.version) ? `v${api.version}` : api.version].filter(Boolean).join(', '),
+          desc: [/^\d/.test(api.version) ? `v${api.version}` : api.version]
+            .filter(Boolean)
+            .join(', '),
           statusLabel: api.id == appSetting['common.apiSource'] ? `[${getApiStatus()}]` : '',
           status: api.status,
           message: api.message,
@@ -284,7 +302,6 @@ export default {
       ]
     })
 
-
     const controlBtnPositionList = computed(() => {
       return [
         { id: 'left', name: t('setting__basic_control_btn_position_left') },
@@ -296,8 +313,8 @@ export default {
     const fontList = computed(() => {
       return [{ id: '', label: t('setting__desktop_lyric_font_default') }, ...systemFontList.value]
     })
-    void getSystemFonts().then(fonts => {
-      systemFontList.value = fonts.map(f => ({ id: f, label: f.replace(/(^"|"$)/g, '') }))
+    void getSystemFonts().then((fonts) => {
+      systemFontList.value = fonts.map((f) => ({ id: f, label: f.replace(/(^"|"$)/g, '') }))
     })
 
     const fontSizeList = computed(() => {
@@ -310,7 +327,6 @@ export default {
         { id: 19, label: t('setting__basic_font_size_19px') },
       ]
     })
-
 
     return {
       appSetting,
@@ -362,13 +378,13 @@ export default {
     cursor: pointer;
     // color: var(--color-primary);
     margin-right: 8px;
-    transition: .3s ease;
+    transition: 0.3s ease;
     transition-property: color, opacity;
     margin-bottom: 18px;
     width: 86px;
 
     &:hover {
-      opacity: .7;
+      opacity: 0.7;
     }
 
     &:last-child {
@@ -391,9 +407,9 @@ export default {
       width: 36px;
       height: 36px;
       margin-bottom: 5px;
-      border: 2Px solid transparent;
-      padding: 2Px;
-      transition: border-color .3s ease;
+      border: 2px solid transparent;
+      padding: 2px;
+      transition: border-color 0.3s ease;
       border-radius: 5px;
       &:after {
         display: block;
@@ -416,7 +432,6 @@ export default {
     }
 
     &.auto {
-
       &.active {
         color: var(--color-primary-font-active);
         .bg {
@@ -424,7 +439,7 @@ export default {
         }
       }
 
-      >.bg {
+      > .bg {
         &:after {
           content: none;
         }
@@ -435,7 +450,8 @@ export default {
         overflow: hidden;
         border-radius: 5px;
       }
-      .light, .dark {
+      .light,
+      .dark {
         position: absolute;
         left: 0;
         top: 0;
@@ -478,15 +494,15 @@ export default {
     }
 
     &.add {
-      >.bg {
+      > .bg {
         &:after {
           content: none;
         }
         .bgContent {
-          transition: .3s ease;
+          transition: 0.3s ease;
           transition-property: border, color;
           box-sizing: border-box;
-          border: 1Px dashed var(--color-primary-light-100-alpha-300);
+          border: 1px dashed var(--color-primary-light-100-alpha-300);
           color: var(--color-primary-light-100-alpha-300);
           position: relative;
           height: 100%;
@@ -536,5 +552,4 @@ export default {
     margin-left: 5px;
   }
 }
-
 </style>

@@ -1,53 +1,183 @@
 <template>
   <div :class="$style.container">
     <transition enter-active-class="animated-fast fadeIn" leave-active-class="animated fadeOut">
-      <div v-show="!isShowThemeList" :class="$style.btns" @mousedown="handleLyricMouseDown" @touchstart="handleLyricTouchStart">
+      <div
+        v-show="!isShowThemeList"
+        :class="$style.btns"
+        @mousedown="handleLyricMouseDown"
+        @touchstart="handleLyricTouchStart"
+      >
         <button :class="$style.btn" :title="$t('desktop_lyric__close')" @click="handleClose">
-          <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" height="20px" viewBox="0 0 24 24" space="preserve">
+          <svg
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xlink="http://www.w3.org/1999/xlink"
+            height="20px"
+            viewBox="0 0 24 24"
+            space="preserve"
+          >
             <use xlink:href="#icon-close" />
           </svg>
         </button>
-        <button :class="$style.btn" :title="$t('desktop_lyric__' + (setting['desktopLyric.isLock'] ? 'unlock' : 'lock'))" @click="handleLock">
-          <svg v-if="setting['desktopLyric.isLock']" version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" height="20px" viewBox="0 0 24 24" space="preserve">
+        <button
+          :class="$style.btn"
+          :title="$t('desktop_lyric__' + (setting['desktopLyric.isLock'] ? 'unlock' : 'lock'))"
+          @click="handleLock"
+        >
+          <svg
+            v-if="setting['desktopLyric.isLock']"
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xlink="http://www.w3.org/1999/xlink"
+            height="20px"
+            viewBox="0 0 24 24"
+            space="preserve"
+          >
             <use xlink:href="#icon-unlock" />
           </svg>
-          <svg v-else version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" height="20px" viewBox="0 0 24 24" space="preserve">
+          <svg
+            v-else
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xlink="http://www.w3.org/1999/xlink"
+            height="20px"
+            viewBox="0 0 24 24"
+            space="preserve"
+          >
             <use xlink:href="#icon-lock" />
           </svg>
         </button>
-        <button :class="$style.btn" :title="$t('desktop_lyric__font_increase')" @click="handleFontChange('increase', 1)">
-          <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" height="20px" viewBox="0 0 24 24" space="preserve">
+        <button
+          :class="$style.btn"
+          :title="$t('desktop_lyric__font_increase')"
+          @click="handleFontChange('increase', 1)"
+        >
+          <svg
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xlink="http://www.w3.org/1999/xlink"
+            height="20px"
+            viewBox="0 0 24 24"
+            space="preserve"
+          >
             <use xlink:href="#icon-font-increase" />
           </svg>
         </button>
-        <button :class="$style.btn" :title="$t('desktop_lyric__font_decrease')" @click="handleFontChange('decrease', 1)">
-          <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" height="20px" viewBox="0 0 24 24" space="preserve">
+        <button
+          :class="$style.btn"
+          :title="$t('desktop_lyric__font_decrease')"
+          @click="handleFontChange('decrease', 1)"
+        >
+          <svg
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xlink="http://www.w3.org/1999/xlink"
+            height="20px"
+            viewBox="0 0 24 24"
+            space="preserve"
+          >
             <use xlink:href="#icon-font-decrease" />
           </svg>
         </button>
-        <button :class="$style.btn" :title="$t('desktop_lyric__opacity_increase')" @click="handleOpactiyChange('increase', 10)" @contextmenu="handleOpactiyChange('increase', 2)">
-          <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" height="20px" viewBox="0 0 24 24" space="preserve">
+        <button
+          :class="$style.btn"
+          :title="$t('desktop_lyric__opacity_increase')"
+          @click="handleOpactiyChange('increase', 10)"
+          @contextmenu="handleOpactiyChange('increase', 2)"
+        >
+          <svg
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xlink="http://www.w3.org/1999/xlink"
+            height="20px"
+            viewBox="0 0 24 24"
+            space="preserve"
+          >
             <use xlink:href="#icon-opactiy-increase" />
           </svg>
         </button>
-        <button :class="$style.btn" :title="$t('desktop_lyric__opacity_decrease')" @click="handleOpactiyChange('decrease', 10)" @contextmenu="handleOpactiyChange('decrease', 2)">
-          <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" height="20px" viewBox="0 0 24 24" space="preserve">
+        <button
+          :class="$style.btn"
+          :title="$t('desktop_lyric__opacity_decrease')"
+          @click="handleOpactiyChange('decrease', 10)"
+          @contextmenu="handleOpactiyChange('decrease', 2)"
+        >
+          <svg
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xlink="http://www.w3.org/1999/xlink"
+            height="20px"
+            viewBox="0 0 24 24"
+            space="preserve"
+          >
             <use xlink:href="#icon-opactiy-decrease" />
           </svg>
         </button>
-        <button :class="$style.btn" :title="$t('desktop_lyric__' + (setting['desktopLyric.style.isZoomActiveLrc'] ? 'lrc_active_zoom_off' : 'lrc_active_zoom_on'))" @click="handleZoomLrc">
-          <svg v-if="setting['desktopLyric.style.isZoomActiveLrc']" version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" height="20px" viewBox="0 0 24 24" space="preserve">
+        <button
+          :class="$style.btn"
+          :title="
+            $t(
+              'desktop_lyric__' +
+                (setting['desktopLyric.style.isZoomActiveLrc']
+                  ? 'lrc_active_zoom_off'
+                  : 'lrc_active_zoom_on')
+            )
+          "
+          @click="handleZoomLrc"
+        >
+          <svg
+            v-if="setting['desktopLyric.style.isZoomActiveLrc']"
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xlink="http://www.w3.org/1999/xlink"
+            height="20px"
+            viewBox="0 0 24 24"
+            space="preserve"
+          >
             <use xlink:href="#icon-vibrate-off" />
           </svg>
-          <svg v-else version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" height="20px" viewBox="0 0 24 24" space="preserve">
+          <svg
+            v-else
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xlink="http://www.w3.org/1999/xlink"
+            height="20px"
+            viewBox="0 0 24 24"
+            space="preserve"
+          >
             <use xlink:href="#icon-vibrate" />
           </svg>
         </button>
-        <button :class="$style.btn" :title="$t('desktop_lyric__' + (setting['desktopLyric.isAlwaysOnTop'] ? 'win_top_off' : 'win_top_on'))" @click="handleAlwaysOnTop">
-          <svg v-if="setting['desktopLyric.isAlwaysOnTop']" version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" height="20px" viewBox="0 0 24 24" space="preserve">
+        <button
+          :class="$style.btn"
+          :title="
+            $t(
+              'desktop_lyric__' +
+                (setting['desktopLyric.isAlwaysOnTop'] ? 'win_top_off' : 'win_top_on')
+            )
+          "
+          @click="handleAlwaysOnTop"
+        >
+          <svg
+            v-if="setting['desktopLyric.isAlwaysOnTop']"
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xlink="http://www.w3.org/1999/xlink"
+            height="20px"
+            viewBox="0 0 24 24"
+            space="preserve"
+          >
             <use xlink:href="#icon-top-off" />
           </svg>
-          <svg v-else version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" height="20px" viewBox="0 0 24 24" space="preserve">
+          <svg
+            v-else
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+            xlink="http://www.w3.org/1999/xlink"
+            height="20px"
+            viewBox="0 0 24 24"
+            space="preserve"
+          >
             <use xlink:href="#icon-top-on" />
           </svg>
         </button>
@@ -77,7 +207,9 @@ export default {
       updateSetting({ 'desktopLyric.isAlwaysOnTop': !setting['desktopLyric.isAlwaysOnTop'] })
     }
     const handleZoomLrc = () => {
-      updateSetting({ 'desktopLyric.style.isZoomActiveLrc': !setting['desktopLyric.style.isZoomActiveLrc'] })
+      updateSetting({
+        'desktopLyric.style.isZoomActiveLrc': !setting['desktopLyric.style.isZoomActiveLrc'],
+      })
     }
     const handleFontChange = (action, step) => {
       let num
@@ -155,8 +287,7 @@ export default {
   color: #fff;
   transition: opacity @transition-theme;
   &:hover {
-    opacity: .7;
+    opacity: 0.7;
   }
 }
-
 </style>

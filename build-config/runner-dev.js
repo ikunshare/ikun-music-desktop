@@ -23,7 +23,6 @@ let electronProcess = null
 let hotMiddlewareRenderer
 let hotMiddlewareRendererLyric
 
-
 function startRenderer() {
   return new Promise((resolve, reject) => {
     // rendererConfig.entry.renderer = [path.join(__dirname, 'dev-client')].concat(rendererConfig.entry.renderer)
@@ -34,12 +33,15 @@ function startRenderer() {
       heartbeat: 2500,
     })
 
-    compiler.hooks.compilation.tap('compilation', compilation => {
+    compiler.hooks.compilation.tap('compilation', (compilation) => {
       // console.log(Object.keys(compilation.hooks))
-      HtmlWebpackPlugin.getHooks(compilation).beforeEmit.tapAsync('html-webpack-plugin-after-emit', (data, cb) => {
-        hotMiddlewareRenderer.publish({ action: 'reload' })
-        cb()
-      })
+      HtmlWebpackPlugin.getHooks(compilation).beforeEmit.tapAsync(
+        'html-webpack-plugin-after-emit',
+        (data, cb) => {
+          hotMiddlewareRenderer.publish({ action: 'reload' })
+          cb()
+        }
+      )
     })
 
     // compiler.hooks.done.tap('done', stats => {
@@ -47,27 +49,30 @@ function startRenderer() {
     //   // logStats('Renderer', stats)
     // })
 
-    const server = new WebpackDevServer({
-      port: 9080,
-      hot: true,
-      historyApiFallback: true,
-      static: {
-        directory: path.join(__dirname, '../src/common/theme/images'),
-        publicPath: '/theme_images',
-      },
-      client: {
-        logging: 'warn',
-        overlay: true,
-      },
-      setupMiddlewares(middlewares, devServer) {
-        devServer.app.use(hotMiddlewareRenderer)
-        setImmediate(() => {
-          devServer.middleware.waitUntilValid(resolve)
-        })
+    const server = new WebpackDevServer(
+      {
+        port: 9080,
+        hot: true,
+        historyApiFallback: true,
+        static: {
+          directory: path.join(__dirname, '../src/common/theme/images'),
+          publicPath: '/theme_images',
+        },
+        client: {
+          logging: 'warn',
+          overlay: true,
+        },
+        setupMiddlewares(middlewares, devServer) {
+          devServer.app.use(hotMiddlewareRenderer)
+          setImmediate(() => {
+            devServer.middleware.waitUntilValid(resolve)
+          })
 
-        return middlewares
+          return middlewares
+        },
       },
-    }, compiler)
+      compiler
+    )
 
     server.start()
   })
@@ -83,12 +88,15 @@ function startRendererLyric() {
       heartbeat: 2500,
     })
 
-    compiler.hooks.compilation.tap('compilation', compilation => {
+    compiler.hooks.compilation.tap('compilation', (compilation) => {
       // console.log(Object.keys(compilation.hooks))
-      HtmlWebpackPlugin.getHooks(compilation).beforeEmit.tapAsync('html-webpack-plugin-after-emit', (data, cb) => {
-        hotMiddlewareRendererLyric.publish({ action: 'reload' })
-        cb()
-      })
+      HtmlWebpackPlugin.getHooks(compilation).beforeEmit.tapAsync(
+        'html-webpack-plugin-after-emit',
+        (data, cb) => {
+          hotMiddlewareRendererLyric.publish({ action: 'reload' })
+          cb()
+        }
+      )
     })
 
     // compiler.hooks.done.tap('done', stats => {
@@ -96,25 +104,28 @@ function startRendererLyric() {
     //   // logStats('Renderer', stats)
     // })
 
-    const server = new WebpackDevServer({
-      port: 9081,
-      hot: true,
-      historyApiFallback: true,
-      // static: {
-      //   directory: path.join(__dirname, '../'),
-      // },
-      client: {
-        logging: 'warn',
-        overlay: true,
+    const server = new WebpackDevServer(
+      {
+        port: 9081,
+        hot: true,
+        historyApiFallback: true,
+        // static: {
+        //   directory: path.join(__dirname, '../'),
+        // },
+        client: {
+          logging: 'warn',
+          overlay: true,
+        },
+        setupMiddlewares(middlewares, devServer) {
+          devServer.app.use(hotMiddlewareRenderer)
+          setImmediate(() => {
+            devServer.middleware.waitUntilValid(resolve)
+          })
+          return middlewares
+        },
       },
-      setupMiddlewares(middlewares, devServer) {
-        devServer.app.use(hotMiddlewareRenderer)
-        setImmediate(() => {
-          devServer.middleware.waitUntilValid(resolve)
-        })
-        return middlewares
-      },
-    }, compiler)
+      compiler
+    )
 
     server.start()
   })
@@ -186,10 +197,10 @@ function startElectron() {
 
   electronProcess = spawn(electron, args)
 
-  electronProcess.stdout.on('data', data => {
+  electronProcess.stdout.on('data', (data) => {
     electronLog(data, 'blue')
   })
-  electronProcess.stderr.on('data', data => {
+  electronProcess.stderr.on('data', (data) => {
     electronLog(data, 'red')
   })
 
@@ -210,7 +221,7 @@ function electronLog(data, color) {
   let log = data.toString()
   if (/[0-9A-z]+/.test(log)) {
     // 抑制某些无关的报错日志
-    if (color == 'red' && typeof log === 'string' && logs.some(l => log.includes(l))) return
+    if (color == 'red' && typeof log === 'string' && logs.some((l) => log.includes(l))) return
 
     console.log(chalk[color](log))
   }
@@ -232,22 +243,32 @@ function init() {
   replaceLib({ electronPlatformName: process.platform, arch: Arch[process.arch] })
 
   Promise.all([
-    startRenderer().then(() => handleSuccess('renderer')).catch((err) => {
-      console.error(err.message)
-      return handleFail('renderer')
-    }),
-    startRendererLyric().then(() => handleSuccess('renderer-lyric')).catch((err) => {
-      console.error(err.message)
-      return handleFail('renderer-lyric')
-    }),
-    startRendererScripts().then(() => handleSuccess('renderer-scripts')).catch((err) => {
-      console.error(err.message)
-      return handleFail('renderer-scripts')
-    }),
-    startMain().then(() => handleSuccess('main')).catch(() => handleFail('main')),
-  ]).then(startElectron).catch(err => {
-    console.error(err)
-  })
+    startRenderer()
+      .then(() => handleSuccess('renderer'))
+      .catch((err) => {
+        console.error(err.message)
+        return handleFail('renderer')
+      }),
+    startRendererLyric()
+      .then(() => handleSuccess('renderer-lyric'))
+      .catch((err) => {
+        console.error(err.message)
+        return handleFail('renderer-lyric')
+      }),
+    startRendererScripts()
+      .then(() => handleSuccess('renderer-scripts'))
+      .catch((err) => {
+        console.error(err.message)
+        return handleFail('renderer-scripts')
+      }),
+    startMain()
+      .then(() => handleSuccess('main'))
+      .catch(() => handleFail('main')),
+  ])
+    .then(startElectron)
+    .catch((err) => {
+      console.error(err)
+    })
 }
 
 init()

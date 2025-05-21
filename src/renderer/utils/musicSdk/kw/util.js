@@ -30,14 +30,15 @@ import { toMD5 } from '../utils'
 //   return JSON.parse(str.replace(/(^{'|'}\n$|'}$|':'|','|':\[{'|'}\],'|':{'|'},'|'},{'|':\['|':\[\],'|':{},'|'}]})/g, s => translationMap[s]))
 // }
 
-export const objStr2JSON = str => {
-  return JSON.parse(str.replace(/('(?=(,\s*')))|('(?=:))|((?<=([:,]\s*))')|((?<={)')|('(?=}))/g, '"'))
+export const objStr2JSON = (str) => {
+  return JSON.parse(
+    str.replace(/('(?=(,\s*')))|('(?=:))|((?<=([:,]\s*))')|((?<={)')|('(?=}))/g, '"')
+  )
 }
 
+export const formatSinger = (rawData) => rawData.replace(/&/g, '、')
 
-export const formatSinger = rawData => rawData.replace(/&/g, '、')
-
-export const matchToken = headers => {
+export const matchToken = (headers) => {
   try {
     return headers['set-cookie'][0].match(/kw_token=(\w+)/)[1]
   } catch (err) {
@@ -46,7 +47,6 @@ export const matchToken = headers => {
 }
 
 // const wait = time => new Promise(resolve => setTimeout(() => resolve(), time))
-
 
 // export const getToken = (retryNum = 0) => new Promise((resolve, reject) => {
 //   if (retryNum > 2) return Promise.reject(new Error('try max num'))
@@ -63,7 +63,8 @@ export const matchToken = headers => {
 //   })
 // })
 
-export const decodeLyric = base64Data => rendererInvoke(WIN_MAIN_RENDERER_EVENT_NAME.handle_kw_decode_lyric, base64Data)
+export const decodeLyric = (base64Data) =>
+  rendererInvoke(WIN_MAIN_RENDERER_EVENT_NAME.handle_kw_decode_lyric, base64Data)
 
 // export const tokenRequest = async(url, options = {}) => {
 //   let token = kw_token.token
@@ -137,7 +138,8 @@ export const lrcTools = {
         const result = this.rxps.wordTime.exec(timeStr)
         const wordInfo = this.getWordInfo(result[1], result[2], preTimeInfo)
         words = words.replace(timeStr, wordInfo.timeStr)
-        if (preTimeInfo?.newTimeStr) words = words.replace(preTimeInfo.timeStr, preTimeInfo.newTimeStr)
+        if (preTimeInfo?.newTimeStr)
+          words = words.replace(preTimeInfo.timeStr, preTimeInfo.newTimeStr)
         preTimeInfo = wordInfo
       }
       this.lines.push(time + words)
@@ -153,7 +155,12 @@ export const lrcTools = {
       const valueOf = parseInt(content, 8)
       this.offset = Math.trunc(valueOf / 10)
       this.offset2 = Math.trunc(valueOf % 10)
-      if (this.offset == 0 || Number.isNaN(this.offset) || this.offset2 == 0 || Number.isNaN(this.offset2)) {
+      if (
+        this.offset == 0 ||
+        Number.isNaN(this.offset) ||
+        this.offset2 == 0 ||
+        Number.isNaN(this.offset2)
+      ) {
         this.isOK = false
       }
     } else {
@@ -182,7 +189,6 @@ export const lrcTools = {
   },
 }
 
-
 const createAesEncrypt = (buffer, mode, key, iv) => {
   const cipher = createCipheriv(mode, key, iv)
   return Buffer.concat([cipher.update(buffer), cipher.final()])
@@ -195,7 +201,10 @@ const createAesDecrypt = (buffer, mode, key, iv) => {
 
 export const wbdCrypto = {
   aesMode: 'aes-128-ecb',
-  aesKey: Buffer.from([112, 87, 39, 61, 199, 250, 41, 191, 57, 68, 45, 114, 221, 94, 140, 228], 'binary'),
+  aesKey: Buffer.from(
+    [112, 87, 39, 61, 199, 250, 41, 191, 57, 68, 45, 114, 221, 94, 140, 228],
+    'binary'
+  ),
   aesIv: '',
   appId: 'y67sprxhhpws',
   decodeData(base64Result) {
@@ -210,7 +219,9 @@ export const wbdCrypto = {
     const data = Buffer.from(JSON.stringify(jsonData))
     const time = Date.now()
 
-    const encodeData = createAesEncrypt(data, this.aesMode, this.aesKey, this.aesIv).toString('base64')
+    const encodeData = createAesEncrypt(data, this.aesMode, this.aesKey, this.aesIv).toString(
+      'base64'
+    )
     const sign = this.createSign(encodeData, time)
 
     return `data=${encodeURIComponent(encodeData)}&time=${time}&appId=${this.appId}&sign=${sign}`

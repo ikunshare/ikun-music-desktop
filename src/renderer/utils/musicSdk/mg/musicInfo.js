@@ -11,24 +11,28 @@ const createGetMusicInfosTask = (ids) => {
     list = list.slice(100)
   }
   let url = 'https://c.musicapp.migu.cn/MIGUM2.0/v1.0/content/resourceinfo.do?resourceType=2'
-  return Promise.all(tasks.map(task => createHttpFetch(url, {
-    method: 'POST',
-    form: {
-      resourceId: task.join('|'),
-    },
-  }).then(data => data.resource)))
+  return Promise.all(
+    tasks.map((task) =>
+      createHttpFetch(url, {
+        method: 'POST',
+        form: {
+          resourceId: task.join('|'),
+        },
+      }).then((data) => data.resource)
+    )
+  )
 }
 
 export const filterMusicInfoList = (rawList) => {
   // console.log(rawList)
   let ids = new Set()
   const list = []
-  rawList.forEach(item => {
+  rawList.forEach((item) => {
     if (!item.songId || ids.has(item.songId)) return
     ids.add(item.songId)
     const types = []
     const _types = {}
-    item.newRateFormats?.forEach(type => {
+    item.newRateFormats?.forEach((type) => {
       let size
       switch (type.formatType) {
         case 'PQ':
@@ -87,10 +91,12 @@ export const filterMusicInfoList = (rawList) => {
   return list
 }
 
-export const getMusicInfo = async(copyrightId) => {
-  return getMusicInfos([copyrightId]).then(data => data[0])
+export const getMusicInfo = async (copyrightId) => {
+  return getMusicInfos([copyrightId]).then((data) => data[0])
 }
 
-export const getMusicInfos = async(copyrightIds) => {
-  return filterMusicInfoList(await Promise.all(createGetMusicInfosTask(copyrightIds)).then(data => data.flat()))
+export const getMusicInfos = async (copyrightIds) => {
+  return filterMusicInfoList(
+    await Promise.all(createGetMusicInfosTask(copyrightIds)).then((data) => data.flat())
+  )
 }

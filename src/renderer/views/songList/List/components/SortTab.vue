@@ -1,5 +1,11 @@
 <template>
-  <base-tab :model-value="sortId" :class="$style.tab" :list="list" item-label="name" @change="handleToggle" />
+  <base-tab
+    :model-value="sortId"
+    :class="$style.tab"
+    :list="list"
+    item-label="name"
+    @change="handleToggle"
+  />
 </template>
 
 <script setup>
@@ -27,7 +33,6 @@ const route = useRoute()
 
 const list = shallowReactive([])
 
-
 const handleToggle = (id) => {
   void router.replace({
     path: route.path,
@@ -38,18 +43,21 @@ const handleToggle = (id) => {
     },
   })
 }
-watch(() => props.source, async(source) => {
-  // const source = (await getLeaderboardSetting()).source as LX.OnlineSource
-  if (!source) return
-  let _list = sortList[source] ?? []
-  list.splice(0, list.length, ..._list)
-  if (!props.sortId && list.length) handleToggle(list[0].id)
-  // console.log(list)
-}, {
-  immediate: true,
-})
+watch(
+  () => props.source,
+  async (source) => {
+    // const source = (await getLeaderboardSetting()).source as LX.OnlineSource
+    if (!source) return
+    let _list = sortList[source] ?? []
+    list.splice(0, list.length, ..._list)
+    if (!props.sortId && list.length) handleToggle(list[0].id)
+    // console.log(list)
+  },
+  {
+    immediate: true,
+  }
+)
 </script>
-
 
 <style lang="less" module>
 @import '@renderer/assets/styles/layout.less';
@@ -61,7 +69,7 @@ watch(() => props.source, async(source) => {
   &.active {
     .label {
       .icon {
-        svg{
+        svg {
           transform: rotate(180deg);
         }
       }
@@ -95,8 +103,8 @@ watch(() => props.source, async(source) => {
     margin-left: 7px;
     line-height: 0;
     svg {
-      width: .9em;
-      transition: transform .2s ease;
+      width: 0.9em;
+      transition: transform 0.2s ease;
       transform: rotate(0);
     }
   }
@@ -123,7 +131,7 @@ watch(() => props.source, async(source) => {
   overflow-y: auto;
   transform-origin: 0 0 0;
   max-height: 250px;
-  transition: .25s ease;
+  transition: 0.25s ease;
   transition-property: transform, opacity;
   z-index: 10;
   padding: 10px;
@@ -169,6 +177,4 @@ watch(() => props.source, async(source) => {
     background-color: var(--color-button-background-active);
   }
 }
-
-
 </style>

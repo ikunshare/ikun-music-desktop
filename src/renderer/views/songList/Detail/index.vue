@@ -1,7 +1,10 @@
 <template>
   <div :class="$style.container">
     <div :class="$style.songListHeader">
-      <div :class="$style.songListHeaderLeft" :style="{ backgroundImage: 'url('+(picUrl || listDetailInfo.info.img)+')' }">
+      <div
+        :class="$style.songListHeaderLeft"
+        :style="{ backgroundImage: 'url(' + (picUrl || listDetailInfo.info.img) + ')' }"
+      >
         <!-- <span v-if="listDetailInfo.info.play_count" :class="$style.playNum">{{ listDetailInfo.info.play_count }}</span> -->
       </div>
       <div :class="$style.songListHeaderMiddle">
@@ -19,7 +22,9 @@
         <base-btn
           :class="$style.headerRightBtn"
           :disabled="!!listDetailInfo.noItemLabel"
-          @click="addSongListDetail(listDetailInfo.id, listDetailInfo.source, listDetailInfo.info.name)"
+          @click="
+            addSongListDetail(listDetailInfo.id, listDetailInfo.source, listDetailInfo.info.name)
+          "
         >
           {{ $t('list__collect') }}
         </base-btn>
@@ -50,13 +55,11 @@ import { addSongListDetail, playSongListDetail } from './action'
 import useList from './useList'
 import useKeyBack from './useKeyBack'
 
-
 const source = ref<LX.OnlineSource>('kw')
 const id = ref<string>('')
 const page = ref<number>(1)
 const picUrl = ref<string>('')
 const refresh = ref<boolean>(false)
-
 
 interface Query {
   source?: string
@@ -67,7 +70,12 @@ interface Query {
   fromName?: string
 }
 
-const verifyQueryParams = async function(this: any, to: { query: Query, path: string }, from: any, next: (route?: { path: string, query: Query }) => void) {
+const verifyQueryParams = async function (
+  this: any,
+  to: { query: Query; path: string },
+  from: any,
+  next: (route?: { path: string; query: Query }) => void
+) {
   let _source = to.query.source
   let _id = to.query.id
   let _page: string | undefined = to.query.page
@@ -88,7 +96,14 @@ const verifyQueryParams = async function(this: any, to: { query: Query, path: st
 
     next({
       path: to.path,
-      query: { ...to.query, source: _source, id: _id, page: _page, picUrl: _picUrl, refresh: _refresh },
+      query: {
+        ...to.query,
+        source: _source,
+        id: _id,
+        page: _page,
+        picUrl: _picUrl,
+        refresh: _refresh,
+      },
     })
     return
   }
@@ -102,20 +117,13 @@ const verifyQueryParams = async function(this: any, to: { query: Query, path: st
   if (to.query.fromName) window.lx.songListInfo.fromName = to.query.fromName
 }
 
-
 export default {
   beforeRouteEnter: verifyQueryParams,
   beforeRouteUpdate: verifyQueryParams,
   setup() {
     const router = useRouter()
 
-    const {
-      listRef,
-      listDetailInfo,
-      getListData,
-      handlePlayList,
-    } = useList()
-
+    const { listRef, listDetailInfo, getListData, handlePlayList } = useList()
 
     const togglePage = (page: number) => {
       void getListData(source.value, id.value, page, refresh.value)
@@ -123,23 +131,28 @@ export default {
 
     const handleBack = () => {
       setVisibleListDetail(false)
-      if (window.lx.songListInfo.fromName) void router.replace({ name: window.lx.songListInfo.fromName })
+      if (window.lx.songListInfo.fromName)
+        void router.replace({ name: window.lx.songListInfo.fromName })
       else router.back()
     }
 
     useKeyBack(handleBack)
 
-    watch([source, id, page, refresh], async([_source, _id, _page, _refresh]) => {
-      if (!_source || !_id) return router.replace({ path: '/songList/list' })
-      // console.log(_source, _id, _page, _refresh, picUrl.value)
-      // source.value = _source
-      // id.value = _id
-      // refresh.value = _refresh
-      // page.value = _page ?? 1
-      void getListData(_source, _id, _page, _refresh)
-    }, {
-      immediate: true,
-    })
+    watch(
+      [source, id, page, refresh],
+      async ([_source, _id, _page, _refresh]) => {
+        if (!_source || !_id) return router.replace({ path: '/songList/list' })
+        // console.log(_source, _id, _page, _refresh, picUrl.value)
+        // source.value = _source
+        // id.value = _id
+        // refresh.value = _refresh
+        // page.value = _page ?? 1
+        void getListData(_source, _id, _page, _refresh)
+      },
+      {
+        immediate: true,
+      }
+    )
 
     return {
       source,
@@ -187,8 +200,8 @@ export default {
   border-radius: 4px;
   background-position: center;
   background-size: cover;
-  opacity: .9;
-  box-shadow: 0 0 2px 0 rgba(0,0,0,.2);
+  opacity: 0.9;
+  box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.2);
 }
 .playNum {
   position: absolute;
@@ -247,4 +260,3 @@ export default {
   height: 100%;
 }
 </style>
-

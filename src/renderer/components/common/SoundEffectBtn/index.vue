@@ -1,6 +1,13 @@
 <template>
   <button :class="$style.btn" :aria-label="$t('player__sound_effect')" @click="visible = true">
-    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="90%" viewBox="0 0 24 24" space="preserve">
+    <svg
+      version="1.1"
+      xmlns="http://www.w3.org/2000/svg"
+      xlink="http://www.w3.org/1999/xlink"
+      width="90%"
+      viewBox="0 0 24 24"
+      space="preserve"
+    >
       <use xlink:href="#icon-tune-variant" />
     </svg>
   </button>
@@ -50,8 +57,6 @@ const showTip = ref(false)
 watch(visible, (visible) => {
   if (visible) showTip.value = appSetting['player.mediaDeviceId'] != 'default'
 })
-
-
 </script>
 
 <style lang="less" module>
@@ -72,12 +77,12 @@ watch(visible, (visible) => {
 
   svg {
     transition: opacity @transition-fast;
-    opacity: .6;
+    opacity: 0.6;
     filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.2));
   }
   &:hover {
     svg {
-      opacity: .9;
+      opacity: 0.9;
     }
   }
   &:active {
@@ -149,5 +154,4 @@ watch(visible, (visible) => {
   line-height: 1.25;
   color: var(--color-font);
 }
-
 </style>

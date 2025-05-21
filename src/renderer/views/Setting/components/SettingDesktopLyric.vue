@@ -124,9 +124,7 @@ const defaultPlayedColors = [
   'rgba(217, 57, 255, 1)',
   'rgba(255, 57, 71, 1)',
 ]
-const defaultShadowColors = [
-  'rgba(0, 0, 0, 0.15)',
-]
+const defaultShadowColors = ['rgba(0, 0, 0, 0.15)']
 
 const useLyricUnplayColor = () => {
   const lyric_unplay_color_ref = ref(null)
@@ -134,7 +132,13 @@ const useLyricUnplayColor = () => {
 
   const initLyricUnplayColor = (color, changed, reset) => {
     if (!lyric_unplay_color_ref.value) return
-    tools = pickrTools.create(lyric_unplay_color_ref.value, color, defaultUnplayColors, changed, reset)
+    tools = pickrTools.create(
+      lyric_unplay_color_ref.value,
+      color,
+      defaultUnplayColors,
+      changed,
+      reset
+    )
   }
   const destroyLyricUnplayColor = () => {
     if (!tools) return
@@ -159,7 +163,13 @@ const useLyricPlayedColor = () => {
 
   const initLyricPlayedColor = (color, changed, reset) => {
     if (!lyric_played_color_ref.value) return
-    tools = pickrTools.create(lyric_played_color_ref.value, color, defaultPlayedColors, changed, reset)
+    tools = pickrTools.create(
+      lyric_played_color_ref.value,
+      color,
+      defaultPlayedColors,
+      changed,
+      reset
+    )
   }
   const destroyLyricPlayedColor = () => {
     if (!tools) return
@@ -184,7 +194,13 @@ const useLyricShadowColor = () => {
 
   const initLyricShadowColor = (color, changed, reset) => {
     if (!lyric_shadow_color_ref.value) return
-    tools = pickrTools.create(lyric_shadow_color_ref.value, color, defaultShadowColors, changed, reset)
+    tools = pickrTools.create(
+      lyric_shadow_color_ref.value,
+      color,
+      defaultShadowColors,
+      changed,
+      reset
+    )
   }
   const destroyLyricShadowColor = () => {
     if (!tools) return
@@ -204,9 +220,24 @@ const useLyricShadowColor = () => {
 }
 
 const useLyricColor = () => {
-  const { lyric_unplay_color_ref, initLyricUnplayColor, destroyLyricUnplayColor, setLyricUnplayColor } = useLyricUnplayColor()
-  const { lyric_played_color_ref, initLyricPlayedColor, destroyLyricPlayedColor, setLyricPlayedColor } = useLyricPlayedColor()
-  const { lyric_shadow_color_ref, initLyricShadowColor, destroyLyricShadowColor, setLyricShadowColor } = useLyricShadowColor()
+  const {
+    lyric_unplay_color_ref,
+    initLyricUnplayColor,
+    destroyLyricUnplayColor,
+    setLyricUnplayColor,
+  } = useLyricUnplayColor()
+  const {
+    lyric_played_color_ref,
+    initLyricPlayedColor,
+    destroyLyricPlayedColor,
+    setLyricPlayedColor,
+  } = useLyricPlayedColor()
+  const {
+    lyric_shadow_color_ref,
+    initLyricShadowColor,
+    destroyLyricShadowColor,
+    setLyricShadowColor,
+  } = useLyricShadowColor()
 
   const initColors = () => {
     initLyricUnplayColor(appSetting['desktopLyric.style.lyricUnplayColor'], (color) => {
@@ -263,19 +294,15 @@ export default {
       updateSetting({ 'desktopLyric.style.lineGap': Math.min(Math.max(gap, 0), 25) })
     }
 
-    const {
-      lyric_unplay_color_ref,
-      lyric_played_color_ref,
-      lyric_shadow_color_ref,
-      resetColor,
-    } = useLyricColor()
+    const { lyric_unplay_color_ref, lyric_played_color_ref, lyric_shadow_color_ref, resetColor } =
+      useLyricColor()
 
     const systemFontList = ref([])
     const fontList = computed(() => {
       return [{ id: '', label: t('setting__desktop_lyric_font_default') }, ...systemFontList.value]
     })
-    void getSystemFonts().then(fonts => {
-      systemFontList.value = fonts.map(f => ({ id: f, label: f.replace(/(^"|"$)/g, '') }))
+    void getSystemFonts().then((fonts) => {
+      systemFontList.value = fonts.map((f) => ({ id: f, label: f.replace(/(^"|"$)/g, '') }))
     })
 
     const resetWindowSetting = () => {
@@ -328,7 +355,7 @@ export default {
   transition-property: background-color, opacity !important;
   box-shadow: 0 0 3px var(--color-primary-light-100-alpha-300);
   &:hover {
-    opacity: .7;
+    opacity: 0.7;
   }
 }
 .label {
@@ -337,5 +364,4 @@ export default {
   text-align: center;
   line-height: 1.1;
 }
-
 </style>

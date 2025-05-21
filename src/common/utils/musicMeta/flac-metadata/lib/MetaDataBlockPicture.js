@@ -14,7 +14,17 @@ class MetaDataBlockPicture extends MetaDataBlock {
     this.pictureData = null
   }
 
-  static create(isLast, pictureType, mimeType, description, width, height, bitsPerPixel, colors, pictureData) {
+  static create(
+    isLast,
+    pictureType,
+    mimeType,
+    description,
+    width,
+    height,
+    bitsPerPixel,
+    colors,
+    pictureData
+  ) {
     let mdb = new MetaDataBlockPicture(isLast)
     mdb.pictureType = pictureType
     mdb.mimeType = mimeType
@@ -27,7 +37,6 @@ class MetaDataBlockPicture extends MetaDataBlock {
     mdb.hasData = true
     return mdb
   }
-
 
   parse(buffer) {
     try {
@@ -67,8 +76,8 @@ class MetaDataBlockPicture extends MetaDataBlock {
     let buffer = Buffer.alloc(4 + size)
 
     let header = size
-    header |= (this.type << 24)
-    header |= (this.isLast ? 0x80000000 : 0)
+    header |= this.type << 24
+    header |= this.isLast ? 0x80000000 : 0
     buffer.writeUInt32BE(header >>> 0, pos)
     pos += 4
 

@@ -64,11 +64,16 @@ dd
 <script>
 import { ref, computed } from '@common/utils/vueTools'
 import {
-  clearCache, getCacheSize,
-  getOtherSourceCount, clearOtherSource,
-  getMusicUrlCount, clearMusicUrl,
-  getLyricRawCount, clearLyricRaw,
-  getLyricEditedCount, clearLyricEdited,
+  clearCache,
+  getCacheSize,
+  getOtherSourceCount,
+  clearOtherSource,
+  getMusicUrlCount,
+  clearMusicUrl,
+  getLyricRawCount,
+  clearLyricRaw,
+  getLyricEditedCount,
+  clearLyricEdited,
 } from '@renderer/utils/ipc'
 import { sizeFormate } from '@common/utils/common'
 import { dialog } from '@renderer/plugins/Dialog'
@@ -100,16 +105,19 @@ export default {
     const isDisabledResourceCacheClear = ref(false)
     // const isDisabledListCacheClear = ref(false)
     const refreshCacheSize = () => {
-      void getCacheSize().then(size => {
+      void getCacheSize().then((size) => {
         cacheSize.value = sizeFormate(size)
       })
     }
-    const clearResourceCache = async() => {
-      if (!await dialog.confirm({
-        message: t('setting__other_resource_cache_tip_confirm'),
-        cancelButtonText: t('cancel_button_text'),
-        confirmButtonText: t('setting__other_resource_cache_confirm'),
-      })) return
+    const clearResourceCache = async () => {
+      if (
+        !(await dialog.confirm({
+          message: t('setting__other_resource_cache_tip_confirm'),
+          cancelButtonText: t('cancel_button_text'),
+          confirmButtonText: t('setting__other_resource_cache_confirm'),
+        }))
+      )
+        return
       isDisabledResourceCacheClear.value = true
       void clearCache().then(() => {
         refreshCacheSize()
@@ -118,15 +126,14 @@ export default {
     }
     refreshCacheSize()
 
-
     const otherSourceCount = ref(0)
     const isDisabledOtherSourceCacheClear = ref(false)
     const refreshOtherSourceCount = () => {
-      void getOtherSourceCount().then(count => {
+      void getOtherSourceCount().then((count) => {
         otherSourceCount.value = count
       })
     }
-    const handleClearOtherSourceCache = async() => {
+    const handleClearOtherSourceCache = async () => {
       isDisabledOtherSourceCacheClear.value = true
       void clearOtherSource().then(() => {
         refreshOtherSourceCount()
@@ -135,15 +142,14 @@ export default {
     }
     refreshOtherSourceCount()
 
-
     const musicUrlCount = ref(0)
     const isDisabledMusicUrlCacheClear = ref(false)
     const refreshMusicUrlCount = () => {
-      void getMusicUrlCount().then(count => {
+      void getMusicUrlCount().then((count) => {
         musicUrlCount.value = count
       })
     }
-    const handleClearMusicUrlCache = async() => {
+    const handleClearMusicUrlCache = async () => {
       isDisabledMusicUrlCacheClear.value = true
       void clearMusicUrl().then(() => {
         refreshMusicUrlCount()
@@ -157,11 +163,11 @@ export default {
     const lyricRawCount = ref(0)
     const isDisabledLyricRawCacheClear = ref(false)
     const refreshLyricRawCount = () => {
-      void getLyricRawCount().then(count => {
+      void getLyricRawCount().then((count) => {
         lyricRawCount.value = count
       })
     }
-    const handleClearLyricRawCache = async() => {
+    const handleClearLyricRawCache = async () => {
       isDisabledLyricRawCacheClear.value = true
       void clearLyricRaw().then(() => {
         refreshLyricRawCount()
@@ -170,20 +176,22 @@ export default {
     }
     refreshLyricRawCount()
 
-
     const lyricEditedCount = ref(0)
     const isDisabledLyricEditedCacheClear = ref(false)
     const refreshLyricEditedCount = () => {
-      void getLyricEditedCount().then(count => {
+      void getLyricEditedCount().then((count) => {
         lyricEditedCount.value = count
       })
     }
-    const handleClearLyricEditedCache = async() => {
-      if (!await dialog.confirm({
-        message: t('setting__other_lyric_edited_clear_tip_confirm'),
-        cancelButtonText: t('cancel_button_text'),
-        confirmButtonText: t('setting__other_resource_cache_confirm'),
-      })) return
+    const handleClearLyricEditedCache = async () => {
+      if (
+        !(await dialog.confirm({
+          message: t('setting__other_lyric_edited_clear_tip_confirm'),
+          cancelButtonText: t('cancel_button_text'),
+          confirmButtonText: t('setting__other_resource_cache_confirm'),
+        }))
+      )
+        return
       isDisabledLyricEditedCacheClear.value = true
       void clearLyricEdited().then(() => {
         refreshLyricEditedCount()
@@ -192,12 +200,15 @@ export default {
     }
     refreshLyricEditedCount()
 
-    const handleClearListData = async() => {
-      if (!await dialog.confirm({
-        message: t('setting__other_listdata_clear_tip_confirm'),
-        cancelButtonText: t('cancel_button_text'),
-        confirmButtonText: t('setting__other_resource_cache_confirm'),
-      })) return
+    const handleClearListData = async () => {
+      if (
+        !(await dialog.confirm({
+          message: t('setting__other_listdata_clear_tip_confirm'),
+          cancelButtonText: t('cancel_button_text'),
+          confirmButtonText: t('setting__other_resource_cache_confirm'),
+        }))
+      )
+        return
       void overwriteListFull({
         defaultList: [],
         loveList: [],

@@ -1,6 +1,5 @@
 import { onMounted, onBeforeUnmount, watch, reactive, ref } from '@common/utils/vueTools'
 
-
 export default ({ visible, location, onHide }) => {
   const transition1 = 'transform, opacity'
   const transition2 = 'transform, opacity, top, left'
@@ -50,25 +49,35 @@ export default ({ visible, location, onHide }) => {
 
     if (event.target == dom_menu.value || dom_menu.value.contains(event.target)) return
 
-    if (show && menuStyles.transitionProperty != transition1) menuStyles.transitionProperty = transition1
+    if (show && menuStyles.transitionProperty != transition1)
+      menuStyles.transitionProperty = transition1
 
     onHide()
   }
 
-  watch(visible, visible => {
-    visible ? handleShow() : handleHide()
-  }, { immediate: true })
+  watch(
+    visible,
+    (visible) => {
+      visible ? handleShow() : handleHide()
+    },
+    { immediate: true }
+  )
 
-  watch(location, location => {
-    menuStyles.left = location.x - window.lx.rootOffset + 2 + 'px'
-    menuStyles.top = location.y - window.lx.rootOffset + 'px'
-    // nextTick(() => {
-    if (show) {
-      if (menuStyles.transitionProperty != transition2) menuStyles.transitionProperty = transition2
-      menuStyles.transform = `scale(1) translate(${handleGetOffsetXY(location.x, location.y)})`
-    }
-    // })
-  }, { deep: true })
+  watch(
+    location,
+    (location) => {
+      menuStyles.left = location.x - window.lx.rootOffset + 2 + 'px'
+      menuStyles.top = location.y - window.lx.rootOffset + 'px'
+      // nextTick(() => {
+      if (show) {
+        if (menuStyles.transitionProperty != transition2)
+          menuStyles.transitionProperty = transition2
+        menuStyles.transform = `scale(1) translate(${handleGetOffsetXY(location.x, location.y)})`
+      }
+      // })
+    },
+    { deep: true }
+  )
 
   onMounted(() => {
     document.addEventListener('click', handleDocumentClick)

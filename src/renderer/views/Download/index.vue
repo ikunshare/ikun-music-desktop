@@ -8,30 +8,47 @@
         <table>
           <thead>
             <tr>
-              <th class="num" style="width: 5%;">#</th>
+              <th class="num" style="width: 5%">#</th>
               <th class="nobreak">{{ $t('music_name') }}</th>
-              <th class="nobreak" style="width: 20%;">{{ $t('download__progress') }}</th>
-              <th class="nobreak" style="width: 22%;">{{ $t('download__status') }}</th>
-              <th class="nobreak" style="width: 10%;">{{ $t('download__quality') }}</th>
-              <th class="nobreak" style="width: 13%;">{{ $t('action') }}</th>
+              <th class="nobreak" style="width: 20%">{{ $t('download__progress') }}</th>
+              <th class="nobreak" style="width: 22%">{{ $t('download__status') }}</th>
+              <th class="nobreak" style="width: 10%">{{ $t('download__quality') }}</th>
+              <th class="nobreak" style="width: 13%">{{ $t('action') }}</th>
             </tr>
           </thead>
         </table>
       </div>
       <div v-if="list.length" ref="dom_listContent" :class="$style.content">
         <base-virtualized-list
-          ref="listRef" v-slot="{ item, index }" :list="list" key-name="id" :item-height="listItemHeight"
-          container-class="scroll" content-class="list"
+          ref="listRef"
+          v-slot="{ item, index }"
+          :list="list"
+          key-name="id"
+          :item-height="listItemHeight"
+          container-class="scroll"
+          content-class="list"
         >
           <div
             class="list-item"
-            :class="[{[$style.active]: playTaskId == item.id }, { selected: rightClickSelectedIndex == index }, { active: selectedList.includes(item) }]"
-            @click="handleListItemClick($event, index)" @contextmenu="handleListItemRightClick($event, index)"
+            :class="[
+              { [$style.active]: playTaskId == item.id },
+              { selected: rightClickSelectedIndex == index },
+              { active: selectedList.includes(item) },
+            ]"
+            @click="handleListItemClick($event, index)"
+            @contextmenu="handleListItemRightClick($event, index)"
           >
-            <div class="list-item-cell no-select" :class="$style.num" style="flex: 0 0 5%;">
+            <div class="list-item-cell no-select" :class="$style.num" style="flex: 0 0 5%">
               <transition name="play-active">
                 <div v-if="playTaskId == item.id" :class="$style.playIcon">
-                  <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" height="50%" viewBox="0 0 512 512" space="preserve">
+                  <svg
+                    version="1.1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    xlink="http://www.w3.org/1999/xlink"
+                    height="50%"
+                    viewBox="0 0 512 512"
+                    space="preserve"
+                  >
                     <use xlink:href="#icon-play-outline" />
                   </svg>
                 </div>
@@ -41,16 +58,36 @@
             <div class="list-item-cell auto name">
               <span class="select name" :aria-label="getName(item)">{{ getName(item) }}</span>
             </div>
-            <div class="list-item-cell" style="flex: 0 0 20%;">{{ item.progress }}%<span v-if="item.status == downloadStatus.RUN && item.speed"> - {{ item.speed }}/s</span></div>
-            <div class="list-item-cell" style="flex: 0 0 22%;" :aria-label="item.statusText">{{ item.statusText }}</div>
-            <div class="list-item-cell" style="flex: 0 0 10%;">{{ getTypeName(item.metadata.quality) }}</div>
-            <div class="list-item-cell" style="flex: 0 0 13%; padding-left: 0; padding-right: 0;">
+            <div class="list-item-cell" style="flex: 0 0 20%">
+              {{ item.progress }}%<span v-if="item.status == downloadStatus.RUN && item.speed">
+                - {{ item.speed }}/s</span
+              >
+            </div>
+            <div class="list-item-cell" style="flex: 0 0 22%" :aria-label="item.statusText">
+              {{ item.statusText }}
+            </div>
+            <div class="list-item-cell" style="flex: 0 0 10%">
+              {{ getTypeName(item.metadata.quality) }}
+            </div>
+            <div class="list-item-cell" style="flex: 0 0 13%; padding-left: 0; padding-right: 0">
               <material-list-buttons
-                :index="index" :download-btn="false" :file-btn="item.status != downloadStatus.ERROR" remove-btn="remove-btn"
-                :start-btn="!item.isComplate && item.status != downloadStatus.WAITING && (item.status != downloadStatus.RUN)"
-                :pause-btn="!item.isComplate && (item.status == downloadStatus.RUN || item.status == downloadStatus.WAITING)"
-                :list-add-btn="false" :play-btn="item.status == downloadStatus.COMPLETED"
-                :search-btn="item.status == downloadStatus.ERROR" @btn-click="handleListBtnClick"
+                :index="index"
+                :download-btn="false"
+                :file-btn="item.status != downloadStatus.ERROR"
+                remove-btn="remove-btn"
+                :start-btn="
+                  !item.isComplate &&
+                  item.status != downloadStatus.WAITING &&
+                  item.status != downloadStatus.RUN
+                "
+                :pause-btn="
+                  !item.isComplate &&
+                  (item.status == downloadStatus.RUN || item.status == downloadStatus.WAITING)
+                "
+                :list-add-btn="false"
+                :play-btn="item.status == downloadStatus.COMPLETED"
+                :search-btn="item.status == downloadStatus.ERROR"
+                @btn-click="handleListBtnClick"
               />
             </div>
           </div>
@@ -59,7 +96,13 @@
       <div v-else :class="$style.noItem">
         <p v-text="$t('no_item')" />
       </div>
-      <base-menu v-model="isShowItemMenu" :menus="menus" :xy="menuLocation" item-name="name" @menu-click="handleMenuClick" />
+      <base-menu
+        v-model="isShowItemMenu"
+        :menus="menus"
+        :xy="menuLocation"
+        item-name="name"
+        @menu-click="handleMenuClick"
+      />
       <!-- <base-menu :menus="listItemMenu" :location="listMenu.menuLocation" item-name="name" :is-show="listMenu.isShowItemMenu" @menu-click="handleListItemMenuClick" /> -->
     </div>
   </div>
@@ -84,25 +127,21 @@ export default {
     const listRef = ref()
     const { tabs, activeTab } = useTab()
 
-    const {
-      rightClickSelectedIndex,
-      dom_listContent,
-      listAll,
+    const { rightClickSelectedIndex, dom_listContent, listAll, list, playTaskId } =
+      useListInfo(activeTab)
+
+    const { selectedList, listItemHeight, removeAllSelect, handleSelectData } = useList({
+      listRef,
       list,
-      playTaskId,
-    } = useListInfo(activeTab)
+      listAll,
+    })
 
-    const {
+    const { handlePlayMusic, handlePlayMusicLater } = usePlay({
       selectedList,
-      listItemHeight,
+      list,
+      listAll,
       removeAllSelect,
-      handleSelectData,
-    } = useList({ listRef, list, listAll })
-
-    const {
-      handlePlayMusic,
-      handlePlayMusicLater,
-    } = usePlay({ selectedList, list, listAll, removeAllSelect })
+    })
 
     const {
       handleSearch,
@@ -113,13 +152,7 @@ export default {
       handleOpenFile,
     } = useTaskActions({ list, removeAllSelect, selectedList })
 
-    const {
-      menus,
-      menuLocation,
-      isShowItemMenu,
-      showMenu,
-      menuClick,
-    } = useMenu({
+    const { menus, menuLocation, isShowItemMenu, showMenu, menuClick } = useMenu({
       handleStartTask,
       handlePauseTask,
       handleRemoveTask,
@@ -132,11 +165,8 @@ export default {
 
     let clickTime = 0
     let clickIndex = -1
-    const doubleClickPlay = index => {
-      if (
-        window.performance.now() - clickTime > 400 ||
-      clickIndex !== index
-      ) {
+    const doubleClickPlay = (index) => {
+      if (window.performance.now() - clickTime > 400 || clickIndex !== index) {
         clickTime = window.performance.now()
         clickIndex = index
         return
@@ -192,7 +222,9 @@ export default {
     }
 
     const getName = (downloadInfo) => {
-      return appSetting['download.fileName'].replace('歌名', downloadInfo.metadata.musicInfo.name).replace('歌手', downloadInfo.metadata.musicInfo.singer)
+      return appSetting['download.fileName']
+        .replace('歌名', downloadInfo.metadata.musicInfo.name)
+        .replace('歌手', downloadInfo.metadata.musicInfo.singer)
     }
     const getTypeName = (quality) => {
       return quality == 'hires' ? 'FLAC Hires' : quality?.toUpperCase()
@@ -259,7 +291,7 @@ export default {
   justify-content: center;
 
   color: var(--color-button-font);
-  opacity: .7;
+  opacity: 0.7;
 }
 
 .content {
@@ -283,6 +315,4 @@ export default {
     color: var(--color-font-label);
   }
 }
-
 </style>
-

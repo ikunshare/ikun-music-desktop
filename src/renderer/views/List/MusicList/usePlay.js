@@ -11,18 +11,15 @@ export default ({ props, selectedList, list, removeAllSelect }) => {
 
   const handlePlayMusicLater = (index, single) => {
     if (selectedList.value.length && !single) {
-      addTempPlayList(selectedList.value.map(s => ({ listId: props.listId, musicInfo: s })))
+      addTempPlayList(selectedList.value.map((s) => ({ listId: props.listId, musicInfo: s })))
       removeAllSelect()
     } else {
       addTempPlayList([{ listId: props.listId, musicInfo: list.value[index] }])
     }
   }
 
-  const doubleClickPlay = index => {
-    if (
-      window.performance.now() - clickTime > 400 ||
-      clickIndex !== index
-    ) {
+  const doubleClickPlay = (index) => {
+    if (window.performance.now() - clickTime > 400 || clickIndex !== index) {
       clickTime = window.performance.now()
       clickIndex = index
       return
