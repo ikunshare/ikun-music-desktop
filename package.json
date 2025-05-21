@@ -1,6 +1,6 @@
 {
   "name": "ikun-music-desktop",
-  "version": "3.2.2",
+  "version": "3.2.3",
   "description": "一个免费的音乐查找助手",
   "main": "./dist/main.js",
   "scripts": {
