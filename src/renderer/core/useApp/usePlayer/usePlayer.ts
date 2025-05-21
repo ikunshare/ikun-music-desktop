@@ -2,21 +2,13 @@ import { onBeforeUnmount, watch } from '@common/utils/vueTools'
 import { useI18n } from '@renderer/plugins/i18n'
 import { setTitle } from '@renderer/utils'
 
-import {
-  getCurrentTime,
-  getDuration,
-  setPause, setStop,
-} from '@renderer/plugins/player'
+import { getCurrentTime, getDuration, setPause, setStop } from '@renderer/plugins/player'
 
 import useMediaSessionInfo from './useMediaSessionInfo'
 import usePlayProgress from './usePlayProgress'
 import usePlayEvent from './usePlayEvent'
 
-import {
-  musicInfo,
-  playMusicInfo,
-  playedList,
-} from '@renderer/store/player/state'
+import { musicInfo, playMusicInfo, playedList } from '@renderer/store/player/state'
 import {
   setPlay,
   setAllStatus,
@@ -31,13 +23,20 @@ import useLyric from './useLyric'
 import useVolume from './useVolume'
 import useWatchList from './useWatchList'
 import { HOTKEY_PLAYER } from '@common/hotKey'
-import { playNext, pause, playPrev, togglePlay, collectMusic, uncollectMusic, dislikeMusic } from '@renderer/core/player'
+import {
+  playNext,
+  pause,
+  playPrev,
+  togglePlay,
+  collectMusic,
+  uncollectMusic,
+  dislikeMusic,
+} from '@renderer/core/player'
 import usePlaybackRate from './usePlaybackRate'
 import useSoundEffect from './useSoundEffect'
 import useMaxOutputChannelCount from './useMaxOutputChannelCount'
 import { setPowerSaveBlocker } from '@renderer/core/player/utils'
 import usePreloadNextMusic from './usePreloadNextMusic'
-
 
 export default () => {
   const t = useI18n()
@@ -125,14 +124,17 @@ export default () => {
     removePowerSaveBlocker()
   }
 
-  watch(() => appSetting['player.togglePlayMethod'], newValue => {
-    // setLoopPlay(newValue == 'singleLoop')
-    if (playedList.length) clearPlayedList()
-    if (newValue == 'random' && playMusicInfo.musicInfo && !playMusicInfo.isTempPlay) addPlayedList({ ...(playMusicInfo as LX.Player.PlayMusicInfo) })
-  })
+  watch(
+    () => appSetting['player.togglePlayMethod'],
+    (newValue) => {
+      // setLoopPlay(newValue == 'singleLoop')
+      if (playedList.length) clearPlayedList()
+      if (newValue == 'random' && playMusicInfo.musicInfo && !playMusicInfo.isTempPlay)
+        addPlayedList({ ...(playMusicInfo as LX.Player.PlayMusicInfo) })
+    }
+  )
 
   // setLoopPlay(appSetting['player.togglePlayMethod'] == 'singleLoop')
-
 
   window.key_event.on(HOTKEY_PLAYER.next.action, handlePlayNext)
   window.key_event.on(HOTKEY_PLAYER.prev.action, handlePlayPrev)
@@ -154,9 +156,7 @@ export default () => {
 
   window.app_event.on('playerEnded', handleEnded)
 
-
   onBeforeUnmount(() => {
-
     window.key_event.off(HOTKEY_PLAYER.next.action, handlePlayNext)
 
     window.key_event.off(HOTKEY_PLAYER.prev.action, handlePlayPrev)
@@ -166,7 +166,6 @@ export default () => {
     window.key_event.off(HOTKEY_PLAYER.music_dislike.action, dislikeMusic)
     window.key_event.off(HOTKEY_PLAYER.seekbackward.action, handleSeekbackward)
     window.key_event.off(HOTKEY_PLAYER.seekforward.action, handleSeekforward)
-
 
     window.app_event.off('play', setPlayStatus)
     window.app_event.off('pause', setPauseStatus)

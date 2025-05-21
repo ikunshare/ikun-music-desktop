@@ -7,13 +7,19 @@ export default () => {
 
   const initMainBgColor = (color: string, changed: (color: string) => void, reset: () => void) => {
     if (!main_bg_color_ref.value) return
-    tools = pickrTools.create(main_bg_color_ref.value, color, [
-      'rgba(255, 255, 255, 1)',
-      'rgba(19, 19, 19, 0.9)',
-      'rgba(255, 255, 255, 0.9)',
-      'rgba(255, 255, 255, 0.8)',
-      'rgba(25.82, 23.65, 46.6, 0.54)',
-    ], changed, reset)
+    tools = pickrTools.create(
+      main_bg_color_ref.value,
+      color,
+      [
+        'rgba(255, 255, 255, 1)',
+        'rgba(19, 19, 19, 0.9)',
+        'rgba(255, 255, 255, 0.9)',
+        'rgba(255, 255, 255, 0.8)',
+        'rgba(25.82, 23.65, 46.6, 0.54)',
+      ],
+      changed,
+      reset
+    )
   }
   const destroyMainBgColor = () => {
     if (!tools) return

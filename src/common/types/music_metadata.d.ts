@@ -1,6 +1,4 @@
-import {
-  type IAudioMetadata as iAudioMetadata,
-} from 'music-metadata'
+import { type IAudioMetadata as iAudioMetadata } from 'music-metadata'
 
 declare global {
   namespace LX {

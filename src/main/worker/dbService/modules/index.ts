@@ -1,4 +1,3 @@
-
 export * as list from './list'
 export * as lyric from './lyric'
 export * as music_url from './music_url'

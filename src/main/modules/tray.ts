@@ -127,21 +127,22 @@ const i18n = {
   },
   setLang(lang?: Langs | null) {
     this.message = lang
-      ? messages[lang] ?? messages[this.fallbackLocale]
+      ? (messages[lang] ?? messages[this.fallbackLocale])
       : messages[this.fallbackLocale]
   },
 }
 
 const getIconPath = (id: number) => {
-  let theme = id == TRAY_AUTO_ID
-    ? global.lx.theme.shouldUseDarkColors
-      ? themeList[0] : themeList[2]
-    : themeList.find(item => item.id === id) ?? themeList[0]
+  let theme =
+    id == TRAY_AUTO_ID
+      ? global.lx.theme.shouldUseDarkColors
+        ? themeList[0]
+        : themeList[2]
+      : (themeList.find((item) => item.id === id) ?? themeList[0])
   return path.join(global.staticPath, 'images/tray', theme.fileName + (isWin ? '.ico' : '.png'))
 }
 
 export const createTray = () => {
-
   if ((tray && !tray.isDestroyed()) || !global.lx.appSetting['tray.enable']) return
 
   // 托盘
@@ -169,17 +170,21 @@ const handleUpdateConfig = (setting: Partial<LX.AppSetting>) => {
 
 const createPlayerMenu = () => {
   let menu: Electron.MenuItemConstructorOptions[] = []
-  menu.push(playerState.play ? {
-    label: i18n.getMessage('pause'),
-    click() {
-      sendTaskbarButtonClick('pause')
-    },
-  } : {
-    label: i18n.getMessage('play'),
-    click() {
-      sendTaskbarButtonClick('play')
-    },
-  })
+  menu.push(
+    playerState.play
+      ? {
+          label: i18n.getMessage('pause'),
+          click() {
+            sendTaskbarButtonClick('pause')
+          },
+        }
+      : {
+          label: i18n.getMessage('play'),
+          click() {
+            sendTaskbarButtonClick('play')
+          },
+        }
+  )
   menu.push({
     label: i18n.getMessage('prev'),
     click() {
@@ -192,17 +197,21 @@ const createPlayerMenu = () => {
       sendTaskbarButtonClick('next')
     },
   })
-  menu.push(playerState.collect ? {
-    label: i18n.getMessage('uncollect'),
-    click() {
-      sendTaskbarButtonClick('unCollect')
-    },
-  } : {
-    label: i18n.getMessage('collect'),
-    click() {
-      sendTaskbarButtonClick('collect')
-    },
-  })
+  menu.push(
+    playerState.collect
+      ? {
+          label: i18n.getMessage('uncollect'),
+          click() {
+            sendTaskbarButtonClick('unCollect')
+          },
+        }
+      : {
+          label: i18n.getMessage('collect'),
+          click() {
+            sendTaskbarButtonClick('collect')
+          },
+        }
+  )
   return menu
 }
 
@@ -211,77 +220,87 @@ export const createMenu = () => {
   let menu: Electron.MenuItemConstructorOptions[] = createPlayerMenu()
   if (playerState.empty) for (const m of menu) m.enabled = false
   menu.push({ type: 'separator' })
-  menu.push(global.lx.appSetting['desktopLyric.enable']
-    ? {
-        label: i18n.getMessage('hide_win_lyric'),
-        click() {
-          handleUpdateConfig({ 'desktopLyric.enable': false })
-        },
-      }
-    : {
-        label: i18n.getMessage('show_win_lyric'),
-        click() {
-          handleUpdateConfig({ 'desktopLyric.enable': true })
-        },
-      })
-  menu.push(global.lx.appSetting['desktopLyric.isLock']
-    ? {
-        label: i18n.getMessage('unlock_win_lyric'),
-        click() {
-          handleUpdateConfig({ 'desktopLyric.isLock': false })
-        },
-      }
-    : {
-        label: i18n.getMessage('lock_win_lyric'),
-        click() {
-          handleUpdateConfig({ 'desktopLyric.isLock': true })
-        },
-      })
-  menu.push(global.lx.appSetting['desktopLyric.isAlwaysOnTop']
-    ? {
-        label: i18n.getMessage('untop_win_lyric'),
-        click() {
-          handleUpdateConfig({ 'desktopLyric.isAlwaysOnTop': false })
-        },
-      }
-    : {
-        label: i18n.getMessage('top_win_lyric'),
-        click() {
-          handleUpdateConfig({ 'desktopLyric.isAlwaysOnTop': true })
-        },
-      })
-  if (isMac) {
-    menu.push({ type: 'separator' })
-    menu.push(isShowStatusBarLyric
+  menu.push(
+    global.lx.appSetting['desktopLyric.enable']
       ? {
-          label: i18n.getMessage('hide_statusbar_lyric'),
+          label: i18n.getMessage('hide_win_lyric'),
           click() {
-            handleUpdateConfig({ 'player.isShowStatusBarLyric': false })
+            handleUpdateConfig({ 'desktopLyric.enable': false })
           },
         }
       : {
-          label: i18n.getMessage('show_statusbar_lyric'),
+          label: i18n.getMessage('show_win_lyric'),
           click() {
-            handleUpdateConfig({ 'player.isShowStatusBarLyric': true })
+            handleUpdateConfig({ 'desktopLyric.enable': true })
           },
-        })
+        }
+  )
+  menu.push(
+    global.lx.appSetting['desktopLyric.isLock']
+      ? {
+          label: i18n.getMessage('unlock_win_lyric'),
+          click() {
+            handleUpdateConfig({ 'desktopLyric.isLock': false })
+          },
+        }
+      : {
+          label: i18n.getMessage('lock_win_lyric'),
+          click() {
+            handleUpdateConfig({ 'desktopLyric.isLock': true })
+          },
+        }
+  )
+  menu.push(
+    global.lx.appSetting['desktopLyric.isAlwaysOnTop']
+      ? {
+          label: i18n.getMessage('untop_win_lyric'),
+          click() {
+            handleUpdateConfig({ 'desktopLyric.isAlwaysOnTop': false })
+          },
+        }
+      : {
+          label: i18n.getMessage('top_win_lyric'),
+          click() {
+            handleUpdateConfig({ 'desktopLyric.isAlwaysOnTop': true })
+          },
+        }
+  )
+  if (isMac) {
+    menu.push({ type: 'separator' })
+    menu.push(
+      isShowStatusBarLyric
+        ? {
+            label: i18n.getMessage('hide_statusbar_lyric'),
+            click() {
+              handleUpdateConfig({ 'player.isShowStatusBarLyric': false })
+            },
+          }
+        : {
+            label: i18n.getMessage('show_statusbar_lyric'),
+            click() {
+              handleUpdateConfig({ 'player.isShowStatusBarLyric': true })
+            },
+          }
+    )
   }
   menu.push({ type: 'separator' })
   if (isExistMainWindow()) {
     const isShow = isShowMainWindow()
-    menu.push(isShow
-      ? {
-          label: i18n.getMessage('hide_win_main'),
-          click() {
-            hideMainWindow()
-          },
-        }
-      : {
-          label: i18n.getMessage('show_win_main'),
-          click() {
-            showMainWindow()
-          },
-        })
+    menu.push(
+      isShow
+        ? {
+            label: i18n.getMessage('hide_win_main'),
+            click() {
+              hideMainWindow()
+            },
+          }
+        : {
+            label: i18n.getMessage('show_win_main'),
+            click() {
+              showMainWindow()
+            },
+          }
+    )
   }
   menu.push({
     label: i18n.getMessage('exit'),
@@ -343,7 +362,7 @@ const init = () => {
 
 export default () => {
   global.lx.event_app.on('updated_config', (keys, setting) => {
-    if (!watchConfigKeys.some(key => keys.includes(key))) return
+    if (!watchConfigKeys.some((key) => keys.includes(key))) return
 
     if (keys.includes('common.langId')) i18n.setLang(setting['common.langId'])
 

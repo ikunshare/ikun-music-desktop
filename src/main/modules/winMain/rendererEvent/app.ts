@@ -64,34 +64,42 @@ export default () => {
     closeWindow()
   })
   // 全屏
-  mainHandle<boolean, boolean>(WIN_MAIN_RENDERER_EVENT_NAME.fullscreen, async({ params: isFullscreen }) => {
-    global.lx.event_app.main_window_fullscreen(isFullscreen)
-    return setFullScreen(isFullscreen)
-  })
+  mainHandle<boolean, boolean>(
+    WIN_MAIN_RENDERER_EVENT_NAME.fullscreen,
+    async ({ params: isFullscreen }) => {
+      global.lx.event_app.main_window_fullscreen(isFullscreen)
+      return setFullScreen(isFullscreen)
+    }
+  )
 
   // 选择目录
-  mainHandle<Electron.OpenDialogOptions, Electron.OpenDialogReturnValue>(WIN_MAIN_RENDERER_EVENT_NAME.show_select_dialog, async({ params: options }) => {
-    return showSelectDialog(options)
-  })
+  mainHandle<Electron.OpenDialogOptions, Electron.OpenDialogReturnValue>(
+    WIN_MAIN_RENDERER_EVENT_NAME.show_select_dialog,
+    async ({ params: options }) => {
+      return showSelectDialog(options)
+    }
+  )
   // 显示弹窗信息
   mainOn<Electron.MessageBoxSyncOptions>(WIN_MAIN_RENDERER_EVENT_NAME.show_dialog, ({ params }) => {
     showDialog(params)
   })
   // 显示保存弹窗
-  mainHandle<Electron.SaveDialogOptions, Electron.SaveDialogReturnValue>(WIN_MAIN_RENDERER_EVENT_NAME.show_save_dialog, async({ params }) => {
-    return showSaveDialog(params)
-  })
+  mainHandle<Electron.SaveDialogOptions, Electron.SaveDialogReturnValue>(
+    WIN_MAIN_RENDERER_EVENT_NAME.show_save_dialog,
+    async ({ params }) => {
+      return showSaveDialog(params)
+    }
+  )
   // 在资源管理器中定位文件
-  mainOn<string>(WIN_MAIN_RENDERER_EVENT_NAME.open_dir_in_explorer, async({ params }) => {
+  mainOn<string>(WIN_MAIN_RENDERER_EVENT_NAME.open_dir_in_explorer, async ({ params }) => {
     return openDirInExplorer(params)
   })
 
-
-  mainHandle(WIN_MAIN_RENDERER_EVENT_NAME.clear_cache, async() => {
+  mainHandle(WIN_MAIN_RENDERER_EVENT_NAME.clear_cache, async () => {
     await clearCache()
   })
 
-  mainHandle<number>(WIN_MAIN_RENDERER_EVENT_NAME.get_cache_size, async() => {
+  mainHandle<number>(WIN_MAIN_RENDERER_EVENT_NAME.get_cache_size, async () => {
     return getCacheSize()
   })
 
@@ -99,14 +107,15 @@ export default () => {
     toggleDevTools()
   })
 
-  mainOn<Partial<Electron.Rectangle>>(WIN_MAIN_RENDERER_EVENT_NAME.set_window_size, ({ params }) => {
-    setWindowBounds(params)
-  })
+  mainOn<Partial<Electron.Rectangle>>(
+    WIN_MAIN_RENDERER_EVENT_NAME.set_window_size,
+    ({ params }) => {
+      setWindowBounds(params)
+    }
+  )
 
   mainOn<boolean>(WIN_MAIN_RENDERER_EVENT_NAME.set_ignore_mouse_events, ({ params: isIgnored }) => {
-    isIgnored
-      ? setIgnoreMouseEvents(isIgnored, { forward: true })
-      : setIgnoreMouseEvents(false)
+    isIgnored ? setIgnoreMouseEvents(isIgnored, { forward: true }) : setIgnoreMouseEvents(false)
   })
 
   // mainHandle<Electron.Rectangle>(WIN_MAIN_RENDERER_EVENT_NAME.taskbar_set_thumbnail_clip, async({ params }) => {
@@ -122,13 +131,16 @@ export default () => {
     global.lx.event_app.main_window_inited()
   })
 
-  mainHandle<{ themes: LX.Theme[], userThemes: LX.Theme[] }>(WIN_MAIN_RENDERER_EVENT_NAME.get_themes, async() => {
-    return getAllThemes()
-  })
-  mainHandle<LX.Theme>(WIN_MAIN_RENDERER_EVENT_NAME.save_theme, async({ params: theme }) => {
+  mainHandle<{ themes: LX.Theme[]; userThemes: LX.Theme[] }>(
+    WIN_MAIN_RENDERER_EVENT_NAME.get_themes,
+    async () => {
+      return getAllThemes()
+    }
+  )
+  mainHandle<LX.Theme>(WIN_MAIN_RENDERER_EVENT_NAME.save_theme, async ({ params: theme }) => {
     saveTheme(theme)
   })
-  mainHandle<string>(WIN_MAIN_RENDERER_EVENT_NAME.remove_theme, async({ params: id }) => {
+  mainHandle<string>(WIN_MAIN_RENDERER_EVENT_NAME.remove_theme, async ({ params: id }) => {
     removeTheme(id)
   })
 }

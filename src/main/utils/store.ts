@@ -8,7 +8,6 @@ type Stores = Record<string, Store>
 
 const stores: Stores = {}
 
-
 class Store {
   private readonly filePath: string
   private readonly dirPath: string
@@ -87,7 +86,6 @@ export default (name: string, isIgnoredError = true, isShowErrorAlert = true): S
 
     if (!isIgnoredError) throw error
 
-
     const backPath = storePath + '.bak'
     fs.renameSync(storePath, backPath)
     if (isShowErrorAlert) {
@@ -99,12 +97,9 @@ export default (name: string, isIgnoredError = true, isShowErrorAlert = true): S
       shell.showItemInFolder(backPath)
     }
 
-
     store = new Store(storePath, true)
   }
   return store
 }
 
-export {
-  Store,
-}
+export { Store }

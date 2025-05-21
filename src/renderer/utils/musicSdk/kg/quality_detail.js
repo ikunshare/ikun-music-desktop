@@ -2,6 +2,7 @@ import { httpFetch } from '../../request'
 import { dnsLookup } from '../utils'
 import { headers, timeout } from '../options'
 import { sizeFormate, decodeName, formatPlayTime } from '../../index'
+import { formatSingerName } from '../utils'
 
 export const getBatchMusicQualityInfo = (hashList) => {
   const resources = hashList.map((hash) => ({
@@ -149,9 +150,9 @@ export const filterData = async (rawList, options = {}) => {
 
     if (item.audio_info) {
       return {
-        singer: decodeName(item.author_name),
         name: decodeName(item.songname),
-        albumName: decodeName(item.album_info.album_name),
+        singer: decodeName(item.author_name),
+        albumName: decodeName(item.album_info?.album_name || item.remark),
         albumId: item.album_info.album_id,
         songmid: item.audio_info.audio_id,
         source: 'kg',
@@ -169,9 +170,9 @@ export const filterData = async (rawList, options = {}) => {
     }
 
     return {
-      singer: decodeName(item.singername),
       name: decodeName(item.songname),
-      albumName: decodeName(item.album_name),
+      singer: decodeName(item.singername) || formatSingerName(item.authors, 'author_name'),
+      albumName: decodeName(item.album_name || item.remark),
       albumId: item.album_id,
       songmid: item.audio_id,
       source: 'kg',

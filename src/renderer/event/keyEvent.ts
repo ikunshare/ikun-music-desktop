@@ -24,14 +24,22 @@ export const registerKeyEvent = () => {
     // console.log(event, key)
     // console.log(key, eventKey, type, event, keys)
     if (window.lx.isEditingHotKey || (isEditing && type == 'down') || event?.lx_handled) return
-    if (event && window.lx.appHotKeyConfig.local.enable && window.lx.appHotKeyConfig.local.keys[key] && (key != 'escape' || !((event.target as HTMLElement).classList.contains('ignore-esc')))) {
+    if (
+      event &&
+      window.lx.appHotKeyConfig.local.enable &&
+      window.lx.appHotKeyConfig.local.keys[key] &&
+      (key != 'escape' || !(event.target as HTMLElement).classList.contains('ignore-esc'))
+    ) {
       // console.log(key, eventKey, type, keys, isEditing)
       event.preventDefault()
       if (type == 'up') return
 
       // 软件内快捷键的最小化触发时
       // 如果已启用托盘，则隐藏程序，否则最小化程序 https://github.com/ikunshare/ikun-music-desktop/issues/603
-      if (window.lx.appHotKeyConfig.local.keys[key].action == HOTKEY_COMMON.min.action && appSetting['tray.enable']) {
+      if (
+        window.lx.appHotKeyConfig.local.keys[key].action == HOTKEY_COMMON.min.action &&
+        appSetting['tray.enable']
+      ) {
         window.key_event.emit(HOTKEY_COMMON.hide_toggle.action)
         return
       }
@@ -41,7 +49,8 @@ export const registerKeyEvent = () => {
     }
     // console.log(`key_${key}_${type}`)
     window.key_event.emit(`key_${key}_${type}`, { event, keys, key, eventKey, type })
-    if (key != eventKey) window.key_event.emit(`key_${eventKey}_${type}`, { event, keys, key, eventKey, type })
+    if (key != eventKey)
+      window.key_event.emit(`key_${eventKey}_${type}`, { event, keys, key, eventKey, type })
   })
 }
 

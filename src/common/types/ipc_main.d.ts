@@ -18,7 +18,11 @@ declare namespace LX {
   }
 
   type IpcMainInvokeEventListener = (params: LX.IpcMainInvokeEvent) => Promise<void>
-  type IpcMainInvokeEventListenerParams<T> = (params: LX.IpcMainInvokeEventParams<T>) => Promise<void>
+  type IpcMainInvokeEventListenerParams<T> = (
+    params: LX.IpcMainInvokeEventParams<T>
+  ) => Promise<void>
   type IpcMainInvokeEventListenerValue<V> = (params: LX.IpcMainInvokeEvent) => Promise<V>
-  type IpcMainInvokeEventListenerParamsValue<T, V> = (params: LX.IpcMainInvokeEventParams<T>) => Promise<V>
+  type IpcMainInvokeEventListenerParamsValue<T, V> = (
+    params: LX.IpcMainInvokeEventParams<T>
+  ) => Promise<V>
 }

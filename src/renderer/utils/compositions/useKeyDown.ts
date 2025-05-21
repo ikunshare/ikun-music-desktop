@@ -13,7 +13,8 @@ export default (name: string) => {
         case 'SELECT':
         case 'TEXTAREA':
           return
-        default: if ((event.event?.target as HTMLElement).isContentEditable) return
+        default:
+          if ((event.event?.target as HTMLElement).isContentEditable) return
       }
 
       keyDown.value = true

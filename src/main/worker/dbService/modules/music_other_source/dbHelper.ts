@@ -7,7 +7,6 @@ import {
   createCountStatement,
 } from './statements'
 
-
 /**
  * 查询歌曲信息
  * @param id 歌曲id

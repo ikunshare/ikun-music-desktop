@@ -7,12 +7,18 @@ export default () => {
 
   const initMinBtnColor = (color: string, changed: (color: string) => void, reset: () => void) => {
     if (!min_btn_color_ref.value) return
-    tools = pickrTools.create(min_btn_color_ref.value, color, [
-      'rgba(59, 194, 178, 1)',
-      'rgba(133, 196, 59, 1)',
-      'rgba(250, 180, 160, 1)',
-      'rgba(116, 87, 152, 1)',
-    ], changed, reset)
+    tools = pickrTools.create(
+      min_btn_color_ref.value,
+      color,
+      [
+        'rgba(59, 194, 178, 1)',
+        'rgba(133, 196, 59, 1)',
+        'rgba(250, 180, 160, 1)',
+        'rgba(116, 87, 152, 1)',
+      ],
+      changed,
+      reset
+    )
   }
   const destroyMinBtnColor = () => {
     if (!tools) return

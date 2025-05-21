@@ -44,11 +44,13 @@ export default () => {
     navigator.mediaSession.metadata = new window.MediaMetadata(mediaMetadata)
   }
 
-  const updatePositionState = (state: {
-    duration?: number
-    position?: number
-    playbackRate?: number
-  } = {}) => {
+  const updatePositionState = (
+    state: {
+      duration?: number
+      position?: number
+      playbackRate?: number
+    } = {}
+  ) => {
     navigator.mediaSession.setPositionState({
       duration: state.duration ?? getDuration(),
       playbackRate: state.playbackRate ?? getPlaybackRate(),
@@ -98,17 +100,17 @@ export default () => {
     console.log('stop')
     setStop()
   })
-  navigator.mediaSession.setActionHandler('seekbackward', details => {
+  navigator.mediaSession.setActionHandler('seekbackward', (details) => {
     console.log('seekbackward')
     const seekOffset = details.seekOffset ?? 5
     setProgress(Math.max(getCurrentTime() - seekOffset, 0))
   })
-  navigator.mediaSession.setActionHandler('seekforward', details => {
+  navigator.mediaSession.setActionHandler('seekforward', (details) => {
     console.log('seekforward')
     const seekOffset = details.seekOffset ?? 5
     setProgress(Math.min(getCurrentTime() + seekOffset, getDuration()))
   })
-  navigator.mediaSession.setActionHandler('seekto', details => {
+  navigator.mediaSession.setActionHandler('seekto', (details) => {
     console.log('seekto', details.seekTime)
     if (details.seekTime == null) return
     let time = Math.min(details.seekTime, getDuration())

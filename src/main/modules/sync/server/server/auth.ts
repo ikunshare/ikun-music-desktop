@@ -1,10 +1,5 @@
 import type http from 'http'
-import {
-  aesEncrypt,
-  aesDecrypt,
-  rsaEncrypt,
-  getIP,
-} from '../utils/tools'
+import { aesEncrypt, aesDecrypt, rsaEncrypt, getIP } from '../utils/tools'
 import querystring from 'node:querystring'
 import { getUserSpace, createClientKeyInfo } from '../user'
 import { toMD5 } from '../utils'
@@ -60,16 +55,25 @@ const verifyByCode = (encryptMsg: string, password: string) => {
     const keyInfo = createClientKeyInfo(deviceName, isMobile)
     const userSpace = getUserSpace()
     userSpace.dataManage.saveClientKeyInfo(keyInfo)
-    return rsaEncrypt(Buffer.from(JSON.stringify({
-      clientId: keyInfo.clientId,
-      key: keyInfo.key,
-      serverName: getComputerName(),
-    })), publicKey)
+    return rsaEncrypt(
+      Buffer.from(
+        JSON.stringify({
+          clientId: keyInfo.clientId,
+          key: keyInfo.key,
+          serverName: getComputerName(),
+        })
+      ),
+      publicKey
+    )
   }
   return null
 }
 
-export const authCode = async(req: http.IncomingMessage, res: http.ServerResponse, password: string) => {
+export const authCode = async (
+  req: http.IncomingMessage,
+  res: http.ServerResponse,
+  password: string
+) => {
   let code = 401
   let msg: string = SYNC_CODE.msgAuthFailed
 
@@ -77,9 +81,10 @@ export const authCode = async(req: http.IncomingMessage, res: http.ServerRespons
   if (ip) {
     if (typeof req.headers.m == 'string' && req.headers.m) {
       const userId = req.headers.i
-      const _msg = typeof userId == 'string' && userId
-        ? verifyByKey(req.headers.m, userId)
-        : verifyByCode(req.headers.m, password)
+      const _msg =
+        typeof userId == 'string' && userId
+          ? verifyByKey(req.headers.m, userId)
+          : verifyByCode(req.headers.m, password)
       if (_msg != null) {
         msg = _msg
         code = 200
@@ -114,10 +119,10 @@ const verifyConnection = (encryptMsg: string, userId: string) => {
   // console.log(text)
   return text == SYNC_CODE.msgConnect
 }
-export const authConnect = async(req: http.IncomingMessage) => {
+export const authConnect = async (req: http.IncomingMessage) => {
   let ip = getAvailableIP(req)
   if (ip) {
-    const query = querystring.parse((req.url!).split('?')[1])
+    const query = querystring.parse(req.url!.split('?')[1])
     const i = query.i
     const t = query.t
     if (typeof i == 'string' && typeof t == 'string' && verifyConnection(t, i)) return
@@ -127,4 +132,3 @@ export const authConnect = async(req: http.IncomingMessage) => {
   }
   throw new Error('failed')
 }
-

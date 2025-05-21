@@ -2,7 +2,7 @@ import { type Ref, onBeforeUnmount, onMounted, ref } from '@common/utils/vueTool
 
 const onDomSizeChanged = (dom: HTMLElement, onChanged: (width: number, height: number) => void) => {
   // 使用 ResizeObserver 监听大小变化
-  const resizeObserver = new ResizeObserver(entries => {
+  const resizeObserver = new ResizeObserver((entries) => {
     for (let entry of entries) {
       const { width, height } = entry.contentRect
       // console.log(dom.offsetLeft, dom.offsetTop, left, top, width, height)

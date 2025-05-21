@@ -5,7 +5,11 @@ export default () => {
   const badge_primary_color_ref = ref(null)
   let tools: PickrTools | null
 
-  const initBadgePrimaryColor = (color: string, changed: (color: string) => void, reset: () => void) => {
+  const initBadgePrimaryColor = (
+    color: string,
+    changed: (color: string) => void,
+    reset: () => void
+  ) => {
     if (!badge_primary_color_ref.value) return
     tools = pickrTools.create(badge_primary_color_ref.value, color, null, changed, reset)
   }

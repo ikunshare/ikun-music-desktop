@@ -2,7 +2,13 @@ import { onBeforeUnmount, watch } from '@common/utils/vueTools'
 import { formatPlayTime2, getRandom } from '@common/utils/common'
 import { throttle } from '@common/utils'
 import { savePlayInfo } from '@renderer/utils/ipc'
-import { onTimeupdate, getCurrentTime, getDuration, setCurrentTime, onVisibilityChange } from '@renderer/plugins/player'
+import {
+  onTimeupdate,
+  getCurrentTime,
+  getDuration,
+  setCurrentTime,
+  onVisibilityChange,
+} from '@renderer/plugins/player'
 import { playProgress, setNowPlayTime, setMaxplayTime } from '@renderer/store/player/playProgress'
 import { musicInfo, playMusicInfo, playInfo } from '@renderer/store/player/state'
 // import { getList } from '@renderer/store/utils'
@@ -34,7 +40,8 @@ export default () => {
 
       mediaBuffer.playTime ||= currentTime
       let skipTime = currentTime + getRandom(3, 6)
-      if (skipTime > playProgress.maxPlayTime) skipTime = (playProgress.maxPlayTime - currentTime) / 2
+      if (skipTime > playProgress.maxPlayTime)
+        skipTime = (playProgress.maxPlayTime - currentTime) / 2
       if (skipTime - mediaBuffer.playTime < 1 || playProgress.maxPlayTime - skipTime < 1) {
         mediaBuffer.playTime = 0
         if (appSetting['player.autoSkipOnError']) {
@@ -90,17 +97,23 @@ export default () => {
   const handleLoadeddata = () => {
     setMaxplayTime(getDuration())
 
-    if (playMusicInfo.musicInfo && 'source' in playMusicInfo.musicInfo && !playMusicInfo.musicInfo.interval) {
+    if (
+      playMusicInfo.musicInfo &&
+      'source' in playMusicInfo.musicInfo &&
+      !playMusicInfo.musicInfo.interval
+    ) {
       // console.log(formatPlayTime2(playProgress.maxPlayTime))
 
       if (playMusicInfo.listId) {
-        void updateListMusics([{
-          id: playMusicInfo.listId,
-          musicInfo: {
-            ...playMusicInfo.musicInfo,
-            interval: formatPlayTime2(playProgress.maxPlayTime),
+        void updateListMusics([
+          {
+            id: playMusicInfo.listId,
+            musicInfo: {
+              ...playMusicInfo.musicInfo,
+              interval: formatPlayTime2(playProgress.maxPlayTime),
+            },
           },
-        }])
+        ])
       }
     }
   }
@@ -128,7 +141,7 @@ export default () => {
 
   const handleSetPlayInfo = () => {
     // restorePlayTime = playProgress.nowPlayTime
-    setCurrentTime(restorePlayTime = playProgress.nowPlayTime)
+    setCurrentTime((restorePlayTime = playProgress.nowPlayTime))
     // setMaxplayTime(playProgress.maxPlayTime)
     handlePause()
     if (!playMusicInfo.isTempPlay && playMusicInfo.listId) {
@@ -141,27 +154,33 @@ export default () => {
     }
   }
 
-  watch(() => playProgress.nowPlayTime, (newValue, oldValue) => {
-    if (Math.abs(newValue - oldValue) > 2) window.app_event.activePlayProgressTransition()
-    if (appSetting['player.isSavePlayTime'] && !playMusicInfo.isTempPlay) {
-      delaySavePlayInfo({
-        time: newValue,
-        maxTime: playProgress.maxPlayTime,
-        listId: playMusicInfo.listId as string,
-        index: playInfo.playIndex,
-      })
+  watch(
+    () => playProgress.nowPlayTime,
+    (newValue, oldValue) => {
+      if (Math.abs(newValue - oldValue) > 2) window.app_event.activePlayProgressTransition()
+      if (appSetting['player.isSavePlayTime'] && !playMusicInfo.isTempPlay) {
+        delaySavePlayInfo({
+          time: newValue,
+          maxTime: playProgress.maxPlayTime,
+          listId: playMusicInfo.listId as string,
+          index: playInfo.playIndex,
+        })
+      }
     }
-  })
-  watch(() => playProgress.maxPlayTime, maxPlayTime => {
-    if (!playMusicInfo.isTempPlay) {
-      delaySavePlayInfo({
-        time: playProgress.nowPlayTime,
-        maxTime: maxPlayTime,
-        listId: playMusicInfo.listId as string,
-        index: playInfo.playIndex,
-      })
+  )
+  watch(
+    () => playProgress.maxPlayTime,
+    (maxPlayTime) => {
+      if (!playMusicInfo.isTempPlay) {
+        delaySavePlayInfo({
+          time: playProgress.nowPlayTime,
+          maxTime: maxPlayTime,
+          listId: playMusicInfo.listId as string,
+          index: playInfo.playIndex,
+        })
+      }
     }
-  })
+  )
 
   // window.app_event.on('play', handlePlay)
   window.app_event.on('pause', handlePause)

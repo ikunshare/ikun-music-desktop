@@ -1,4 +1,8 @@
-import { createDownload, type DownloaderType, type Options as DownloadOptions } from '@common/utils/download'
+import {
+  createDownload,
+  type DownloaderType,
+  type Options as DownloadOptions,
+} from '@common/utils/download'
 // import music from '@renderer/utils/musicSdk'
 import { createDownloadInfo } from './utils'
 // import {
@@ -21,8 +25,15 @@ const tryNum = new Map<string, number>()
 const taskActions = new Map<string, (action: LX.Download.DownloadTaskActions) => void>()
 const tasks = new Map<string, LX.Download.ListItem>()
 
-export const checkList = (list: LX.Download.ListItem[], musicInfo: LX.Music.MusicInfo, quality: LX.Quality, ext: string): boolean => {
-  return list.some(s => s.id === musicInfo.id && (s.metadata.quality === quality || s.metadata.ext === ext))
+export const checkList = (
+  list: LX.Download.ListItem[],
+  musicInfo: LX.Music.MusicInfo,
+  quality: LX.Quality,
+  ext: string
+): boolean => {
+  return list.some(
+    (s) => s.id === musicInfo.id && (s.metadata.quality === quality || s.metadata.ext === ext)
+  )
 }
 
 // const removeTask = (id: string) => {
@@ -42,11 +53,13 @@ export const createDownloadTasks = (
   quality: LX.Quality,
   fileNameFormat: string,
   qualityList: LX.QualityList,
-  listId?: string,
+  listId?: string
 ): LX.Download.ListItem[] => {
-  return list.map(musicInfo => {
-    return createDownloadInfo(musicInfo, quality, fileNameFormat, qualityList, listId)
-  }).filter(task => task)
+  return list
+    .map((musicInfo) => {
+      return createDownloadInfo(musicInfo, quality, fileNameFormat, qualityList, listId)
+    })
+    .filter((task) => task)
   // commit('addTasks', { list: taskList, addMusicLocationType: rootState.setting.list.addMusicLocationType })
   // let result = getStartTask(downloadList, DOWNLOAD_STATUS, rootState.setting.download.maxDownloadNum)
   // while (result) {
@@ -55,12 +68,17 @@ export const createDownloadTasks = (
   // }
 }
 
-const createTask = async(downloadInfo: LX.Download.ListItem, savePath: string, skipExistFile: boolean, proxy?: { host: string, port: number }) => {
+const createTask = async (
+  downloadInfo: LX.Download.ListItem,
+  savePath: string,
+  skipExistFile: boolean,
+  proxy?: { host: string; port: number }
+) => {
   // console.log('createTask', downloadInfo, savePath)
   // 开始任务
   /* commit('onStart', downloadInfo)
   commit('setStatusText', { downloadInfo, text: '任务初始化中' }) */
-  if (!await checkAndCreateDir(savePath)) {
+  if (!(await checkAndCreateDir(savePath))) {
     sendAction(downloadInfo.id, {
       action: 'error',
       data: {
@@ -141,17 +159,19 @@ const createTask = async(downloadInfo: LX.Download.ListItem, savePath: string, s
         return
       }
       if (err.message?.startsWith('Resume failed')) {
-        removeFile(downloadInfo.metadata.filePath).catch(err => {
-          console.log('删除不匹配的文件失败：', err.message)
-          // commit('onError', { downloadInfo, errorMsg: '删除不匹配的文件失败：' + err.message })
-        }).finally(() => {
-          console.log('正在重试')
-          void dls.get(downloadInfo.id)?.start()
-          // sendAction(downloadInfo.id, {
-          //   action: 'statusText',
-          //   data: 'download_status_error_retrying',
-          // })
-        })
+        removeFile(downloadInfo.metadata.filePath)
+          .catch((err) => {
+            console.log('删除不匹配的文件失败：', err.message)
+            // commit('onError', { downloadInfo, errorMsg: '删除不匹配的文件失败：' + err.message })
+          })
+          .finally(() => {
+            console.log('正在重试')
+            void dls.get(downloadInfo.id)?.start()
+            // sendAction(downloadInfo.id, {
+            //   action: 'statusText',
+            //   data: 'download_status_error_retrying',
+            // })
+          })
         return
       }
       if (err.code == 'ENOTFOUND') {
@@ -232,7 +252,7 @@ export const updateUrl = (id: string, url: string) => {
   const dl = dls.get(id)
   if (!dl) return
   dl.refreshUrl(url)
-  dl.start().catch(err => {
+  dl.start().catch((err) => {
     sendAction(id, {
       action: 'error',
       data: {
@@ -242,7 +262,13 @@ export const updateUrl = (id: string, url: string) => {
   })
 }
 
-export const startTask = async(downloadInfo: LX.Download.ListItem, savePath: string, skipExistFile: boolean, callback: (action: LX.Download.DownloadTaskActions) => void, proxy?: { host: string, port: number }) => {
+export const startTask = async (
+  downloadInfo: LX.Download.ListItem,
+  savePath: string,
+  skipExistFile: boolean,
+  callback: (action: LX.Download.DownloadTaskActions) => void,
+  proxy?: { host: string; port: number }
+) => {
   await pauseTask(downloadInfo.id)
 
   tasks.set(downloadInfo.id, downloadInfo)
@@ -282,7 +308,7 @@ export const startTask = async(downloadInfo: LX.Download.ListItem, savePath: str
   }
 }
 
-export const pauseTask = async(id: string) => {
+export const pauseTask = async (id: string) => {
   const dl = dls.get(id)
   if (dl) {
     dls.delete(id)
@@ -299,7 +325,7 @@ export const pauseTask = async(id: string) => {
   // commit('setStatus', { downloadInfo: downloadInfo, status: DOWNLOAD_STATUS.PAUSE })
 }
 
-export const removeTask = async(id: string) => {
+export const removeTask = async (id: string) => {
   const dl = dls.get(id)
   const downloadInfo = tasks.get(id)
   if (dl) {

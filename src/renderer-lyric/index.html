@@ -1,11 +1,11 @@
-<!DOCTYPE html>
-<html lang="en" style="background-color: transparent;">
+<!doctype html>
+<html lang="en" style="background-color: transparent">
   <head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Lyric - IKUN Music</title>
   </head>
-  <body id="body" style="background-color: transparent;">
+  <body id="body" style="background-color: transparent">
     <div id="root"></div>
     <script>
       const formatLang = (lang = 'en') => {
@@ -22,12 +22,16 @@
       window.dom_style_theme = document.createElement('style')
       window.dom_style_lyric = document.createElement('style')
 
-      window.setTheme = colors => {
-        window.dom_style_theme.innerText = `:root {${(Object.entries(colors)).map(([key, value]) => `${key}:${value};`).join('')}}`
+      window.setTheme = (colors) => {
+        window.dom_style_theme.innerText = `:root {${Object.entries(colors)
+          .map(([key, value]) => `${key}:${value};`)
+          .join('')}}`
       }
-      window.setLyricColor = colors => {
+      window.setLyricColor = (colors) => {
         console.log(colors)
-        window.dom_style_lyric.innerText = `:root {${(Object.entries(colors)).map(([key, value]) => `${key}:${value};`).join('')}}`
+        window.dom_style_lyric.innerText = `:root {${Object.entries(colors)
+          .map(([key, value]) => `${key}:${value};`)
+          .join('')}}`
       }
       document.body.appendChild(window.dom_style_lyric)
 

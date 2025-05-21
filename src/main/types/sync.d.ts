@@ -2,7 +2,6 @@ import type WS from 'ws'
 
 type DefaultEventsMap = Record<string, (...args: any[]) => void>
 
-
 declare global {
   namespace LX {
     namespace Sync {
@@ -18,7 +17,7 @@ declare global {
             dislike: boolean
           }
 
-          onClose: (handler: (err: Error) => (void | Promise<void>)) => () => void
+          onClose: (handler: (err: Error) => void | Promise<void>) => () => void
           remote: LX.Sync.ServerSyncActions
           remoteQueueList: LX.Sync.ServerSyncListActions
           remoteQueueDislike: LX.Sync.ServerSyncDislikeActions
@@ -43,7 +42,7 @@ declare global {
             dislike: boolean
           }
 
-          onClose: (handler: (err: Error) => (void | Promise<void>)) => () => void
+          onClose: (handler: (err: Error) => void | Promise<void>) => () => void
           broadcast: (handler: (client: Socket) => void) => void
 
           remote: LX.Sync.ClientSyncActions
@@ -65,4 +64,3 @@ declare global {
 
   // type SyncListActionData = SyncListActionData_none | SyncListActionData_getData
 }
-

@@ -1,6 +1,5 @@
 import Event from './Event'
 
-
 // {
 //   // sync: {
 //   //   send_action_list: 'send_action_list',
@@ -173,9 +172,7 @@ export class AppEvent extends Event {
   }
 }
 
-
 type EventMethods = Omit<EventType, keyof Event>
-
 
 declare class EventType extends AppEvent {
   on<K extends keyof EventMethods>(event: K, listener: EventMethods[K]): any

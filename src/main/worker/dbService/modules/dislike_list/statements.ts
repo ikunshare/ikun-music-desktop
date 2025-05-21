@@ -59,4 +59,3 @@ export const createClearStatement = () => {
 //     WHERE "id"=@id
 //   `)
 // }
-

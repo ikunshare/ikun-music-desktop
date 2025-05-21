@@ -9,12 +9,16 @@ const changedListIds = new Set<string | null>()
 
 export default () => {
   const throttleListChange = throttle(() => {
-    const isSkip = playMusicInfo.listId && !changedListIds.has(playInfo.playerListId) && !changedListIds.has(playMusicInfo.listId)
+    const isSkip =
+      playMusicInfo.listId &&
+      !changedListIds.has(playInfo.playerListId) &&
+      !changedListIds.has(playMusicInfo.listId)
     changedListIds.clear()
     if (isSkip) return
 
     const { playIndex } = updatePlayIndex()
-    if (playIndex < 0) { // 歌曲被移除
+    if (playIndex < 0) {
+      // 歌曲被移除
       if (window.lx.isPlayedStop) {
         stop()
         setTimeout(() => {

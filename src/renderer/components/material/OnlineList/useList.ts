@@ -3,7 +3,10 @@ import { isFullscreen } from '@renderer/store'
 import { appSetting } from '@renderer/store/setting'
 import { getFontSizeWithScreen } from '@renderer/utils'
 
-const useKeyEvent = ({ handleSelectAllData, listRef }: {
+const useKeyEvent = ({
+  handleSelectAllData,
+  listRef,
+}: {
   handleSelectAllData: () => void
   listRef: Ref<any>
 }) => {
@@ -25,7 +28,12 @@ const useKeyEvent = ({ handleSelectAllData, listRef }: {
     keyEvent.isModDown &&= false
   }
   const handle_key_mod_a_down = ({ event }: LX.KeyDownEevent) => {
-    if (!event || (event.target as HTMLElement).tagName == 'INPUT' || document.activeElement != listRef.value?.$el) return
+    if (
+      !event ||
+      (event.target as HTMLElement).tagName == 'INPUT' ||
+      document.activeElement != listRef.value?.$el
+    )
+      return
     event.preventDefault()
     if (event.repeat) return
     keyEvent.isModDown = false
@@ -48,8 +56,10 @@ const useKeyEvent = ({ handleSelectAllData, listRef }: {
   return keyEvent
 }
 
-
-export default ({ props, listRef }: {
+export default ({
+  props,
+  listRef,
+}: {
   props: {
     list: LX.Music.MusicInfoOnline[]
   }
@@ -58,7 +68,9 @@ export default ({ props, listRef }: {
   const selectedList = ref<LX.Music.MusicInfoOnline[]>([])
   let lastSelectIndex = -1
   const listItemHeight = computed(() => {
-    return Math.ceil((isFullscreen.value ? getFontSizeWithScreen() : appSetting['common.fontSize']) * 2.3)
+    return Math.ceil(
+      (isFullscreen.value ? getFontSizeWithScreen() : appSetting['common.fontSize']) * 2.3
+    )
   })
 
   const removeAllSelect = () => {

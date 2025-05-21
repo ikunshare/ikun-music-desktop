@@ -1,6 +1,5 @@
 import { EventEmitter } from 'events'
 
-
 export class Event extends EventEmitter {
   dislike_changed() {
     this.emit('dislike_changed')
@@ -45,7 +44,6 @@ export class Event extends EventEmitter {
     this.dislike_changed()
   }
 }
-
 
 type EventMethods = Omit<EventType, keyof EventEmitter>
 declare class EventType extends Event {

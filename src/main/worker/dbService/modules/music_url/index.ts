@@ -6,7 +6,6 @@ import {
   countMusicUrl,
 } from './dbHelper'
 
-
 /**
  * 获取歌曲url
  * @param id 歌曲id
@@ -46,4 +45,3 @@ export const musicUrlClear = () => {
 export const musicUrlCount = () => {
   return countMusicUrl()
 }
-

@@ -10,32 +10,40 @@ export default () => {
     clearTimeout(timeout)
     timeout = null
   }
-  watch(() => setting['desktopLyric.pauseHide'], (enable) => {
-    if (enable) {
-      unWatch = watch(isPlay, (isPlay) => {
+  watch(
+    () => setting['desktopLyric.pauseHide'],
+    (enable) => {
+      if (enable) {
+        unWatch = watch(
+          isPlay,
+          (isPlay) => {
+            clearIntv()
+            if (isPlay) {
+              isHide.value &&= false
+            } else {
+              timeout = setTimeout(() => {
+                timeout = null
+                isHide.value = true
+              }, 200)
+            }
+          },
+          {
+            immediate: true,
+          }
+        )
+      } else {
         clearIntv()
-        if (isPlay) {
-          isHide.value &&= false
-        } else {
-          timeout = setTimeout(() => {
-            timeout = null
-            isHide.value = true
-          }, 200)
+        isHide.value &&= false
+        if (unWatch) {
+          unWatch()
+          unWatch = null
         }
-      }, {
-        immediate: true,
-      })
-    } else {
-      clearIntv()
-      isHide.value &&= false
-      if (unWatch) {
-        unWatch()
-        unWatch = null
       }
+    },
+    {
+      immediate: true,
     }
-  }, {
-    immediate: true,
-  })
+  )
 
   return isHide
 }

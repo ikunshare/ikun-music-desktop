@@ -1,8 +1,7 @@
 import { FeaturesList } from '../../../../../../common/constants_sync'
 import { featureVersion, modules } from '../../modules'
 
-
-export const sync = async(socket: LX.Sync.Server.Socket) => {
+export const sync = async (socket: LX.Sync.Server.Socket) => {
   let disconnected = false
   socket.onClose(() => {
     disconnected = true
@@ -13,7 +12,7 @@ export const sync = async(socket: LX.Sync.Server.Socket) => {
   for (const moduleName of FeaturesList) {
     if (enabledFeatures[moduleName]) {
       socket.feature[moduleName] = enabledFeatures[moduleName]
-      await modules[moduleName].sync(socket).catch(_ => _)
+      await modules[moduleName].sync(socket).catch((_) => _)
     }
     if (disconnected) throw new Error('disconnected')
   }

@@ -21,7 +21,6 @@ import { LIST_IDS } from '@common/constants'
 import { toRaw } from '@common/utils/vueTools'
 import { arrPush, arrUnshift } from '@common/utils/common'
 
-
 type PlayerMusicInfoKeys = keyof typeof musicInfo
 
 const musicInfoKeys: PlayerMusicInfoKeys[] = Object.keys(musicInfo) as PlayerMusicInfoKeys[]
@@ -45,7 +44,6 @@ export const setStatus = (val: string) => {
   status.value = val
 }
 
-
 export const setStatusText = (val: string) => {
   statusText.value = val
 }
@@ -55,7 +53,6 @@ export const setAllStatus = (val: string) => {
   status.value = val
   statusText.value = val
 }
-
 
 export const setShowPlayerDetail = (val: boolean) => {
   isShowPlayerDetail.value = val
@@ -73,7 +70,9 @@ export const setPlayListId = (listId: string | null) => {
   playInfo.playerListId = listId
 }
 
-export const getList = (listId: string | null): Array<LX.Music.MusicInfo | LX.Download.ListItem> => {
+export const getList = (
+  listId: string | null
+): Array<LX.Music.MusicInfo | LX.Download.ListItem> => {
   return listId == LIST_IDS.DOWNLOAD ? downloadList : getListMusicsFromCache(listId)
 }
 
@@ -82,7 +81,11 @@ export const getList = (listId: string | null): Array<LX.Music.MusicInfo | LX.Do
  * @returns 播放位置
  */
 export const updatePlayIndex = () => {
-  const indexInfo = getPlayIndex(playMusicInfo.listId, playMusicInfo.musicInfo, playMusicInfo.isTempPlay)
+  const indexInfo = getPlayIndex(
+    playMusicInfo.listId,
+    playMusicInfo.musicInfo,
+    playMusicInfo.isTempPlay
+  )
   // console.log(indexInfo)
   playInfo.playIndex = indexInfo.playIndex
   playInfo.playerPlayIndex = indexInfo.playerPlayIndex
@@ -90,7 +93,11 @@ export const updatePlayIndex = () => {
   return indexInfo
 }
 
-export const getPlayIndex = (listId: string | null, musicInfo: LX.Download.ListItem | LX.Music.MusicInfo | null, isTempPlay: boolean): {
+export const getPlayIndex = (
+  listId: string | null,
+  musicInfo: LX.Download.ListItem | LX.Music.MusicInfo | null,
+  isTempPlay: boolean
+): {
   playIndex: number
   playerPlayIndex: number
 } => {
@@ -108,10 +115,10 @@ export const getPlayIndex = (listId: string | null, musicInfo: LX.Download.ListI
   const list = getList(listId)
   if (list.length && musicInfo) {
     const currentId = musicInfo.id
-    playIndex = list.findIndex(m => m.id == currentId)
+    playIndex = list.findIndex((m) => m.id == currentId)
     if (!isTempPlay) {
       if (playIndex < 0) {
-        playerPlayIndex = playerPlayIndex < 1 ? (list.length - 1) : (playerPlayIndex - 1)
+        playerPlayIndex = playerPlayIndex < 1 ? list.length - 1 : playerPlayIndex - 1
       } else {
         playerPlayIndex = playIndex
       }
@@ -141,29 +148,33 @@ export const resetPlayerMusicInfo = () => {
 
 const setPlayerMusicInfo = (musicInfo: LX.Music.MusicInfo | LX.Download.ListItem | null) => {
   if (musicInfo) {
-    setMusicInfo('progress' in musicInfo ? {
-      id: musicInfo.id,
-      pic: musicInfo.metadata.musicInfo.meta.picUrl,
-      name: musicInfo.metadata.musicInfo.name,
-      singer: musicInfo.metadata.musicInfo.singer,
-      album: musicInfo.metadata.musicInfo.meta.albumName ?? '',
-      lrc: null,
-      tlrc: null,
-      rlrc: null,
-      lxlrc: null,
-      rawlrc: null,
-    } : {
-      id: musicInfo.id,
-      pic: musicInfo.meta.picUrl,
-      name: musicInfo.name,
-      singer: musicInfo.singer,
-      album: musicInfo.meta.albumName ?? '',
-      lrc: null,
-      tlrc: null,
-      rlrc: null,
-      lxlrc: null,
-      rawlrc: null,
-    })
+    setMusicInfo(
+      'progress' in musicInfo
+        ? {
+            id: musicInfo.id,
+            pic: musicInfo.metadata.musicInfo.meta.picUrl,
+            name: musicInfo.metadata.musicInfo.name,
+            singer: musicInfo.metadata.musicInfo.singer,
+            album: musicInfo.metadata.musicInfo.meta.albumName ?? '',
+            lrc: null,
+            tlrc: null,
+            rlrc: null,
+            lxlrc: null,
+            rawlrc: null,
+          }
+        : {
+            id: musicInfo.id,
+            pic: musicInfo.meta.picUrl,
+            name: musicInfo.name,
+            singer: musicInfo.singer,
+            album: musicInfo.meta.albumName ?? '',
+            lrc: null,
+            tlrc: null,
+            rlrc: null,
+            lxlrc: null,
+            rawlrc: null,
+          }
+    )
   } else resetPlayerMusicInfo()
 }
 
@@ -173,7 +184,11 @@ const setPlayerMusicInfo = (musicInfo: LX.Music.MusicInfo | LX.Download.ListItem
  * @param musicInfo 歌曲信息
  * @param isTempPlay 是否临时播放
  */
-export const setPlayMusicInfo = (listId: string | null, musicInfo: LX.Download.ListItem | LX.Music.MusicInfo | null, isTempPlay: boolean = false) => {
+export const setPlayMusicInfo = (
+  listId: string | null,
+  musicInfo: LX.Download.ListItem | LX.Music.MusicInfo | null,
+  isTempPlay: boolean = false
+) => {
   musicInfo = toRaw(musicInfo)
 
   playMusicInfo.listId = listId
@@ -203,7 +218,7 @@ export const setPlayMusicInfo = (listId: string | null, musicInfo: LX.Download.L
  */
 export const addPlayedList = (playMusicInfo: LX.Player.PlayMusicInfo) => {
   const id = playMusicInfo.musicInfo.id
-  if (playedList.some(m => m.musicInfo.id === id)) return
+  if (playedList.some((m) => m.musicInfo.id === id)) return
   playedList.push(playMusicInfo)
 }
 /**
@@ -233,8 +248,16 @@ export const addTempPlayList = (list: LX.Player.TempPlayListItem[]) => {
     }
     return true
   })
-  if (topList.length) arrUnshift(tempPlayList, topList.map(({ musicInfo, listId }) => ({ musicInfo, listId, isTempPlay: true })))
-  if (bottomList.length) arrPush(tempPlayList, bottomList.map(({ musicInfo, listId }) => ({ musicInfo, listId, isTempPlay: true })))
+  if (topList.length)
+    arrUnshift(
+      tempPlayList,
+      topList.map(({ musicInfo, listId }) => ({ musicInfo, listId, isTempPlay: true }))
+    )
+  if (bottomList.length)
+    arrPush(
+      tempPlayList,
+      bottomList.map(({ musicInfo, listId }) => ({ musicInfo, listId, isTempPlay: true }))
+    )
 
   if (!playMusicInfo.musicInfo) void playNext()
 }

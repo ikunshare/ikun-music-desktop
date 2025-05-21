@@ -9,7 +9,7 @@ import { nativeTheme, powerSaveBlocker } from 'electron'
 import { joinPath } from '@common/utils/nodejs'
 import themes from '@common/theme/index.json'
 
-export const parseEnvParams = (): { cmdParams: LX.CmdParams, deeplink: string | null } => {
+export const parseEnvParams = (): { cmdParams: LX.CmdParams; deeplink: string | null } => {
   const cmdParams: LX.CmdParams = {}
   let deeplink = null
   const rx = /^-\w+/
@@ -55,7 +55,10 @@ const checkPrimitiveType = (val: any): boolean => val === null || primitiveType.
 //   }
 // }
 
-export const mergeSetting = (originSetting: LX.AppSetting, targetSetting?: Partial<LX.AppSetting> | null): {
+export const mergeSetting = (
+  originSetting: LX.AppSetting,
+  targetSetting?: Partial<LX.AppSetting> | null
+): {
   setting: LX.AppSetting
   updatedSettingKeys: Array<keyof LX.AppSetting>
   updatedSetting: Partial<LX.AppSetting>
@@ -74,7 +77,12 @@ export const mergeSetting = (originSetting: LX.AppSetting, targetSetting?: Parti
         const targetValue: any = targetSetting[key]
         const isPrimitive = checkPrimitiveType(targetValue)
         // if (checkPrimitiveType(value)) {
-        if (!isPrimitive || targetValue == originSettingCopy[key] || originSettingCopy[key] === undefined) continue
+        if (
+          !isPrimitive ||
+          targetValue == originSettingCopy[key] ||
+          originSettingCopy[key] === undefined
+        )
+          continue
         updatedSettingKeys.push(key)
         updatedSetting[key] = targetValue
         // @ts-expect-error
@@ -107,7 +115,6 @@ export const mergeSetting = (originSetting: LX.AppSetting, targetSetting?: Parti
   }
 }
 
-
 export const updateSetting = (setting?: Partial<LX.AppSetting>, isInit: boolean = false) => {
   const electronStore_config = getStore(STORE_NAMES.APP_SETTINGS)
 
@@ -128,7 +135,7 @@ export const updateSetting = (setting?: Partial<LX.AppSetting>, isInit: boolean 
 /**
  * 初始化设置
  */
-export const initSetting = async() => {
+export const initSetting = async () => {
   const electronStore_config = getStore(STORE_NAMES.APP_SETTINGS)
 
   let setting = electronStore_config.get('setting') as LX.AppSetting | undefined
@@ -148,7 +155,7 @@ export const initSetting = async() => {
 /**
  * 初始化快捷键设置
  */
-export const initHotKey = async() => {
+export const initHotKey = async () => {
   const electronStore_hotKey = getStore(STORE_NAMES.HOTKEY)
 
   let localConfig = electronStore_hotKey.get('local') as LX.HotKeyConfig | null
@@ -201,10 +208,9 @@ export const openDevTools = (webContents: Electron.WebContents) => {
   })
 }
 
-
 let userThemes: LX.Theme[]
 export const getAllThemes = () => {
-  userThemes ??= getStore(STORE_NAMES.THEME).get('themes') as (LX.Theme[] | null) ?? []
+  userThemes ??= (getStore(STORE_NAMES.THEME).get('themes') as LX.Theme[] | null) ?? []
   return {
     themes,
     userThemes,
@@ -213,14 +219,14 @@ export const getAllThemes = () => {
 }
 
 export const saveTheme = (theme: LX.Theme) => {
-  const targetTheme = userThemes.find(t => t.id === theme.id)
+  const targetTheme = userThemes.find((t) => t.id === theme.id)
   if (targetTheme) Object.assign(targetTheme, theme)
   else userThemes.push(theme)
   getStore(STORE_NAMES.THEME).set('themes', userThemes)
 }
 
 export const removeTheme = (id: string) => {
-  const index = userThemes.findIndex(t => t.id === id)
+  const index = userThemes.findIndex((t) => t.id === id)
   if (index < 0) return
   userThemes.splice(index, 1)
   getStore(STORE_NAMES.THEME).set('themes', userThemes)
@@ -239,29 +245,32 @@ const copyTheme = (theme: LX.Theme): LX.Theme => {
 export const getTheme = () => {
   // fs.promises.readdir()
   const shouldUseDarkColors = nativeTheme.shouldUseDarkColors
-  let themeId = global.lx.appSetting['theme.id'] == 'auto'
-    ? shouldUseDarkColors
-      ? global.lx.appSetting['theme.darkId']
-      : global.lx.appSetting['theme.lightId']
-    : global.lx.appSetting['theme.id']
+  let themeId =
+    global.lx.appSetting['theme.id'] == 'auto'
+      ? shouldUseDarkColors
+        ? global.lx.appSetting['theme.darkId']
+        : global.lx.appSetting['theme.lightId']
+      : global.lx.appSetting['theme.id']
   // themeId = 'naruto'
   // themeId = 'pink'
   // themeId = 'black'
-  let theme = themes.find(theme => theme.id == themeId)
+  let theme = themes.find((theme) => theme.id == themeId)
   if (!theme) {
-    userThemes = getStore(STORE_NAMES.THEME).get('themes') as LX.Theme[] | null ?? []
-    theme = userThemes.find(theme => theme.id == themeId)
+    userThemes = (getStore(STORE_NAMES.THEME).get('themes') as LX.Theme[] | null) ?? []
+    theme = userThemes.find((theme) => theme.id == themeId)
     if (theme) {
       if (theme.config.extInfo['--background-image'] != 'none') {
         theme = copyTheme(theme)
-        theme.config.extInfo['--background-image'] =
-          isUrl(theme.config.extInfo['--background-image'])
-            ? `url(${theme.config.extInfo['--background-image']})`
-            : `url(file:///${encodePath(joinPath(global.lxDataPath, 'theme_images', theme.config.extInfo['--background-image']))})`
+        theme.config.extInfo['--background-image'] = isUrl(
+          theme.config.extInfo['--background-image']
+        )
+          ? `url(${theme.config.extInfo['--background-image']})`
+          : `url(file:///${encodePath(joinPath(global.lxDataPath, 'theme_images', theme.config.extInfo['--background-image']))})`
       }
     } else {
-      themeId = global.lx.appSetting['theme.id'] == 'auto' && shouldUseDarkColors ? 'black' : 'green'
-      theme = themes.find(theme => theme.id == themeId) as LX.Theme
+      themeId =
+        global.lx.appSetting['theme.id'] == 'auto' && shouldUseDarkColors ? 'black' : 'green'
+      theme = themes.find((theme) => theme.id == themeId) as LX.Theme
     }
   }
 
@@ -295,8 +304,7 @@ export const setPowerSaveBlocker = (enabled: boolean) => {
   }
 }
 
-
-let envProxy: null | { host: string, port: number } = null
+let envProxy: null | { host: string; port: number } = null
 export const getProxy = () => {
   if (global.lx.appSetting['network.proxy.enable'] && global.lx.appSetting['network.proxy.host']) {
     return {
@@ -313,10 +321,10 @@ export const getProxy = () => {
     const envProxyStr = envParams.cmdParams['proxy-server']
     if (envProxyStr && typeof envProxyStr == 'string') {
       const [host, port = ''] = envProxyStr.split(':')
-      return envProxy = {
+      return (envProxy = {
         host,
         port: parseInt(port || '80'),
-      }
+      })
     }
   }
 

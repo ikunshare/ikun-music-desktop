@@ -1,22 +1,29 @@
-
-export const getLocalDislikeData = async(): Promise<LX.Dislike.DislikeRules> => {
+export const getLocalDislikeData = async (): Promise<LX.Dislike.DislikeRules> => {
   return (await global.lx.worker.dbService.getDislikeListInfo()).rules
 }
 
-export const setLocalDislikeData = async(listData: LX.Dislike.DislikeRules) => {
+export const setLocalDislikeData = async (listData: LX.Dislike.DislikeRules) => {
   await global.lx.event_dislike.dislike_data_overwrite(listData, true)
 }
 
-export const registerDislikeActionEvent = (sendDislikeAction: (action: LX.Sync.Dislike.ActionList) => (void | Promise<void>)) => {
-  const dislike_music_add = async(listData: LX.Dislike.DislikeMusicInfo[], isRemote: boolean = false) => {
+export const registerDislikeActionEvent = (
+  sendDislikeAction: (action: LX.Sync.Dislike.ActionList) => void | Promise<void>
+) => {
+  const dislike_music_add = async (
+    listData: LX.Dislike.DislikeMusicInfo[],
+    isRemote: boolean = false
+  ) => {
     if (isRemote) return
     await sendDislikeAction({ action: 'dislike_music_add', data: listData })
   }
-  const dislike_data_overwrite = async(listInfos: LX.Dislike.DislikeRules, isRemote: boolean = false) => {
+  const dislike_data_overwrite = async (
+    listInfos: LX.Dislike.DislikeRules,
+    isRemote: boolean = false
+  ) => {
     if (isRemote) return
     await sendDislikeAction({ action: 'dislike_data_overwrite', data: listInfos })
   }
-  const dislike_music_clear = async(isRemote: boolean = false) => {
+  const dislike_music_clear = async (isRemote: boolean = false) => {
     if (isRemote) return
     await sendDislikeAction({ action: 'dislike_music_clear' })
   }
@@ -31,7 +38,7 @@ export const registerDislikeActionEvent = (sendDislikeAction: (action: LX.Sync.D
   }
 }
 
-export const handleRemoteDislikeAction = async(event: LX.Sync.Dislike.ActionList) => {
+export const handleRemoteDislikeAction = async (event: LX.Sync.Dislike.ActionList) => {
   // console.log('handleRemoteDislikeAction', event)
 
   switch (event.action) {

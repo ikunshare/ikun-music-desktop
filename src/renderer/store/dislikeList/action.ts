@@ -1,25 +1,40 @@
 import { markRaw } from '@common/utils/vueTools'
 
-
 import { dislikeInfo, dislikeRuleCount } from './state'
 import { SPLIT_CHAR } from '@common/constants'
 
-
 export const hasDislike = (info: LX.Music.MusicInfo | LX.Download.ListItem) => {
   if ('progress' in info) info = info.metadata.musicInfo
-  const name = info.name?.replaceAll(SPLIT_CHAR.DISLIKE_NAME, SPLIT_CHAR.DISLIKE_NAME_ALIAS).toLocaleLowerCase().trim() ?? ''
-  const singer = info.singer?.replaceAll(SPLIT_CHAR.DISLIKE_NAME, SPLIT_CHAR.DISLIKE_NAME_ALIAS).toLocaleLowerCase().trim() ?? ''
+  const name =
+    info.name
+      ?.replaceAll(SPLIT_CHAR.DISLIKE_NAME, SPLIT_CHAR.DISLIKE_NAME_ALIAS)
+      .toLocaleLowerCase()
+      .trim() ?? ''
+  const singer =
+    info.singer
+      ?.replaceAll(SPLIT_CHAR.DISLIKE_NAME, SPLIT_CHAR.DISLIKE_NAME_ALIAS)
+      .toLocaleLowerCase()
+      .trim() ?? ''
 
-  return dislikeInfo.musicNames.has(name) || dislikeInfo.singerNames.has(singer) ||
+  return (
+    dislikeInfo.musicNames.has(name) ||
+    dislikeInfo.singerNames.has(singer) ||
     dislikeInfo.names.has(`${name}${SPLIT_CHAR.DISLIKE_NAME}${singer}`)
+  )
 }
 
-export const initDislikeInfo = ({ musicNames, rules, names, singerNames }: LX.Dislike.DislikeInfo) => {
+export const initDislikeInfo = ({
+  musicNames,
+  rules,
+  names,
+  singerNames,
+}: LX.Dislike.DislikeInfo) => {
   dislikeInfo.names = markRaw(names)
   dislikeInfo.singerNames = markRaw(singerNames)
   dislikeInfo.musicNames = markRaw(musicNames)
   dislikeInfo.rules = rules
-  dislikeRuleCount.value = dislikeInfo.musicNames.size + dislikeInfo.singerNames.size + dislikeInfo.names.size
+  dislikeRuleCount.value =
+    dislikeInfo.musicNames.size + dislikeInfo.singerNames.size + dislikeInfo.names.size
 }
 
 const initNameSet = () => {
@@ -31,9 +46,15 @@ const initNameSet = () => {
     if (!item) continue
     let [name, singer] = item.split(SPLIT_CHAR.DISLIKE_NAME)
     if (name) {
-      name = name.replaceAll(SPLIT_CHAR.DISLIKE_NAME, SPLIT_CHAR.DISLIKE_NAME_ALIAS).toLocaleLowerCase().trim()
+      name = name
+        .replaceAll(SPLIT_CHAR.DISLIKE_NAME, SPLIT_CHAR.DISLIKE_NAME_ALIAS)
+        .toLocaleLowerCase()
+        .trim()
       if (singer) {
-        singer = singer.replaceAll(SPLIT_CHAR.DISLIKE_NAME, SPLIT_CHAR.DISLIKE_NAME_ALIAS).toLocaleLowerCase().trim()
+        singer = singer
+          .replaceAll(SPLIT_CHAR.DISLIKE_NAME, SPLIT_CHAR.DISLIKE_NAME_ALIAS)
+          .toLocaleLowerCase()
+          .trim()
         const rule = `${name}${SPLIT_CHAR.DISLIKE_NAME}${singer}`
         dislikeInfo.names.add(rule)
         list.push(rule)
@@ -42,17 +63,25 @@ const initNameSet = () => {
         list.push(name)
       }
     } else if (singer) {
-      singer = singer.replaceAll(SPLIT_CHAR.DISLIKE_NAME, SPLIT_CHAR.DISLIKE_NAME_ALIAS).toLocaleLowerCase().trim()
+      singer = singer
+        .replaceAll(SPLIT_CHAR.DISLIKE_NAME, SPLIT_CHAR.DISLIKE_NAME_ALIAS)
+        .toLocaleLowerCase()
+        .trim()
       dislikeInfo.singerNames.add(singer)
       list.push(`${SPLIT_CHAR.DISLIKE_NAME}${singer}`)
     }
   }
   dislikeInfo.rules = Array.from(new Set(list)).join('\n')
-  dislikeRuleCount.value = dislikeInfo.musicNames.size + dislikeInfo.singerNames.size + dislikeInfo.names.size
+  dislikeRuleCount.value =
+    dislikeInfo.musicNames.size + dislikeInfo.singerNames.size + dislikeInfo.names.size
 }
 
 export const addDislikeInfo = (infos: LX.Dislike.DislikeMusicInfo[]) => {
-  dislikeInfo.rules += '\n' + infos.map(info => `${info.name ?? ''}${SPLIT_CHAR.DISLIKE_NAME}${info.singer ?? ''}`).join('\n')
+  dislikeInfo.rules +=
+    '\n' +
+    infos
+      .map((info) => `${info.name ?? ''}${SPLIT_CHAR.DISLIKE_NAME}${info.singer ?? ''}`)
+      .join('\n')
   initNameSet()
   return dislikeInfo.rules
 }
@@ -68,7 +97,6 @@ export const clearDislikeInfo = () => {
   initNameSet()
   return dislikeInfo.rules
 }
-
 
 // export const updateDislikeInfo = (info: LX.Dislike.ListItem) => {
 //   const targetInfo = dislikeInfo.list.find(i => i.id == info.id)
@@ -89,4 +117,3 @@ export const clearDislikeInfo = () => {
 //   dislikeInfo.rules = ''
 //   initNameSet()
 // }
-

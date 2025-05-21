@@ -1,5 +1,4 @@
 declare namespace LX {
-
   interface ThemeColors {
     '--color-000': string
     '--color-050': string
@@ -22,7 +21,6 @@ declare namespace LX {
     '--color-900': string
     '--color-950': string
     '--color-1000': string
-
 
     '--color-theme': string
 
@@ -283,7 +281,6 @@ declare namespace LX {
         '--color-badge-primary': string
         '--color-badge-secondary': string
         '--color-badge-tertiary': string
-
       }
     }
   }

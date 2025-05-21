@@ -1,6 +1,5 @@
 import { markRaw, reactive } from '@common/utils/vueTools'
 
-
 export const lyrics = markRaw<{
   lyric: string
   tlyric: string | null

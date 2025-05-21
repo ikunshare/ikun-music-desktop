@@ -16,7 +16,7 @@ export async function rendererInvoke(name: string): Promise<void>
 export async function rendererInvoke<V>(name: string): Promise<V>
 export async function rendererInvoke<T>(name: string, params: T): Promise<void>
 export async function rendererInvoke<T, V>(name: string, params: T): Promise<V>
-export async function rendererInvoke <T, V>(name: string, params?: T): Promise<V> {
+export async function rendererInvoke<T, V>(name: string, params?: T): Promise<V> {
   return ipcRenderer.invoke(name, params)
 }
 
@@ -30,7 +30,10 @@ export function rendererOn<T>(name: string, listener: LX.IpcRendererEventListene
 
 export function rendererOnce(name: string, listener: LX.IpcRendererEventListener): void
 export function rendererOnce<T>(name: string, listener: LX.IpcRendererEventListenerParams<T>): void
-export function rendererOnce<T>(name: string, listener: LX.IpcRendererEventListenerParams<T>): void {
+export function rendererOnce<T>(
+  name: string,
+  listener: LX.IpcRendererEventListenerParams<T>
+): void {
   ipcRenderer.once(name, (event, params) => {
     listener({ event, params })
   })

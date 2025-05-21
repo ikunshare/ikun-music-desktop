@@ -35,7 +35,6 @@ export const tempListMeta = {
   id: '',
 }
 
-
 // export const userLists: LX.List.UserListInfo[] = window.lxData.userLists = reactive([])
 
 export const fetchingListStatus = reactive<Record<string, boolean>>({})

@@ -8,7 +8,12 @@ import {
 import { buildLyricInfo, getCachedLyricInfo } from './utils'
 import { buildSavePath } from '@renderer/store/download/utils'
 
-export const getMusicUrl = async({ musicInfo, isRefresh, allowToggleSource = true, onToggleSource = () => {} }: {
+export const getMusicUrl = async ({
+  musicInfo,
+  isRefresh,
+  allowToggleSource = true,
+  onToggleSource = () => {},
+}: {
   musicInfo: LX.Download.ListItem
   isRefresh: boolean
   onToggleSource?: (musicInfo?: LX.Music.MusicInfoOnline) => void
@@ -19,10 +24,20 @@ export const getMusicUrl = async({ musicInfo, isRefresh, allowToggleSource = tru
     if (path) return path
   }
 
-  return getOnlineMusicUrl({ musicInfo: musicInfo.metadata.musicInfo, isRefresh, onToggleSource, allowToggleSource })
+  return getOnlineMusicUrl({
+    musicInfo: musicInfo.metadata.musicInfo,
+    isRefresh,
+    onToggleSource,
+    allowToggleSource,
+  })
 }
 
-export const getPicUrl = async({ musicInfo, isRefresh, listId, onToggleSource = () => {} }: {
+export const getPicUrl = async ({
+  musicInfo,
+  isRefresh,
+  listId,
+  onToggleSource = () => {},
+}: {
   musicInfo: LX.Download.ListItem
   isRefresh: boolean
   listId?: string | null
@@ -39,14 +54,22 @@ export const getPicUrl = async({ musicInfo, isRefresh, listId, onToggleSource = 
     if (onlineMusicInfo.meta.picUrl) return onlineMusicInfo.meta.picUrl
   }
 
-  return getOnlinePicUrl({ musicInfo: musicInfo.metadata.musicInfo, isRefresh, onToggleSource }).then((url) => {
+  return getOnlinePicUrl({
+    musicInfo: musicInfo.metadata.musicInfo,
+    isRefresh,
+    onToggleSource,
+  }).then((url) => {
     // TODO: when listId required save url (update downloadInfo)
 
     return url
   })
 }
 
-export const getLyricInfo = async({ musicInfo, isRefresh, onToggleSource = () => {} }: {
+export const getLyricInfo = async ({
+  musicInfo,
+  isRefresh,
+  onToggleSource = () => {},
+}: {
   musicInfo: LX.Download.ListItem
   isRefresh: boolean
   onToggleSource?: (musicInfo?: LX.Music.MusicInfoOnline) => void
@@ -60,7 +83,7 @@ export const getLyricInfo = async({ musicInfo, isRefresh, onToggleSource = () =>
     musicInfo: musicInfo.metadata.musicInfo,
     isRefresh,
     onToggleSource,
-  }).catch(async() => {
+  }).catch(async () => {
     // 尝试读取文件内歌词
     const path = await getDownloadFilePath(musicInfo, buildSavePath(musicInfo))
     if (path) {

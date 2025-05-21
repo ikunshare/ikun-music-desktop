@@ -19,7 +19,6 @@ const denyEvents = [
   'media-started-playing',
 ] as const
 
-
 export const getProxy = () => {
   if (global.lx.appSetting['network.proxy.enable'] && global.lx.appSetting['network.proxy.host']) {
     return {
@@ -43,7 +42,11 @@ export const getProxy = () => {
   }
 }
 const handleUpdateProxy = (keys: Array<keyof LX.AppSetting>) => {
-  if (keys.includes('network.proxy.enable') || (global.lx.appSetting['network.proxy.enable'] && keys.some(k => k.startsWith('network.proxy.')))) {
+  if (
+    keys.includes('network.proxy.enable') ||
+    (global.lx.appSetting['network.proxy.enable'] &&
+      keys.some((k) => k.startsWith('network.proxy.')))
+  ) {
     sendEvent(USER_API_RENDERER_EVENT_NAME.proxyUpdate, getProxy())
   }
 }
@@ -55,17 +58,18 @@ const winEvent = () => {
   })
 }
 
-export const createWindow = async(userApi: LX.UserApi.UserApiInfo) => {
+export const createWindow = async (userApi: LX.UserApi.UserApiInfo) => {
   await closeWindow()
-  dir ??= process.env.NODE_ENV !== 'production' ? webpackUserApiPath : path.join(__dirname, 'userApi')
+  dir ??=
+    process.env.NODE_ENV !== 'production' ? webpackUserApiPath : path.join(__dirname, 'userApi')
 
   if (!html) {
-
     html = await fs.promises.readFile(path.join(dir, 'renderer/user-api.html'), 'utf8')
   }
-  const preloadUrl = process.env.NODE_ENV !== 'production'
-    ? `${path.join(__dirname, '../dist/user-api-preload.js')}`
-    : `${path.join(__dirname, 'user-api-preload.js')}`
+  const preloadUrl =
+    process.env.NODE_ENV !== 'production'
+      ? `${path.join(__dirname, '../dist/user-api-preload.js')}`
+      : `${path.join(__dirname, 'user-api-preload.js')}`
   // console.log(preloadUrl)
 
   /**
@@ -104,13 +108,15 @@ export const createWindow = async(userApi: LX.UserApi.UserApiInfo) => {
       event.preventDefault()
     })
   }
-  browserWindow.webContents.session.setPermissionRequestHandler((webContents, permission, resolve) => {
-    if (webContents === browserWindow?.webContents) {
-      resolve(false)
-      return
+  browserWindow.webContents.session.setPermissionRequestHandler(
+    (webContents, permission, resolve) => {
+      if (webContents === browserWindow?.webContents) {
+        resolve(false)
+        return
+      }
+      resolve(true)
     }
-    resolve(true)
-  })
+  )
   browserWindow.webContents.setWindowOpenHandler(() => {
     return { action: 'deny' }
   })
@@ -121,16 +127,20 @@ export const createWindow = async(userApi: LX.UserApi.UserApiInfo) => {
   // const randomNum = Math.random().toString().substring(2, 10)
   await browserWindow.loadURL('data:text/html;charset=UTF-8,' + encodeURIComponent(html))
 
-  browserWindow.on('ready-to-show', async() => {
+  browserWindow.on('ready-to-show', async () => {
     global.lx.event_app.on('updated_config', handleUpdateProxy)
-    sendEvent(USER_API_RENDERER_EVENT_NAME.initEnv, { ...userApi, script: await getScript(userApi.id), proxy: getProxy() })
+    sendEvent(USER_API_RENDERER_EVENT_NAME.initEnv, {
+      ...userApi,
+      script: await getScript(userApi.id),
+      proxy: getProxy(),
+    })
   })
 
   // global.modules.userApiWindow.loadFile(join(dir, 'renderer/user-api.html'))
   // global.modules.userApiWindow.webContents.openDevTools()
 }
 
-export const closeWindow = async() => {
+export const closeWindow = async () => {
   global.lx.event_app.off('updated_config', handleUpdateProxy)
   if (!browserWindow) return
   await Promise.all([

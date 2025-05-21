@@ -9,7 +9,10 @@ import {
 
 let list: LX.Download.ListItem[]
 
-const toDBDownloadInfo = (musicInfos: LX.Download.ListItem[], offset: number = 0): LX.DBService.DownloadMusicInfo[] => {
+const toDBDownloadInfo = (
+  musicInfos: LX.Download.ListItem[],
+  offset: number = 0
+): LX.DBService.DownloadMusicInfo[] => {
   return musicInfos.map((info, index) => {
     return {
       id: info.id,
@@ -30,7 +33,7 @@ const toDBDownloadInfo = (musicInfos: LX.Download.ListItem[], offset: number = 0
 }
 
 const initDownloadList = () => {
-  list = queryDownloadList().map(item => {
+  list = queryDownloadList().map((item) => {
     const musicInfo = JSON.parse(item.musicInfo) as LX.Music.MusicInfoOnline
     return {
       id: item.id,
@@ -39,7 +42,9 @@ const initDownloadList = () => {
       statusText: item.statusText,
       downloaded: item.progress_downloaded,
       total: item.progress_total,
-      progress: item.progress_total ? parseInt((item.progress_downloaded / item.progress_total).toFixed(2)) * 100 : 0,
+      progress: item.progress_total
+        ? parseInt((item.progress_downloaded / item.progress_total).toFixed(2)) * 100
+        : 0,
       speed: '',
       writeQueue: 0,
       metadata: {
@@ -67,14 +72,20 @@ export const getDownloadList = (): LX.Download.ListItem[] => {
  * 添加下载歌曲信息
  * @param downloadInfos url信息
  */
-export const downloadInfoSave = (downloadInfos: LX.Download.ListItem[], addMusicLocationType: LX.AddMusicLocationType) => {
+export const downloadInfoSave = (
+  downloadInfos: LX.Download.ListItem[],
+  addMusicLocationType: LX.AddMusicLocationType
+) => {
   if (!list) initDownloadList()
   if (addMusicLocationType == 'top') {
     let newList = [...list]
     arrUnshift(newList, downloadInfos)
-    insertDownloadList(toDBDownloadInfo(downloadInfos), newList.slice(downloadInfos.length - 1).map((info, index) => {
-      return { id: info.id, position: index }
-    }))
+    insertDownloadList(
+      toDBDownloadInfo(downloadInfos),
+      newList.slice(downloadInfos.length - 1).map((info, index) => {
+        return { id: info.id, position: index }
+      })
+    )
     list = newList
   } else {
     insertDownloadList(toDBDownloadInfo(downloadInfos, list.length), [])
@@ -90,13 +101,12 @@ export const downloadInfoUpdate = (lists: LX.Download.ListItem[]) => {
   updateDownloadList(toDBDownloadInfo(lists))
   if (list) {
     for (const item of lists) {
-      const index = list.findIndex(info => info.id === item.id)
+      const index = list.findIndex((info) => info.id === item.id)
       if (index < 0) continue
       list.splice(index, 1, item)
     }
   }
 }
-
 
 /**
  * 删除下载列表
@@ -106,7 +116,7 @@ export const downloadInfoRemove = (ids: string[]) => {
   deleteDownloadList(ids)
   if (list) {
     const idSet = new Set<string>(ids)
-    list = list.filter(task => !idSet.has(task.id))
+    list = list.filter((task) => !idSet.has(task.id))
   }
 }
 
@@ -116,4 +126,3 @@ export const downloadInfoRemove = (ids: string[]) => {
 export const downloadInfoClear = () => {
   clearDownloadList()
 }
-

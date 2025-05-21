@@ -11,7 +11,7 @@ declare namespace LX {
       bindLan: boolean
     }
 
-    interface ActionBase <A> {
+    interface ActionBase<A> {
       action: A
     }
     interface ActionData<A, D> extends ActionBase<A> {
@@ -19,8 +19,6 @@ declare namespace LX {
     }
     type Action<A, D = undefined> = D extends undefined ? ActionBase<A> : ActionData<A, D>
 
-    type Actions = Action<'status'>
-    | Action<'enable', EnableServer>
-
+    type Actions = Action<'status'> | Action<'enable', EnableServer>
   }
 }

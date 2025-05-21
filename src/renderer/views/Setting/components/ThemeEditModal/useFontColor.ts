@@ -7,10 +7,13 @@ export default () => {
 
   const initFontColor = (color: string, changed: (color: string) => void) => {
     if (!font_color_ref.value) return
-    tools = pickrTools.create(font_color_ref.value, color, [
-      'rgba(33, 33, 33, 1)',
-      'rgba(229, 229, 229, 1)',
-    ], changed, () => {})
+    tools = pickrTools.create(
+      font_color_ref.value,
+      color,
+      ['rgba(33, 33, 33, 1)', 'rgba(229, 229, 229, 1)'],
+      changed,
+      () => {}
+    )
   }
   const destroyFontColor = () => {
     if (!tools) return

@@ -16,7 +16,13 @@ import { setPowerSaveBlocker as setPowerSaveBlockerRemote } from '@renderer/util
 /**
  * 过滤列表中已播放的歌曲
  */
-export const filterList = async({ playedList, listId, list, playerMusicInfo, isNext }: {
+export const filterList = async ({
+  playedList,
+  listId,
+  list,
+  playerMusicInfo,
+  isNext,
+}: {
   playedList: LX.Player.PlayMusicInfo[]
   listId: string
   list: Array<LX.Music.MusicInfo | LX.Download.ListItem>
@@ -27,11 +33,15 @@ export const filterList = async({ playedList, listId, list, playerMusicInfo, isN
   // console.log(isCheckFile)
   let { filteredList, canPlayList, playerIndex } = await window.lx.worker.main.filterMusicList({
     listId,
-    list: list.map(m => toRaw(m)),
+    list: list.map((m) => toRaw(m)),
     playedList: toRaw(playedList),
     // savePath: appSetting['download.savePath'],
     playerMusicInfo: toRaw(playerMusicInfo),
-    dislikeInfo: { names: toRaw(dislikeInfo.names), musicNames: toRaw(dislikeInfo.musicNames), singerNames: toRaw(dislikeInfo.singerNames) },
+    dislikeInfo: {
+      names: toRaw(dislikeInfo.names),
+      musicNames: toRaw(dislikeInfo.musicNames),
+      singerNames: toRaw(dislikeInfo.singerNames),
+    },
     isNext,
   })
 

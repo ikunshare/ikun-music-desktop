@@ -27,7 +27,11 @@ export default () => {
   })
   global.lx.event_app.on('updated_config', (keys, setting) => {
     setLrcConfig(keys, setting)
-    if (keys.includes('desktopLyric.fullscreenHide') && global.lx.appSetting['desktopLyric.enable'] && isMainWidnowFullscreen) {
+    if (
+      keys.includes('desktopLyric.fullscreenHide') &&
+      global.lx.appSetting['desktopLyric.enable'] &&
+      isMainWidnowFullscreen
+    ) {
       if (global.lx.appSetting['desktopLyric.fullscreenHide']) closeWindow()
       else if (!isExistWindow()) createWindow()
     }
@@ -37,12 +41,14 @@ export default () => {
   })
   global.lx.event_app.on('main_window_fullscreen', (isFullscreen) => {
     isMainWidnowFullscreen = isFullscreen
-    if (global.lx.appSetting['desktopLyric.enable'] && global.lx.appSetting['desktopLyric.fullscreenHide']) {
+    if (
+      global.lx.appSetting['desktopLyric.enable'] &&
+      global.lx.appSetting['desktopLyric.fullscreenHide']
+    ) {
       if (isFullscreen) closeWindow()
       else if (!isExistWindow()) createWindow()
     }
   })
-
 
   // global.lx_event.mainWindow.on(MAIN_WINDOW_EVENT_NAME.setLyricInfo, info => {
   //   if (!global.modules.lyricWindow) return
@@ -64,7 +70,8 @@ export default () => {
       case HOTKEY_DESKTOP_LYRIC.toggle_always_top.action:
         settingKey = 'desktopLyric.isAlwaysOnTop'
         break
-      default: return
+      default:
+        return
     }
     newSetting[settingKey] = !global.lx.appSetting[settingKey]
 

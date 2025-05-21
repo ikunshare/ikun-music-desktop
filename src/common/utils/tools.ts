@@ -26,7 +26,7 @@ export const toNewMusicInfo = (oldMusicInfo: any): LX.Music.MusicInfo => {
       meta._qualitys.hires = meta._qualitys.flac32bit
       delete meta._qualitys.flac32bit
 
-      meta.qualitys = (meta.qualitys as any[]).map(quality => {
+      meta.qualitys = (meta.qualitys as any[]).map((quality) => {
         if (quality.type == 'flac32bit') quality.type = 'hires'
         return quality
       })
@@ -111,7 +111,7 @@ export const fixNewMusicInfoQuality = (musicInfo: LX.Music.MusicInfo) => {
     // @ts-expect-error
     delete musicInfo.meta._qualitys.flac32bit
 
-    musicInfo.meta.qualitys = musicInfo.meta.qualitys.map(quality => {
+    musicInfo.meta.qualitys = musicInfo.meta.qualitys.map((quality) => {
       // @ts-expect-error
       if (quality.type == 'flac32bit') quality.type = 'hires'
       return quality
@@ -123,14 +123,13 @@ export const fixNewMusicInfoQuality = (musicInfo: LX.Music.MusicInfo) => {
 
 export const filterMusicList = <T extends LX.Music.MusicInfo>(list: T[]): T[] => {
   const ids = new Set<string>()
-  return list.filter(s => {
+  return list.filter((s) => {
     if (!s.id || ids.has(s.id) || !s.name) return false
     if (s.singer == null) s.singer = ''
     ids.add(s.id)
     return true
   })
 }
-
 
 const MAX_NAME_LENGTH = 80
 const MAX_FILE_NAME_LENGTH = 150
@@ -147,4 +146,3 @@ export const clipNameLength = (name: string) => {
 export const clipFileNameLength = (name: string) => {
   return name.length > MAX_FILE_NAME_LENGTH ? name.substring(0, MAX_FILE_NAME_LENGTH) : name
 }
-

@@ -89,7 +89,6 @@ export const updateUserLists = (lists: LX.DBService.UserListInfo[]) => {
   })(lists)
 }
 
-
 /**
  * 批量添加歌曲
  * @param list
@@ -116,30 +115,36 @@ export const insertMusicInfoList = (list: LX.DBService.MusicInfo[]) => {
  * @param listId 列表Id
  * @param listAll 原始列表歌曲，列表去重后
  */
-export const insertMusicInfoListAndRefreshOrder = (list: LX.DBService.MusicInfo[], listId: string, listAll: LX.DBService.MusicInfo[]) => {
+export const insertMusicInfoListAndRefreshOrder = (
+  list: LX.DBService.MusicInfo[],
+  listId: string,
+  listAll: LX.DBService.MusicInfo[]
+) => {
   const musicInfoInsertStatement = createMusicInfoInsertStatement()
   const musicInfoOrderInsertStatement = createMusicInfoOrderInsertStatement()
   const musicInfoOrderDeleteByListIdStatement = createMusicInfoOrderDeleteByListIdStatement()
 
   const db = getDB()
-  db.transaction((list: LX.DBService.MusicInfo[], listId: string, listAll: LX.DBService.MusicInfo[]) => {
-    musicInfoOrderDeleteByListIdStatement.run(listId)
-    for (const music of list) {
-      musicInfoInsertStatement.run(music)
-      musicInfoOrderInsertStatement.run({
-        listId: music.listId,
-        musicInfoId: music.id,
-        order: music.order,
-      })
+  db.transaction(
+    (list: LX.DBService.MusicInfo[], listId: string, listAll: LX.DBService.MusicInfo[]) => {
+      musicInfoOrderDeleteByListIdStatement.run(listId)
+      for (const music of list) {
+        musicInfoInsertStatement.run(music)
+        musicInfoOrderInsertStatement.run({
+          listId: music.listId,
+          musicInfoId: music.id,
+          order: music.order,
+        })
+      }
+      for (const music of listAll) {
+        musicInfoOrderInsertStatement.run({
+          listId: music.listId,
+          musicInfoId: music.id,
+          order: music.order,
+        })
+      }
     }
-    for (const music of listAll) {
-      musicInfoOrderInsertStatement.run({
-        listId: music.listId,
-        musicInfoId: music.id,
-        order: music.order,
-      })
-    }
-  })(list, listId, listAll)
+  )(list, listId, listAll)
 }
 
 /**
@@ -172,7 +177,11 @@ export const queryMusicInfoByListId = (listId: string) => {
  * @param ids 要移动的歌曲
  * @param musicInfos 音乐信息
  */
-export const moveMusicInfo = (fromId: string, ids: string[], musicInfos: LX.DBService.MusicInfo[]) => {
+export const moveMusicInfo = (
+  fromId: string,
+  ids: string[],
+  musicInfos: LX.DBService.MusicInfo[]
+) => {
   const musicInfoInsertStatement = createMusicInfoInsertStatement()
   const musicInfoOrderInsertStatement = createMusicInfoOrderInsertStatement()
   const musicInfoDeleteStatement = createMusicInfoDeleteStatement()
@@ -204,7 +213,13 @@ export const moveMusicInfo = (fromId: string, ids: string[], musicInfos: LX.DBSe
  * @param musicInfos 要移动的歌曲，目标列表去重后
  * @param toListAll 目标列表歌曲
  */
-export const moveMusicInfoAndRefreshOrder = (fromId: string, ids: string[], toId: string, musicInfos: LX.DBService.MusicInfo[], toListAll: LX.DBService.MusicInfo[]) => {
+export const moveMusicInfoAndRefreshOrder = (
+  fromId: string,
+  ids: string[],
+  toId: string,
+  musicInfos: LX.DBService.MusicInfo[],
+  toListAll: LX.DBService.MusicInfo[]
+) => {
   const musicInfoInsertStatement = createMusicInfoInsertStatement()
   const musicInfoDeleteStatement = createMusicInfoDeleteStatement()
   const musicInfoOrderDeleteStatement = createMusicInfoOrderDeleteStatement()
@@ -212,28 +227,35 @@ export const moveMusicInfoAndRefreshOrder = (fromId: string, ids: string[], toId
   const musicInfoOrderDeleteByListIdStatement = createMusicInfoOrderDeleteByListIdStatement()
 
   const db = getDB()
-  db.transaction((fromId: string, ids: string[], musicInfos: LX.DBService.MusicInfo[], toListAll: LX.DBService.MusicInfo[]) => {
-    for (const id of ids) {
-      musicInfoDeleteStatement.run({ listId: fromId, id })
-      musicInfoOrderDeleteStatement.run({ listId: fromId, id })
+  db.transaction(
+    (
+      fromId: string,
+      ids: string[],
+      musicInfos: LX.DBService.MusicInfo[],
+      toListAll: LX.DBService.MusicInfo[]
+    ) => {
+      for (const id of ids) {
+        musicInfoDeleteStatement.run({ listId: fromId, id })
+        musicInfoOrderDeleteStatement.run({ listId: fromId, id })
+      }
+      musicInfoOrderDeleteByListIdStatement.run(toId)
+      for (const music of musicInfos) {
+        musicInfoInsertStatement.run(music)
+        musicInfoOrderInsertStatement.run({
+          listId: music.listId,
+          musicInfoId: music.id,
+          order: music.order,
+        })
+      }
+      for (const music of toListAll) {
+        musicInfoOrderInsertStatement.run({
+          listId: music.listId,
+          musicInfoId: music.id,
+          order: music.order,
+        })
+      }
     }
-    musicInfoOrderDeleteByListIdStatement.run(toId)
-    for (const music of musicInfos) {
-      musicInfoInsertStatement.run(music)
-      musicInfoOrderInsertStatement.run({
-        listId: music.listId,
-        musicInfoId: music.id,
-        order: music.order,
-      })
-    }
-    for (const music of toListAll) {
-      musicInfoOrderInsertStatement.run({
-        listId: music.listId,
-        musicInfoId: music.id,
-        order: music.order,
-      })
-    }
-  })(fromId, ids, musicInfos, toListAll)
+  )(fromId, ids, musicInfos, toListAll)
 }
 
 /**
@@ -276,8 +298,12 @@ export const removeMusicInfoByListId = (ids: string[]) => {
  * @returns
  */
 export const queryMusicInfoByListIdAndMusicInfoId = (listId: string, musicInfoId: string) => {
-  const musicInfoByListAndMusicInfoIdQueryStatement = createMusicInfoByListAndMusicInfoIdQueryStatement()
-  return musicInfoByListAndMusicInfoIdQueryStatement.get({ listId, musicInfoId }) as LX.DBService.MusicInfo | null
+  const musicInfoByListAndMusicInfoIdQueryStatement =
+    createMusicInfoByListAndMusicInfoIdQueryStatement()
+  return musicInfoByListAndMusicInfoIdQueryStatement.get({
+    listId,
+    musicInfoId,
+  }) as LX.DBService.MusicInfo | null
 }
 
 /**
@@ -295,7 +321,10 @@ export const queryMusicInfoByMusicInfoId = (id: string) => {
  * @param listId 列表id
  * @param musicInfoOrders 音乐顺序
  */
-export const updateMusicInfoOrder = (listId: string, musicInfoOrders: LX.DBService.MusicInfoOrder[]) => {
+export const updateMusicInfoOrder = (
+  listId: string,
+  musicInfoOrders: LX.DBService.MusicInfoOrder[]
+) => {
   const db = getDB()
   const musicInfoOrderInsertStatement = createMusicInfoOrderInsertStatement()
   const musicInfoOrderDeleteByListIdStatement = createMusicInfoOrderDeleteByListIdStatement()
@@ -335,7 +364,10 @@ export const overwriteMusicInfo = (listId: string, musicInfos: LX.DBService.Musi
  * @param lists 列表
  * @param musicInfos 歌曲列表
  */
-export const overwriteListData = (lists: LX.DBService.UserListInfo[], musicInfos: LX.DBService.MusicInfo[]) => {
+export const overwriteListData = (
+  lists: LX.DBService.UserListInfo[],
+  musicInfos: LX.DBService.MusicInfo[]
+) => {
   const db = getDB()
   const listClearStatement = createListClearStatement()
   const listInsertStatement = createListInsertStatement()
@@ -367,4 +399,3 @@ export const overwriteListData = (lists: LX.DBService.UserListInfo[], musicInfos
     }
   })(lists, musicInfos)
 }
-

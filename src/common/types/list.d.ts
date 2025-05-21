@@ -43,23 +43,26 @@ declare namespace LX {
       tempList: MyTempListInfo
     }
 
-
     type SearchHistoryList = string[]
     type ListPositionInfo = Record<string, number>
-    type ListUpdateInfo = Record<string, {
-      updateTime: number
-      isAutoUpdate: boolean
-    }>
+    type ListUpdateInfo = Record<
+      string,
+      {
+        updateTime: number
+        isAutoUpdate: boolean
+      }
+    >
 
     type ListSaveType = 'myList' | 'downloadList'
-    type ListSaveInfo = {
-      type: 'myList'
-      data: Partial<MyAllList>
-    } | {
-      type: 'downloadList'
-      data: LX.Download.ListItem[]
-    }
-
+    type ListSaveInfo =
+      | {
+          type: 'myList'
+          data: Partial<MyAllList>
+        }
+      | {
+          type: 'downloadList'
+          data: LX.Download.ListItem[]
+        }
 
     type ListActionDataOverwrite = MakeOptional<LX.List.ListDataFull, 'tempList'>
     interface ListActionAdd {

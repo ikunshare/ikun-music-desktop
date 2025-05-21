@@ -73,7 +73,8 @@ export default (setting: any): Partial<LX.AppSetting> => {
     setting['player.autoSkipOnError'] = setting.player?.autoSkipOnError
 
     setting['playDetail.isZoomActiveLrc'] = setting.playDetail?.isZoomActiveLrc
-    setting['playDetail.isShowLyricProgressSetting'] = setting.playDetail?.isShowLyricProgressSetting
+    setting['playDetail.isShowLyricProgressSetting'] =
+      setting.playDetail?.isShowLyricProgressSetting
     setting['playDetail.style.fontSize'] = setting.playDetail?.style?.fontSize
     setting['playDetail.style.align'] = setting.playDetail?.style?.align
 
@@ -89,7 +90,8 @@ export default (setting: any): Partial<LX.AppSetting> => {
     setting['desktopLyric.isDelayScroll'] = setting.desktopLyric?.isDelayScroll
     setting['desktopLyric.isHoverHide'] = setting.desktopLyric?.isHoverHide
     setting['desktopLyric.style.font'] = setting.desktopLyric?.style?.font
-    if (setting.desktopLyric?.style?.fontSize) setting['desktopLyric.style.fontSize'] = setting.desktopLyric.style.fontSize / 100 * 16
+    if (setting.desktopLyric?.style?.fontSize)
+      setting['desktopLyric.style.fontSize'] = (setting.desktopLyric.style.fontSize / 100) * 16
     setting['desktopLyric.style.opacity'] = setting.desktopLyric?.style?.opacity
     setting['desktopLyric.style.isZoomActiveLrc'] = setting.desktopLyric?.style?.isZoomActiveLrc
 
@@ -120,7 +122,6 @@ export default (setting: any): Partial<LX.AppSetting> => {
     setting['tray.enable'] = setting.tray?.enable
     setting['tray.themeId'] = setting.tray?.themeId
 
-
     setting['sync.enable'] = setting.sync?.enable
     setting['sync.port'] = setting.sync?.port
 
@@ -139,7 +140,6 @@ export default (setting: any): Partial<LX.AppSetting> => {
     setting['sync.erver.port'] = setting['sync.port']
     setting.version = '2.1.0'
   }
-
 
   return setting
 }

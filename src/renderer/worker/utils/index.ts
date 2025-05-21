@@ -3,11 +3,13 @@ import * as Comlink from 'comlink'
 export type MainTypes = Comlink.Remote<LX.WorkerMainTypes>
 
 export const createMainWorker = () => {
-  const worker: Worker = new Worker(new URL(
-    /* webpackChunkName: 'renderer.main.worker' */
-    '../main',
-    import.meta.url,
-  ))
+  const worker: Worker = new Worker(
+    new URL(
+      /* webpackChunkName: 'renderer.main.worker' */
+      '../main',
+      import.meta.url
+    )
+  )
   return Comlink.wrap<LX.WorkerMainTypes>(worker)
 }
 
@@ -22,11 +24,13 @@ export const createMainWorker = () => {
 
 export type DownloadTypes = Comlink.Remote<LX.WorkerDownloadTypes>
 export const createDownloadWorker = () => {
-  const worker: Worker = new Worker(new URL(
-    /* webpackChunkName: 'renderer.download.worker' */
-    '../download',
-    import.meta.url,
-  ))
+  const worker: Worker = new Worker(
+    new URL(
+      /* webpackChunkName: 'renderer.download.worker' */
+      '../download',
+      import.meta.url
+    )
+  )
   return Comlink.wrap<LX.WorkerDownloadTypes>(worker)
 }
 

@@ -15,13 +15,13 @@ export const dirname = (p: string): string => path.dirname(p)
  * 检查路径是否存在
  * @param {*} path 路径
  */
-export const checkPath = async(path: string): Promise<boolean> => {
-  return new Promise(resolve => {
+export const checkPath = async (path: string): Promise<boolean> => {
+  return new Promise((resolve) => {
     if (!path) {
       resolve(false)
       return
     }
-    fs.access(path, fs.constants.F_OK, err => {
+    fs.access(path, fs.constants.F_OK, (err) => {
       if (err) {
         resolve(false)
         return
@@ -36,9 +36,10 @@ export const checkPath = async(path: string): Promise<boolean> => {
  * @param path
  * @returns
  */
-export const checkAndCreateDir = async(path: string) => {
-  return fs.promises.access(path, fs.constants.F_OK | fs.constants.W_OK)
-    .catch(async(err: NodeJS.ErrnoException) => {
+export const checkAndCreateDir = async (path: string) => {
+  return fs.promises
+    .access(path, fs.constants.F_OK | fs.constants.W_OK)
+    .catch(async (err: NodeJS.ErrnoException) => {
       if (err.code != 'ENOENT') throw err as Error
       return fs.promises.mkdir(path, { recursive: true })
     })
@@ -49,9 +50,8 @@ export const checkAndCreateDir = async(path: string) => {
     })
 }
 
-
-export const getFileStats = async(path: string): Promise<fs.Stats | null> => {
-  return new Promise(resolve => {
+export const getFileStats = async (path: string): Promise<fs.Stats | null> => {
+  return new Promise((resolve) => {
     if (!path) {
       resolve(null)
       return
@@ -71,44 +71,45 @@ export const getFileStats = async(path: string): Promise<fs.Stats | null> => {
  * @param path
  * @returns
  */
-export const createDir = async(path: string) => new Promise<void>((resolve, reject) => {
-  fs.access(path, fs.constants.F_OK | fs.constants.W_OK, err => {
-    if (err) {
-      if (err.code === 'ENOENT') {
-        fs.mkdir(path, { recursive: true }, err => {
-          if (err) {
-            reject(err)
-            return
-          }
-          resolve()
-        })
-        return
-      }
-      reject(err)
-      return
-    }
-    resolve()
-  })
-})
-
-export const removeFile = async(path: string) => new Promise<void>((resolve, reject) => {
-  fs.access(path, fs.constants.F_OK, err => {
-    if (err) {
-      err.code == 'ENOENT' ? resolve() : reject(err)
-      return
-    }
-    fs.unlink(path, err => {
+export const createDir = async (path: string) =>
+  new Promise<void>((resolve, reject) => {
+    fs.access(path, fs.constants.F_OK | fs.constants.W_OK, (err) => {
       if (err) {
+        if (err.code === 'ENOENT') {
+          fs.mkdir(path, { recursive: true }, (err) => {
+            if (err) {
+              reject(err)
+              return
+            }
+            resolve()
+          })
+          return
+        }
         reject(err)
         return
       }
       resolve()
     })
   })
-})
 
-export const readFile = async(path: string) => fs.promises.readFile(path)
+export const removeFile = async (path: string) =>
+  new Promise<void>((resolve, reject) => {
+    fs.access(path, fs.constants.F_OK, (err) => {
+      if (err) {
+        err.code == 'ENOENT' ? resolve() : reject(err)
+        return
+      }
+      fs.unlink(path, (err) => {
+        if (err) {
+          reject(err)
+          return
+        }
+        resolve()
+      })
+    })
+  })
 
+export const readFile = async (path: string) => fs.promises.readFile(path)
 
 /**
  * 创建 MD5 hash
@@ -116,7 +117,7 @@ export const readFile = async(path: string) => fs.promises.readFile(path)
  */
 export const toMD5 = (str: string) => crypto.createHash('md5').update(str).digest('hex')
 
-export const gzipData = async(str: string): Promise<Buffer> => {
+export const gzipData = async (str: string): Promise<Buffer> => {
   return new Promise((resolve, reject) => {
     gzip(str, (err, result) => {
       if (err) {
@@ -128,7 +129,7 @@ export const gzipData = async(str: string): Promise<Buffer> => {
   })
 }
 
-export const gunzipData = async(buf: Buffer): Promise<string> => {
+export const gunzipData = async (buf: Buffer): Promise<string> => {
   return new Promise((resolve, reject) => {
     gunzip(buf, (err, result) => {
       if (err) {
@@ -145,9 +146,9 @@ export const gunzipData = async(buf: Buffer): Promise<string> => {
  * @param path 保存路径
  * @param data 数据
  */
-export const saveLxConfigFile = async(path: string, data: any) => {
+export const saveLxConfigFile = async (path: string, data: any) => {
   if (!path.endsWith('.lxmc')) path += '.lxmc'
-  fs.writeFile(path, await gzipData(JSON.stringify(data)), 'binary', err => {
+  fs.writeFile(path, await gzipData(JSON.stringify(data)), 'binary', (err) => {
     console.log(err)
   })
 }
@@ -157,7 +158,7 @@ export const saveLxConfigFile = async(path: string, data: any) => {
  * @param path 文件路径
  * @returns 数据
  */
-export const readLxConfigFile = async(path: string): Promise<any> => {
+export const readLxConfigFile = async (path: string): Promise<any> => {
   let isJSON = path.endsWith('.json')
   let data: string | Buffer = await fs.promises.readFile(path, isJSON ? 'utf8' : 'binary')
   if (!data) return data
@@ -176,9 +177,9 @@ export const readLxConfigFile = async(path: string): Promise<any> => {
   return data
 }
 
-export const saveStrToFile = async(path: string, str: string | Buffer): Promise<void> => {
+export const saveStrToFile = async (path: string, str: string | Buffer): Promise<void> => {
   await new Promise<void>((resolve, reject) => {
-    fs.writeFile(path, str, err => {
+    fs.writeFile(path, str, (err) => {
       if (err) {
         log.error(err)
         reject(err)
@@ -198,11 +199,11 @@ export const b64DecodeUnicode = (str: string): string => {
   return Buffer.from(str, 'base64').toString()
 }
 
-export const copyFile = async(sourcePath: string, distPath: string) => {
+export const copyFile = async (sourcePath: string, distPath: string) => {
   return fs.promises.copyFile(sourcePath, distPath)
 }
 
-export const moveFile = async(sourcePath: string, distPath: string) => {
+export const moveFile = async (sourcePath: string, distPath: string) => {
   return fs.promises.rename(sourcePath, distPath)
 }
 

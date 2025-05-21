@@ -1,5 +1,3 @@
-
-
 // // declare module NodeJS {
 // //   interface Global {
 // //     isDev: boolean
@@ -11,4 +9,3 @@
 
 declare const webpackStaticPath: string
 declare const webpackUserApiPath: string
-

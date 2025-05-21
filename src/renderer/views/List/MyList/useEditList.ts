@@ -3,9 +3,7 @@ import { userLists } from '@renderer/store/list/state'
 import { updateUserList, createUserList } from '@renderer/store/list/action'
 import { dialog } from '@renderer/plugins/Dialog'
 
-export default ({ dom_lists_list }: {
-  dom_lists_list: Ref<HTMLElement | null>
-}) => {
+export default ({ dom_lists_list }: { dom_lists_list: Ref<HTMLElement | null> }) => {
   const isShowNewList = ref(false)
   const isNewListLeave = ref(false)
   const editIndex = ref(-1)
@@ -21,7 +19,7 @@ export default ({ dom_lists_list }: {
     })
   }
 
-  const handleSaveListName = async() => {
+  const handleSaveListName = async () => {
     let dom_target = dom_lists_list.value?.querySelector('.' + styles.editing) as HTMLElement
     if (!dom_target) return
     const dom_input: HTMLInputElement = dom_target.querySelector('.' + styles.listsInput)!
@@ -34,14 +32,16 @@ export default ({ dom_lists_list }: {
     dom_target.classList.remove(styles.editing)
   }
 
-  const handleCreateList = async(event: Event) => {
+  const handleCreateList = async (event: Event) => {
     const target = event.target as HTMLInputElement
     if (target.readOnly) return
     let name = target.value.trim()
     target.readOnly = true
 
-    if (name == '' || (
-      userLists.some(l => l.name == name) && !(await dialog.confirm(window.i18n.t('list_duplicate_tip'))))
+    if (
+      name == '' ||
+      (userLists.some((l) => l.name == name) &&
+        !(await dialog.confirm(window.i18n.t('list_duplicate_tip'))))
     ) {
       isShowNewList.value = false
       return
@@ -53,7 +53,6 @@ export default ({ dom_lists_list }: {
       isShowNewList.value = false
     })
   }
-
 
   return {
     isShowNewList,

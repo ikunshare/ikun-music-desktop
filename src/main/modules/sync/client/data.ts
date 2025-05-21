@@ -3,37 +3,46 @@ import path from 'node:path'
 import { File } from '../../../../common/constants_sync'
 import { exists } from '../utils'
 
-
 let syncAuthKeys: Record<string, LX.Sync.ClientKeyInfo>
 
-
-const saveSyncAuthKeys = async() => {
-  const syncAuthKeysFilePath = path.join(global.lxDataPath, File.clientDataPath, File.syncAuthKeysJSON)
+const saveSyncAuthKeys = async () => {
+  const syncAuthKeysFilePath = path.join(
+    global.lxDataPath,
+    File.clientDataPath,
+    File.syncAuthKeysJSON
+  )
   return fs.promises.writeFile(syncAuthKeysFilePath, JSON.stringify(syncAuthKeys), 'utf8')
 }
 
-export const initClientInfo = async() => {
+export const initClientInfo = async () => {
   if (syncAuthKeys != null) return
-  const syncAuthKeysFilePath = path.join(global.lxDataPath, File.clientDataPath, File.syncAuthKeysJSON)
-  if (await fs.promises.stat(syncAuthKeysFilePath).then(() => true).catch(() => false)) {
-
+  const syncAuthKeysFilePath = path.join(
+    global.lxDataPath,
+    File.clientDataPath,
+    File.syncAuthKeysJSON
+  )
+  if (
+    await fs.promises
+      .stat(syncAuthKeysFilePath)
+      .then(() => true)
+      .catch(() => false)
+  ) {
     syncAuthKeys = JSON.parse((await fs.promises.readFile(syncAuthKeysFilePath)).toString())
   } else {
-
     syncAuthKeys = {}
     const syncDataPath = path.join(global.lxDataPath, File.clientDataPath)
-    if (!await exists(syncDataPath)) {
+    if (!(await exists(syncDataPath))) {
       await fs.promises.mkdir(syncDataPath, { recursive: true })
     }
     void saveSyncAuthKeys()
   }
 }
 
-export const getSyncAuthKey = async(serverId: string) => {
+export const getSyncAuthKey = async (serverId: string) => {
   await initClientInfo()
   return syncAuthKeys[serverId] ?? null
 }
-export const setSyncAuthKey = async(serverId: string, info: LX.Sync.ClientKeyInfo) => {
+export const setSyncAuthKey = async (serverId: string, info: LX.Sync.ClientKeyInfo) => {
   await initClientInfo()
   syncAuthKeys[serverId] = info
   void saveSyncAuthKeys()

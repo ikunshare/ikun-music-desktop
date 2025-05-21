@@ -5,9 +5,7 @@ const t_rxp_1 = /^0+(\d+)/
 const t_rxp_2 = /:0+(\d+)/g
 const t_rxp_3 = /\.0+(\d+)/
 const formatTimeLabel = (label: string) => {
-  return label.replace(t_rxp_1, '$1')
-    .replace(t_rxp_2, ':$1')
-    .replace(t_rxp_3, '.$1')
+  return label.replace(t_rxp_1, '$1').replace(t_rxp_2, ':$1').replace(t_rxp_3, '.$1')
 }
 
 const filterExtendedLyricLabel = (lrcTimeLabels: Set<string>, extendedLyric: string) => {
@@ -24,7 +22,7 @@ const filterExtendedLyricLabel = (lrcTimeLabels: Set<string>, extendedLyric: str
     let times = timeField.match(timeExp)
     if (times == null) continue
 
-    const newTimes = times.filter(time => {
+    const newTimes = times.filter((time) => {
       const timeStr = formatTimeLabel(time)
       return lrcTimeLabels.has(timeStr)
     })
@@ -60,7 +58,6 @@ const parseLrcTimeLabel = (lrc: string) => {
 
   return linesSet
 }
-
 
 export const mergeLyrics = (lrc: string, tlrc: string | null, rlrc: string | null) => {
   if (!tlrc && !rlrc) return lrc

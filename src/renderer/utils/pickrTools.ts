@@ -4,7 +4,13 @@ import '@simonwep/pickr/dist/themes/classic.min.css'
 
 export interface PickrTools {
   pickr: Pickr | null
-  create: (dom: HTMLElement, color: string, swatches: string[] | null, change: (color: string) => void, reset?: () => void) => PickrTools
+  create: (
+    dom: HTMLElement,
+    color: string,
+    swatches: string[] | null,
+    change: (color: string) => void,
+    reset?: () => void
+  ) => PickrTools
   destroy: () => void
   setColor: (color: string) => void
 }
@@ -28,7 +34,6 @@ export const pickrTools: PickrTools = {
       swatches,
 
       components: {
-
         // Main components
         preview: true,
         opacity: true,
@@ -69,13 +74,16 @@ export const pickrTools: PickrTools = {
       if (source == 'swatch' && swatchselectColor !== color) return
       change(color.toRGBA().toString())
     })
-    pickrTools.pickr.on('swatchselect', (color: any) => {
-      swatchselectColor = color
-    }).on('change', throttleChange).on('cancel', () => {
-      console.log('cancel')
-      change(color)
-      reset?.()
-    })
+    pickrTools.pickr
+      .on('swatchselect', (color: any) => {
+        swatchselectColor = color
+      })
+      .on('change', throttleChange)
+      .on('cancel', () => {
+        console.log('cancel')
+        change(color)
+        reset?.()
+      })
 
     return pickrTools
   },

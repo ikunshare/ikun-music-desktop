@@ -28,7 +28,10 @@ export default () => {
     if (text.length) void addHistoryWord(text)
     void searchSongList(text, page, source).then((list: ListInfoItem[]) => {
       // console.log(list)
-      if (listInfo.value.key == window.lx.songListInfo.searchKey && window.lx.songListInfo.searchPosition) {
+      if (
+        listInfo.value.key == window.lx.songListInfo.searchKey &&
+        window.lx.songListInfo.searchPosition
+      ) {
         void nextTick(() => {
           listRef.value?.scrollTo(window.lx.songListInfo.searchPosition)
         })
@@ -45,7 +48,6 @@ export default () => {
     window.lx.songListInfo.searchKey = listInfo.value.key
     if (listRef.value) window.lx.songListInfo.searchPosition = listRef.value.getScrollTop()
   })
-
 
   return {
     listRef,

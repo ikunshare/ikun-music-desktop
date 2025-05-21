@@ -13,7 +13,6 @@ interface SearchResult {
   source: LX.OnlineSource
 }
 
-
 /**
  * 按搜索关键词重新排序列表
  * @param list 歌曲列表
@@ -28,9 +27,8 @@ const handleSortList = (list: LX.Music.MusicInfo[], keyword: string) => {
       data: item,
     })
   }
-  return arr.map(item => item.data).reverse()
+  return arr.map((item) => item.data).reverse()
 }
-
 
 const setLists = (results: SearchResult[], page: number, text: string): LX.Music.MusicInfo[] => {
   let pages = []
@@ -45,7 +43,7 @@ const setLists = (results: SearchResult[], page: number, text: string): LX.Music
     pages.push(source.allPage)
     totals.push(source.total)
   }
-  list = deduplicationList(list.map(s => markRaw(toNewMusicInfo(s))))
+  list = deduplicationList(list.map((s) => markRaw(toNewMusicInfo(s))))
   let listInfo = listInfos.all
   listInfo.maxPage = Math.max(0, ...pages)
   const total = Math.max(0, ...totals)
@@ -62,7 +60,7 @@ const setLists = (results: SearchResult[], page: number, text: string): LX.Music
 const setList = (datas: SearchResult, page: number, text: string): LX.Music.MusicInfo[] => {
   // console.log(datas.source, datas.list)
   let listInfo = listInfos[datas.source]!
-  listInfo.list = deduplicationList(datas.list.map(s => markRaw(toNewMusicInfo(s))))
+  listInfo.list = deduplicationList(datas.list.map((s) => markRaw(toNewMusicInfo(s))))
   if (page == 1 || (datas.total && datas.list.length)) listInfo.total = datas.total
   else listInfo.total = datas.limit * page
   listInfo.maxPage = datas.allPage
@@ -83,7 +81,11 @@ export const resetListInfo = (sourceId: LX.OnlineSource | 'all'): [] => {
   return []
 }
 
-export const search = async(text: string, page: number, sourceId: LX.OnlineSource | 'all'): Promise<LX.Music.MusicInfo[]> => {
+export const search = async (
+  text: string,
+  page: number,
+  sourceId: LX.OnlineSource | 'all'
+): Promise<LX.Music.MusicInfo[]> => {
   const listInfo = listInfos[sourceId]
   if (!text) return resetListInfo(sourceId)
   const key = `${page}__${text}`
@@ -93,16 +95,21 @@ export const search = async(text: string, page: number, sourceId: LX.OnlineSourc
     let task = []
     for (const source of sources) {
       if (source == 'all') continue
-      task.push((music[source]?.musicSearch.search(text, page, listInfos.all.limit) ?? Promise.reject(new Error('source not found: ' + source))).catch((error: any) => {
-        console.log(error)
-        return {
-          allPage: 1,
-          limit: 30,
-          list: [],
-          source,
-          total: 0,
-        }
-      }))
+      task.push(
+        (
+          music[source]?.musicSearch.search(text, page, listInfos.all.limit) ??
+          Promise.reject(new Error('source not found: ' + source))
+        ).catch((error: any) => {
+          console.log(error)
+          return {
+            allPage: 1,
+            limit: 30,
+            list: [],
+            source,
+            total: 0,
+          }
+        })
+      )
     }
     return Promise.all(task).then((results: SearchResult[]) => {
       if (key != listInfo!.key) return []
@@ -112,15 +119,17 @@ export const search = async(text: string, page: number, sourceId: LX.OnlineSourc
     if (listInfo?.key == key && listInfo?.list.length) return listInfo?.list
     listInfo!.noItemLabel = window.i18n.t('list__loading')
     listInfo!.key = key
-    return music[sourceId].musicSearch.search(text, page, listInfo!.limit).then((data: SearchResult) => {
-      if (key != listInfo!.key) return []
-      return setList(data, page, text)
-    }).catch((error: any) => {
-      resetListInfo(sourceId)
-      listInfo!.noItemLabel = window.i18n.t('list__load_failed')
-      console.log(error)
-      throw error
-    })
+    return music[sourceId].musicSearch
+      .search(text, page, listInfo!.limit)
+      .then((data: SearchResult) => {
+        if (key != listInfo!.key) return []
+        return setList(data, page, text)
+      })
+      .catch((error: any) => {
+        resetListInfo(sourceId)
+        listInfo!.noItemLabel = window.i18n.t('list__load_failed')
+        console.log(error)
+        throw error
+      })
   }
 }
-

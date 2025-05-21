@@ -5,8 +5,10 @@ import { getUserSpace } from '../../../user'
 // let socket: LX.Sync.Server.Socket | null
 let unregisterLocalListAction: (() => void) | null
 
-
-const sendListAction = async(wss: LX.Sync.Server.SocketServer, action: LX.Sync.Dislike.ActionList) => {
+const sendListAction = async (
+  wss: LX.Sync.Server.SocketServer,
+  action: LX.Sync.Dislike.ActionList
+) => {
   // console.log('sendListAction', action.action)
   const userSpace = getUserSpace()
   let key = ''
@@ -14,14 +16,17 @@ const sendListAction = async(wss: LX.Sync.Server.SocketServer, action: LX.Sync.D
     if (!client.moduleReadys?.dislike) continue
 
     if (!key) key = await userSpace.dislikeManage.createSnapshot()
-    void client.remoteQueueDislike.onDislikeSyncAction(action).then(async() => {
-      return userSpace.dislikeManage.updateDeviceSnapshotKey(client.keyInfo.clientId, key)
-    }).catch(err => {
-      // TODO send status
-      client.close(SYNC_CLOSE_CODE.failed)
-      // client.moduleReadys.dislike = false
-      console.log(err.message)
-    })
+    void client.remoteQueueDislike
+      .onDislikeSyncAction(action)
+      .then(async () => {
+        return userSpace.dislikeManage.updateDeviceSnapshotKey(client.keyInfo.clientId, key)
+      })
+      .catch((err) => {
+        // TODO send status
+        client.close(SYNC_CLOSE_CODE.failed)
+        // client.moduleReadys.dislike = false
+        console.log(err.message)
+      })
   }
 }
 

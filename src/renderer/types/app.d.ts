@@ -1,4 +1,3 @@
-
 import { type AppEventTypes, type KeyEventTypes } from '@renderer/event'
 import { type MainTypes, type DownloadTypes } from '@renderer/worker/utils'
 import { type I18n } from '@renderer/plugins/i18n'
@@ -7,7 +6,6 @@ import { type I18n } from '@renderer/plugins/i18n'
 //   cmdParams: LX.CmdParams
 //   workAreaSize?: Electron.Size
 // }
-
 
 interface Lx {
   // appSetting: LX.AppSetting
@@ -55,7 +53,6 @@ declare global {
 
   // const ENVIRONMENT: NodeJS.ProcessEnv
 
-
   namespace LX {
     interface KeyDownEevent {
       /**
@@ -99,7 +96,6 @@ declare global {
   var COMMIT_ID: string
   var COMMIT_DATE: string
 }
-
 
 // declare const ELECTRON_DISABLE_SECURITY_WARNINGS: string
 // declare const userApiPath: string

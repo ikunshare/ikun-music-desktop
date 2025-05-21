@@ -8,7 +8,12 @@ import { playSongListDetail } from './action'
 export default () => {
   const listRef = ref<any>(null)
 
-  const getListData = async(source: LX.OnlineSource, id: string, page: number, refresh: boolean) => {
+  const getListData = async (
+    source: LX.OnlineSource,
+    id: string,
+    page: number,
+    refresh: boolean
+  ) => {
     await getAndSetListDetail(id, source, page, refresh).then(() => {
       setTimeout(() => {
         if (listRef.value) listRef.value.scrollToTop()
@@ -19,7 +24,6 @@ export default () => {
   const handlePlayList = (index: number) => {
     void playSongListDetail(listDetailInfo.id, listDetailInfo.source, listDetailInfo.list, index)
   }
-
 
   return {
     listRef,

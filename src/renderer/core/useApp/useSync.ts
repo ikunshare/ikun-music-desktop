@@ -27,7 +27,10 @@ export default () => {
         sync.client.status.status = event.data.status
         sync.client.status.message = event.data.message
         sync.client.status.address = markRaw(event.data.address)
-        if (event.data.message == SYNC_CODE.missingAuthCode || event.data.message == SYNC_CODE.authFailed) {
+        if (
+          event.data.message == SYNC_CODE.missingAuthCode ||
+          event.data.message == SYNC_CODE.authFailed
+        ) {
           if (!sync.isShowAuthCodeModal) sync.isShowAuthCodeModal = true
         } else if (sync.isShowAuthCodeModal) sync.isShowAuthCodeModal = false
         break
@@ -42,7 +45,7 @@ export default () => {
     rSyncAction()
   })
 
-  return async() => {
+  return async () => {
     sync.enable = appSetting['sync.enable']
     sync.mode = appSetting['sync.mode']
     sync.server.port = appSetting['sync.server.port']
@@ -57,7 +60,7 @@ export default () => {
                 enable: appSetting['sync.enable'],
                 port: appSetting['sync.server.port'],
               },
-            }).catch(err => {
+            }).catch((err) => {
               console.log(err)
             })
           }
@@ -70,7 +73,7 @@ export default () => {
                 enable: appSetting['sync.enable'],
                 host: appSetting['sync.client.host'],
               },
-            }).catch(err => {
+            }).catch((err) => {
               console.log(err)
             })
           }

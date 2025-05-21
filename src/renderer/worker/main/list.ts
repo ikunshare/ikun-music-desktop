@@ -1,15 +1,27 @@
 // import { throttle } from '@common/utils'
 
 import { SPLIT_CHAR } from '@common/constants'
-import { filterFileName, sortInsert, similar, arrPushByPosition, arrShuffle } from '@common/utils/common'
+import {
+  filterFileName,
+  sortInsert,
+  similar,
+  arrPushByPosition,
+  arrShuffle,
+} from '@common/utils/common'
 import { joinPath, saveStrToFile } from '@common/utils/nodejs'
 import { createLocalMusicInfo } from '@renderer/utils/music'
-
 
 /**
  * 过滤列表中已播放的歌曲
  */
-export const filterMusicList = async({ playedList, listId, list, playerMusicInfo, dislikeInfo, isNext }: {
+export const filterMusicList = async ({
+  playedList,
+  listId,
+  list,
+  playerMusicInfo,
+  dislikeInfo,
+  isNext,
+}: {
   /**
    * 已播放列表
    */
@@ -40,17 +52,30 @@ export const filterMusicList = async({ playedList, listId, list, playerMusicInfo
   let playerIndex = -1
 
   let canPlayList: Array<LX.Music.MusicInfo | LX.Download.ListItem> = []
-  const filteredPlayedList = playedList.filter(pmInfo => pmInfo.listId == listId && !pmInfo.isTempPlay).map(({ musicInfo }) => musicInfo)
+  const filteredPlayedList = playedList
+    .filter((pmInfo) => pmInfo.listId == listId && !pmInfo.isTempPlay)
+    .map(({ musicInfo }) => musicInfo)
   const hasDislike = (info: LX.Music.MusicInfo) => {
-    const name = info.name?.replaceAll(SPLIT_CHAR.DISLIKE_NAME, SPLIT_CHAR.DISLIKE_NAME_ALIAS).toLocaleLowerCase().trim() ?? ''
-    const singer = info.singer?.replaceAll(SPLIT_CHAR.DISLIKE_NAME, SPLIT_CHAR.DISLIKE_NAME_ALIAS).toLocaleLowerCase().trim() ?? ''
+    const name =
+      info.name
+        ?.replaceAll(SPLIT_CHAR.DISLIKE_NAME, SPLIT_CHAR.DISLIKE_NAME_ALIAS)
+        .toLocaleLowerCase()
+        .trim() ?? ''
+    const singer =
+      info.singer
+        ?.replaceAll(SPLIT_CHAR.DISLIKE_NAME, SPLIT_CHAR.DISLIKE_NAME_ALIAS)
+        .toLocaleLowerCase()
+        .trim() ?? ''
 
-    return dislikeInfo.musicNames.has(name) || dislikeInfo.singerNames.has(singer) ||
+    return (
+      dislikeInfo.musicNames.has(name) ||
+      dislikeInfo.singerNames.has(singer) ||
       dislikeInfo.names.has(`${name}${SPLIT_CHAR.DISLIKE_NAME}${singer}`)
+    )
   }
 
   let isDislike = false
-  const filteredList: Array<LX.Music.MusicInfo | LX.Download.ListItem> = list.filter(s => {
+  const filteredList: Array<LX.Music.MusicInfo | LX.Download.ListItem> = list.filter((s) => {
     // if (!assertApiSupport(s.source)) return false
     if ('progress' in s) {
       if (!s.isComplate) return false
@@ -61,7 +86,7 @@ export const filterMusicList = async({ playedList, listId, list, playerMusicInfo
 
     canPlayList.push(s)
 
-    let index = filteredPlayedList.findIndex(m => m.id == s.id)
+    let index = filteredPlayedList.findIndex((m) => m.id == s.id)
     if (index > -1) {
       filteredPlayedList.splice(index, 1)
       return false
@@ -73,7 +98,7 @@ export const filterMusicList = async({ playedList, listId, list, playerMusicInfo
       if (filteredList.length <= 1) {
         filteredList.splice(0, 1)
         if (canPlayList.length > 1) {
-          let currentMusicIndex = canPlayList.findIndex(m => m.id == playerMusicInfo.id)
+          let currentMusicIndex = canPlayList.findIndex((m) => m.id == playerMusicInfo.id)
           if (isNext) {
             playerIndex = currentMusicIndex - 1
             if (playerIndex < 0 && canPlayList.length > 1) playerIndex = canPlayList.length - 2
@@ -84,7 +109,7 @@ export const filterMusicList = async({ playedList, listId, list, playerMusicInfo
           canPlayList.splice(currentMusicIndex, 1)
         } else canPlayList.splice(0, 1)
       } else {
-        let currentMusicIndex = filteredList.findIndex(m => m.id == playerMusicInfo.id)
+        let currentMusicIndex = filteredList.findIndex((m) => m.id == playerMusicInfo.id)
         if (isNext) {
           playerIndex = currentMusicIndex - 1
           if (playerIndex < 0 && filteredList.length > 1) playerIndex = filteredList.length - 2
@@ -95,7 +120,9 @@ export const filterMusicList = async({ playedList, listId, list, playerMusicInfo
         filteredList.splice(currentMusicIndex, 1)
       }
     } else {
-      playerIndex = (filteredList.length ? filteredList : canPlayList).findIndex(m => m.id == playerMusicInfo.id)
+      playerIndex = (filteredList.length ? filteredList : canPlayList).findIndex(
+        (m) => m.id == playerMusicInfo.id
+      )
     }
   }
   return {
@@ -128,7 +155,12 @@ export type SortFieldType = 'up' | 'down' | 'random'
  * @param localeId 排序语言
  * @returns
  */
-export const sortListMusicInfo = async(list: LX.Music.MusicInfo[], sortType: SortFieldType, fieldName: SortFieldName, localeId: string) => {
+export const sortListMusicInfo = async (
+  list: LX.Music.MusicInfo[],
+  sortType: SortFieldType,
+  fieldName: SortFieldName,
+  localeId: string
+) => {
   // console.log(sortType, fieldName, localeId)
   // const locale = new Intl.Locale(localeId)
   switch (sortType) {
@@ -150,14 +182,18 @@ export const sortListMusicInfo = async(list: LX.Music.MusicInfo[], sortType: Sor
             list.sort((a, b) => {
               if (a[fieldName] == null) {
                 return b[fieldName] == null ? 0 : -1
-              } else return b[fieldName] == null ? 1 : a[fieldName].localeCompare(b[fieldName], localeId)
+              } else
+                return b[fieldName] == null ? 1 : a[fieldName].localeCompare(b[fieldName], localeId)
             })
             break
           case 'albumName':
             list.sort((a, b) => {
               if (a.meta.albumName == null) {
                 return b.meta.albumName == null ? 0 : -1
-              } else return b.meta.albumName == null ? 1 : a.meta.albumName.localeCompare(b.meta.albumName, localeId)
+              } else
+                return b.meta.albumName == null
+                  ? 1
+                  : a.meta.albumName.localeCompare(b.meta.albumName, localeId)
             })
             break
         }
@@ -178,14 +214,20 @@ export const sortListMusicInfo = async(list: LX.Music.MusicInfo[], sortType: Sor
             list.sort((a, b) => {
               if (a[fieldName] == null) {
                 return b[fieldName] == null ? 0 : 1
-              } else return b[fieldName] == null ? -1 : b[fieldName].localeCompare(a[fieldName], localeId)
+              } else
+                return b[fieldName] == null
+                  ? -1
+                  : b[fieldName].localeCompare(a[fieldName], localeId)
             })
             break
           case 'albumName':
             list.sort((a, b) => {
               if (a.meta.albumName == null) {
                 return b.meta.albumName == null ? 0 : 1
-              } else return b.meta.albumName == null ? -1 : b.meta.albumName.localeCompare(a.meta.albumName, localeId)
+              } else
+                return b.meta.albumName == null
+                  ? -1
+                  : b.meta.albumName.localeCompare(a.meta.albumName, localeId)
             })
             break
         }
@@ -203,8 +245,11 @@ const variantRxp2 = /\s|'|\.|,|，|&|"|、|\(|\)|（|）|`|~|-|<|>|\||\/|\]|\[/g
  * @param isFilterVariant 是否过滤 Live Explicit 等歌曲名
  * @returns
  */
-export const filterDuplicateMusic = async(list: LX.Music.MusicInfo[], isFilterVariant: boolean = true) => {
-  type ListMapValue = Array<{ id: string, index: number, musicInfo: LX.Music.MusicInfo }>
+export const filterDuplicateMusic = async (
+  list: LX.Music.MusicInfo[],
+  isFilterVariant: boolean = true
+) => {
+  type ListMapValue = Array<{ id: string; index: number; musicInfo: LX.Music.MusicInfo }>
   const listMap = new Map<string, ListMapValue>()
   const duplicateList = new Set<string>()
   const handleFilter = (name: string, index: number, musicInfo: LX.Music.MusicInfo) => {
@@ -217,16 +262,21 @@ export const filterDuplicateMusic = async(list: LX.Music.MusicInfo[], isFilterVa
       })
       duplicateList.add(name)
     } else {
-      listMap.set(name, [{
-        id: musicInfo.id,
-        index,
-        musicInfo,
-      }])
+      listMap.set(name, [
+        {
+          id: musicInfo.id,
+          index,
+          musicInfo,
+        },
+      ])
     }
   }
   if (isFilterVariant) {
     list.forEach((musicInfo, index) => {
-      let musicInfoName = musicInfo.name.toLowerCase().replace(variantRxp, '').replace(variantRxp2, '')
+      let musicInfoName = musicInfo.name
+        .toLowerCase()
+        .replace(variantRxp, '')
+        .replace(variantRxp2, '')
       musicInfoName ||= musicInfo.name.toLowerCase().replace(/\s+/g, '')
       handleFilter(musicInfoName, index, musicInfo)
     })
@@ -239,26 +289,35 @@ export const filterDuplicateMusic = async(list: LX.Music.MusicInfo[], isFilterVa
   // console.log(duplicateList)
   const duplicateNames = Array.from(duplicateList)
   duplicateNames.sort((a, b) => a.localeCompare(b))
-  return duplicateNames.map(name => listMap.get(name)!).flat()
+  return duplicateNames.map((name) => listMap.get(name)!).flat()
 }
 
 export const searchListMusic = (list: LX.Music.MusicInfo[], text: string) => {
   let result: LX.Music.MusicInfo[] = []
-  let rxp = new RegExp(text.split('').map(s => s.replace(/[.*+?^${}()|[\]\\]/, '\\$&')).join('.*') + '.*', 'i')
+  let rxp = new RegExp(
+    text
+      .split('')
+      .map((s) => s.replace(/[.*+?^${}()|[\]\\]/, '\\$&'))
+      .join('.*') + '.*',
+    'i'
+  )
   for (const mInfo of list) {
     const str = `${mInfo.name}${mInfo.singer}${mInfo.meta.albumName ? mInfo.meta.albumName : ''}`
     if (rxp.test(str)) result.push(mInfo)
   }
 
-  const sortedList: Array<{ num: number, data: LX.Music.MusicInfo }> = []
+  const sortedList: Array<{ num: number; data: LX.Music.MusicInfo }> = []
 
   for (const mInfo of result) {
     sortInsert(sortedList, {
-      num: similar(text, `${mInfo.name}${mInfo.singer}${mInfo.meta.albumName ? mInfo.meta.albumName : ''}`),
+      num: similar(
+        text,
+        `${mInfo.name}${mInfo.singer}${mInfo.meta.albumName ? mInfo.meta.albumName : ''}`
+      ),
       data: mInfo,
     })
   }
-  return sortedList.map(item => item.data).reverse()
+  return sortedList.map((item) => item.data).reverse()
 }
 
 /**
@@ -276,17 +335,18 @@ export const createSortedList = (list: LX.Music.MusicInfo[], position: number, i
     infos.push(map.get(id)!)
     map.delete(id)
   }
-  list = list.filter(mInfo => map.has(mInfo.id))
+  list = list.filter((mInfo) => map.has(mInfo.id))
   arrPushByPosition(list, infos, Math.min(position, list.length))
   return list
 }
-
 
 /**
  * 创建本地列表音乐信息
  * @param filePaths 文件路径
  */
-export const createLocalMusicInfos = async(filePaths: string[]): Promise<LX.Music.MusicInfoLocal[]> => {
+export const createLocalMusicInfos = async (
+  filePaths: string[]
+): Promise<LX.Music.MusicInfoLocal[]> => {
   const list: LX.Music.MusicInfoLocal[] = []
   for await (const path of filePaths) {
     const musicInfo = await createLocalMusicInfo(path)
@@ -303,16 +363,38 @@ export const createLocalMusicInfos = async(filePaths: string[]): Promise<LX.Musi
  * @param lists 列表数据
  * @param isMerge 是否合并
  */
-export const exportPlayListToText = async(savePath: string, lists: Array<LX.List.MyDefaultListInfoFull | LX.List.MyLoveListInfoFull | LX.List.UserListInfoFull>, isMerge: boolean) => {
+export const exportPlayListToText = async (
+  savePath: string,
+  lists: Array<
+    LX.List.MyDefaultListInfoFull | LX.List.MyLoveListInfoFull | LX.List.UserListInfoFull
+  >,
+  isMerge: boolean
+) => {
   const iconv = await import('iconv-lite')
 
   if (isMerge) {
-    await saveStrToFile(savePath,
-      iconv.encode(lists.map(l => l.list.map(m => `${m.name}  ${m.singer}  ${m.meta.albumName ?? ''}`).join('\n')).join('\n\n'), 'utf8', { addBOM: true }))
+    await saveStrToFile(
+      savePath,
+      iconv.encode(
+        lists
+          .map((l) =>
+            l.list.map((m) => `${m.name}  ${m.singer}  ${m.meta.albumName ?? ''}`).join('\n')
+          )
+          .join('\n\n'),
+        'utf8',
+        { addBOM: true }
+      )
+    )
   } else {
     for await (const list of lists) {
-      await saveStrToFile(joinPath(savePath, `lx_list_${filterFileName(list.name)}.txt`),
-        iconv.encode(list.list.map(m => `${m.name}  ${m.singer}  ${m.meta.albumName ?? ''}`).join('\n'), 'utf8', { addBOM: true }))
+      await saveStrToFile(
+        joinPath(savePath, `lx_list_${filterFileName(list.name)}.txt`),
+        iconv.encode(
+          list.list.map((m) => `${m.name}  ${m.singer}  ${m.meta.albumName ?? ''}`).join('\n'),
+          'utf8',
+          { addBOM: true }
+        )
+      )
     }
   }
 }
@@ -324,10 +406,14 @@ export const exportPlayListToText = async(savePath: string, lists: Array<LX.List
  * @param isMerge 是否合并
  * @param header 表头名称
  */
-export const exportPlayListToCSV = async(savePath: string,
-  lists: Array<LX.List.MyDefaultListInfoFull | LX.List.MyLoveListInfoFull | LX.List.UserListInfoFull>,
+export const exportPlayListToCSV = async (
+  savePath: string,
+  lists: Array<
+    LX.List.MyDefaultListInfoFull | LX.List.MyLoveListInfoFull | LX.List.UserListInfoFull
+  >,
   isMerge: boolean,
-  header: string) => {
+  header: string
+) => {
   const iconv = await import('iconv-lite')
 
   const filterStr = (str: string) => {
@@ -338,10 +424,40 @@ export const exportPlayListToCSV = async(savePath: string,
   }
 
   if (isMerge) {
-    await saveStrToFile(savePath, iconv.encode(header + lists.map(l => l.list.map(m => `${filterStr(m.name)},${filterStr(m.singer)},${filterStr(m.meta.albumName ?? '')}`).join('\n')).join('\n'), 'utf8', { addBOM: true }))
+    await saveStrToFile(
+      savePath,
+      iconv.encode(
+        header +
+          lists
+            .map((l) =>
+              l.list
+                .map(
+                  (m) =>
+                    `${filterStr(m.name)},${filterStr(m.singer)},${filterStr(m.meta.albumName ?? '')}`
+                )
+                .join('\n')
+            )
+            .join('\n'),
+        'utf8',
+        { addBOM: true }
+      )
+    )
   } else {
     for await (const list of lists) {
-      await saveStrToFile(joinPath(savePath, `lx_list_${filterFileName(list.name)}.csv`), iconv.encode(header + list.list.map(m => `${filterStr(m.name)},${filterStr(m.singer)},${filterStr(m.meta.albumName ?? '')}`).join('\n'), 'utf8', { addBOM: true }))
+      await saveStrToFile(
+        joinPath(savePath, `lx_list_${filterFileName(list.name)}.csv`),
+        iconv.encode(
+          header +
+            list.list
+              .map(
+                (m) =>
+                  `${filterStr(m.name)},${filterStr(m.singer)},${filterStr(m.meta.albumName ?? '')}`
+              )
+              .join('\n'),
+          'utf8',
+          { addBOM: true }
+        )
+      )
     }
   }
 }

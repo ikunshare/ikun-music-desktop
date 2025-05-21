@@ -5,8 +5,4 @@ export const langS2t = (textBase64: string): string => {
   return Buffer.from(text).toString('base64')
 }
 
-export {
-  saveLxConfigFile,
-  readLxConfigFile,
-  saveStrToFile,
-} from '@common/utils/nodejs'
+export { saveLxConfigFile, readLxConfigFile, saveStrToFile } from '@common/utils/nodejs'

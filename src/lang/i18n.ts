@@ -22,7 +22,6 @@ const locale = ref<Langs>('zh-cn')
 
 let i18n: I18n
 
-
 const trackReactivityValues = (): any => {
   return locale.value
 }
@@ -54,7 +53,7 @@ const setLanguage = (lang: Langs) => {
 }
 
 const createI18n = (): I18n => {
-  return i18n = {
+  return (i18n = {
     locale: locale.value,
     fallbackLocale: 'zh-cn',
     availableLocales: Object.keys(messages) as Langs[],
@@ -79,13 +78,7 @@ const createI18n = (): I18n => {
       trackReactivityValues()
       return this.getMessage(key, val)
     },
-  }
+  })
 }
 
-
-export {
-  i18nPlugin,
-  setLanguage,
-  useI18n,
-  createI18n,
-}
+export { i18nPlugin, setLanguage, useI18n, createI18n }

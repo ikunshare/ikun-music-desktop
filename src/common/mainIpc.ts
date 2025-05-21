@@ -27,19 +27,37 @@ export const mainOffAll = (name: string) => {
 export function mainHandle(name: string, listener: LX.IpcMainInvokeEventListener): void
 export function mainHandle<T>(name: string, listener: LX.IpcMainInvokeEventListenerParams<T>): void
 export function mainHandle<V>(name: string, listener: LX.IpcMainInvokeEventListenerValue<V>): void
-export function mainHandle<T, V>(name: string, listener: LX.IpcMainInvokeEventListenerParamsValue<T, V>): void
-export function mainHandle<T, V>(name: string, listener: LX.IpcMainInvokeEventListenerParamsValue<T, V>): void {
-  ipcMain.handle(name, async(event, params) => {
+export function mainHandle<T, V>(
+  name: string,
+  listener: LX.IpcMainInvokeEventListenerParamsValue<T, V>
+): void
+export function mainHandle<T, V>(
+  name: string,
+  listener: LX.IpcMainInvokeEventListenerParamsValue<T, V>
+): void {
+  ipcMain.handle(name, async (event, params) => {
     return listener({ event, params })
   })
 }
 
 export function mainHandleOnce(name: string, listener: LX.IpcMainInvokeEventListener): void
-export function mainHandleOnce<T>(name: string, listener: LX.IpcMainInvokeEventListenerParams<T>): void
-export function mainHandleOnce<V>(name: string, listener: LX.IpcMainInvokeEventListenerValue<V>): void
-export function mainHandleOnce<T, V>(name: string, listener: LX.IpcMainInvokeEventListenerParamsValue<T, V>): void
-export function mainHandleOnce<T, V>(name: string, listener: LX.IpcMainInvokeEventListenerParamsValue<T, V>): void {
-  ipcMain.handleOnce(name, async(event, params) => {
+export function mainHandleOnce<T>(
+  name: string,
+  listener: LX.IpcMainInvokeEventListenerParams<T>
+): void
+export function mainHandleOnce<V>(
+  name: string,
+  listener: LX.IpcMainInvokeEventListenerValue<V>
+): void
+export function mainHandleOnce<T, V>(
+  name: string,
+  listener: LX.IpcMainInvokeEventListenerParamsValue<T, V>
+): void
+export function mainHandleOnce<T, V>(
+  name: string,
+  listener: LX.IpcMainInvokeEventListenerParamsValue<T, V>
+): void {
+  ipcMain.handleOnce(name, async (event, params) => {
     return listener({ event, params })
   })
 }

@@ -3,7 +3,6 @@ import { mainHandle } from '@common/mainIpc'
 import { sendEvent } from '../main'
 // import getStore from '@common/store'
 
-
 // const { registerHotkey, unRegisterHotkey } = require('../modules/hotKey/utils')
 
 // mainHandle(ipcMainWindowNames.set_hot_key_config, async(event, { action, data }) => {
@@ -19,7 +18,7 @@ import { sendEvent } from '../main'
 // })
 
 export default () => {
-  mainHandle<LX.HotKeyConfigAll>(WIN_MAIN_RENDERER_EVENT_NAME.get_hot_key, async() => {
+  mainHandle<LX.HotKeyConfigAll>(WIN_MAIN_RENDERER_EVENT_NAME.get_hot_key, async () => {
     // const electronStore_hotKey = getStore('hotKey')
     return {
       local: global.lx.hotKey?.config.local,

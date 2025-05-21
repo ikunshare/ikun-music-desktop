@@ -1,6 +1,5 @@
 import { shell, clipboard } from 'electron'
 
-
 /**
  * 在资源管理器中打开目录
  * @param {string} dir
@@ -9,16 +8,14 @@ export const openDirInExplorer = (dir: string) => {
   shell.showItemInFolder(dir)
 }
 
-
 /**
  * 在浏览器打开URL
  * @param {*} url
  */
-export const openUrl = async(url: string) => {
+export const openUrl = async (url: string) => {
   if (!/^https?:\/\//.test(url)) return
   await shell.openExternal(url)
 }
-
 
 /**
  * 复制文本到剪贴板
@@ -35,7 +32,6 @@ export const clipboardWriteText = (str: string) => {
 export const clipboardReadText = (): string => {
   return clipboard.readText()
 }
-
 
 export const encodePath = (path: string) => {
   // https://github.com/ikunshare/ikun-music-desktop/issues/963

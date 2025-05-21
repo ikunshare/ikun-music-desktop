@@ -1,9 +1,6 @@
 import { onMounted, useCssModule, type Ref } from '@common/utils/vueTools'
 
-
-export default ({ dom_lists_list }: {
-  dom_lists_list: Ref<HTMLElement | null>
-}) => {
+export default ({ dom_lists_list }: { dom_lists_list: Ref<HTMLElement | null> }) => {
   const styles = useCssModule()
 
   const setListsScroll = () => {

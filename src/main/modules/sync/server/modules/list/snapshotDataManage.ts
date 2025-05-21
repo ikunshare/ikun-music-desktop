@@ -6,7 +6,6 @@ import { getUserConfig, type UserDataManage } from '../../user/data'
 import { File } from '../../../../../../common/constants_sync'
 import { checkAndCreateDirSync } from '../../utils'
 
-
 interface SnapshotInfo {
   latest: string | null
   time: number
@@ -26,9 +25,9 @@ export class SnapshotDataManage {
     return this.clientSnapshotKeys.includes(key)
   }
 
-  clearOldSnapshot = async() => {
+  clearOldSnapshot = async () => {
     if (!this.snapshotInfo) return
-    const snapshotList = this.snapshotInfo.list.filter(key => !this.isIncluedsDevice(key))
+    const snapshotList = this.snapshotInfo.list.filter((key) => !this.isIncluedsDevice(key))
     // console.log(snapshotList.length, lx.config.maxSnapshotNum)
     const userMaxSnapshotNum = getUserConfig(this.userDataManage.userName).maxSnapshotNum
     let requiredSave = snapshotList.length > userMaxSnapshotNum
@@ -42,24 +41,25 @@ export class SnapshotDataManage {
     if (requiredSave) this.saveSnapshotInfo(this.snapshotInfo)
   }
 
-  updateDeviceSnapshotKey = async(clientId: string, key: string) => {
+  updateDeviceSnapshotKey = async (clientId: string, key: string) => {
     // console.log('updateDeviceSnapshotKey', key)
     let client = this.snapshotInfo.clients[clientId]
     if (!client) client = this.snapshotInfo.clients[clientId] = { snapshotKey: '', lastSyncDate: 0 }
-    if (client.snapshotKey) this.clientSnapshotKeys.splice(this.clientSnapshotKeys.indexOf(client.snapshotKey), 1)
+    if (client.snapshotKey)
+      this.clientSnapshotKeys.splice(this.clientSnapshotKeys.indexOf(client.snapshotKey), 1)
     client.snapshotKey = key
     client.lastSyncDate = Date.now()
     this.clientSnapshotKeys.push(key)
     this.saveSnapshotInfoThrottle()
   }
 
-  getDeviceCurrentSnapshotKey = async(clientId: string) => {
+  getDeviceCurrentSnapshotKey = async (clientId: string) => {
     // console.log('updateDeviceSnapshotKey', key)
     const client = this.snapshotInfo.clients[clientId]
     return client?.snapshotKey
   }
 
-  getSnapshotInfo = async(): Promise<SnapshotInfo> => {
+  getSnapshotInfo = async (): Promise<SnapshotInfo> => {
     return this.snapshotInfo
   }
 
@@ -71,13 +71,14 @@ export class SnapshotDataManage {
   removeSnapshotInfo = (clientId: string) => {
     let client = this.snapshotInfo.clients[clientId]
     if (!client) return
-    if (client.snapshotKey) this.clientSnapshotKeys.splice(this.clientSnapshotKeys.indexOf(client.snapshotKey), 1)
+    if (client.snapshotKey)
+      this.clientSnapshotKeys.splice(this.clientSnapshotKeys.indexOf(client.snapshotKey), 1)
 
     delete this.snapshotInfo.clients[clientId]
     this.saveSnapshotInfoThrottle()
   }
 
-  getSnapshot = async(name: string) => {
+  getSnapshot = async (name: string) => {
     const filePath = path.join(this.snapshotDir, `snapshot_${name}`)
     let listData: LX.Sync.List.ListData
     try {
@@ -89,7 +90,7 @@ export class SnapshotDataManage {
     return listData
   }
 
-  saveSnapshot = async(name: string, data: string) => {
+  saveSnapshot = async (name: string, data: string) => {
     syncLog.info('saveSnapshot', this.userDataManage.userName, name)
     const filePath = path.join(this.snapshotDir, `snapshot_${name}`)
     try {
@@ -100,7 +101,7 @@ export class SnapshotDataManage {
     }
   }
 
-  removeSnapshot = async(name: string) => {
+  removeSnapshot = async (name: string) => {
     syncLog.info('removeSnapshot', this.userDataManage.userName, name)
     const filePath = path.join(this.snapshotDir, `snapshot_${name}`)
     try {
@@ -109,7 +110,6 @@ export class SnapshotDataManage {
       syncLog.error(err)
     }
   }
-
 
   constructor(userDataManage: UserDataManage) {
     this.userDataManage = userDataManage
@@ -132,7 +132,9 @@ export class SnapshotDataManage {
       })
     })
 
-    this.clientSnapshotKeys = Object.values(this.snapshotInfo.clients).map(device => device.snapshotKey).filter(k => k)
+    this.clientSnapshotKeys = Object.values(this.snapshotInfo.clients)
+      .map((device) => device.snapshotKey)
+      .filter((k) => k)
   }
 }
 // type UserDataManages = Map<string, UserDataManage>

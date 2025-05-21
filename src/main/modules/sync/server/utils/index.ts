@@ -1,7 +1,6 @@
 import fs from 'node:fs'
 import crypto from 'node:crypto'
 
-
 export const createDirSync = (path: string) => {
   if (!fs.existsSync(path)) {
     try {

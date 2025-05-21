@@ -1,7 +1,6 @@
 // import { getListFromState } from './list'
 // import { downloadList } from './download'
 
-
 // export const getList = (listId: string | null): LX.Download.ListItem[] | LX.Music.MusicInfo[] => {
 //   return listId == 'download' ? downloadList : getListFromState(listId)
 // }
@@ -26,7 +25,7 @@ export const getThemes = (callback: (themeInfo: LX.ThemeInfo) => void) => {
     callback(themeInfo)
     return
   }
-  void getTheme().then(info => {
+  void getTheme().then((info) => {
     themeInfo.themes = markRaw(info.themes)
     themeInfo.userThemes = shallowReactive(info.userThemes)
     themeInfo.dataPath = info.dataPath
@@ -36,7 +35,10 @@ export const getThemes = (callback: (themeInfo: LX.ThemeInfo) => void) => {
 export const buildThemeColors = (theme: LX.Theme, dataPath: string) => {
   if (theme.isCustom && theme.config.extInfo['--background-image'] != 'none') {
     theme = copyTheme(theme)
-    theme.config.extInfo['--background-image'] = buildBgUrl(theme.config.extInfo['--background-image'], dataPath)
+    theme.config.extInfo['--background-image'] = buildBgUrl(
+      theme.config.extInfo['--background-image'],
+      dataPath
+    )
   }
   const colors: Record<string, string> = {
     ...theme.config.themeColors,
@@ -58,24 +60,20 @@ export const copyTheme = (theme: LX.Theme): LX.Theme => {
 }
 
 export const findTheme = (themeInfo: LX.ThemeInfo, id: string): LX.Theme | undefined => {
-  let theme = themeInfo.themes.find(theme => theme.id == id)
+  let theme = themeInfo.themes.find((theme) => theme.id == id)
   if (theme) return theme
-  theme = themeInfo.userThemes.find(theme => theme.id == id)
+  theme = themeInfo.userThemes.find((theme) => theme.id == id)
   return theme
 }
 
 export const applyTheme = (id: string, lightId: string, darkId: string, dataPath: string) => {
   getThemes((themeInfo) => {
-    let themeId = id == 'auto'
-      ? themeShouldUseDarkColors.value
-        ? darkId
-        : lightId
-      : id
+    let themeId = id == 'auto' ? (themeShouldUseDarkColors.value ? darkId : lightId) : id
 
     let theme = findTheme(themeInfo, themeId)
     if (!theme) {
       themeId = id == 'auto' && themeShouldUseDarkColors.value ? 'black' : 'green'
-      theme = themeInfo.themes.find(theme => theme.id == themeId)!
+      theme = themeInfo.themes.find((theme) => theme.id == themeId)!
     }
     window.setTheme(buildThemeColors(theme, dataPath))
   })

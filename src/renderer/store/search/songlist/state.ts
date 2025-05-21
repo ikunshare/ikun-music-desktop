@@ -11,11 +11,9 @@ export const sources: Array<LX.OnlineSource | 'all'> = markRaw([])
 
 export type SearchListInfo = Omit<ListInfo, 'source'>
 
-
 interface ListInfos extends Partial<Record<LX.OnlineSource, SearchListInfo>> {
-  'all': SearchListInfo
+  all: SearchListInfo
 }
-
 
 export const listInfos: ListInfos = markRaw({
   all: reactive<SearchListInfo>({

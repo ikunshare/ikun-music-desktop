@@ -76,16 +76,16 @@ export const createRawLyricUpdateStatement = () => {
     WHERE "id"=@id AND "source"='${RAW_LYRIC}' AND "type"=@type`)
 }
 
-
 /**
  * 创建原始歌词数量统计语句
  * @returns 统计语句
  */
 export const createRawLyricCountStatement = () => {
   const db = getDB()
-  return db.prepare<[]>(`SELECT COUNT(*) as count FROM "main"."lyric" WHERE "source"='${RAW_LYRIC}'`)
+  return db.prepare<[]>(
+    `SELECT COUNT(*) as count FROM "main"."lyric" WHERE "source"='${RAW_LYRIC}'`
+  )
 }
-
 
 /**
  * 创建已编辑歌词查询语句
@@ -153,5 +153,7 @@ export const createEditedLyricUpdateStatement = () => {
  */
 export const createEditedLyricCountStatement = () => {
   const db = getDB()
-  return db.prepare<[]>(`SELECT COUNT(*) as count FROM "main"."lyric" WHERE "source"='${EDITED_LYRIC}'`)
+  return db.prepare<[]>(
+    `SELECT COUNT(*) as count FROM "main"."lyric" WHERE "source"='${EDITED_LYRIC}'`
+  )
 }

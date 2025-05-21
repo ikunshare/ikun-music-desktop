@@ -3,8 +3,11 @@ import { updateUserListPosition } from '@renderer/store/list/action'
 import { userLists } from '@renderer/store/list/state'
 import useDarg from '@renderer/utils/compositions/useDrag'
 
-
-export default ({ dom_lists_list, handleSaveListName, handleMenuClick }: {
+export default ({
+  dom_lists_list,
+  handleSaveListName,
+  handleMenuClick,
+}: {
   dom_lists_list: Ref<HTMLElement | null>
   handleSaveListName: () => Promise<void> | void
   handleMenuClick: () => void
@@ -29,7 +32,8 @@ export default ({ dom_lists_list, handleSaveListName, handleMenuClick }: {
         case 'SELECT':
         case 'TEXTAREA':
           return
-        default: if ((event!.target as HTMLElement).isContentEditable) return
+        default:
+          if ((event!.target as HTMLElement).isContentEditable) return
       }
 
       isModDown.value = true

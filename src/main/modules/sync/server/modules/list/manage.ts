@@ -10,7 +10,7 @@ export class ListManage {
     this.snapshotDataManage = new SnapshotDataManage(userDataManage)
   }
 
-  createSnapshot = async() => {
+  createSnapshot = async () => {
     const listData = JSON.stringify(await this.getListData())
     const md5 = toMD5(listData)
     const snapshotInfo = await this.snapshotDataManage.getSnapshotInfo()
@@ -26,7 +26,7 @@ export class ListManage {
     return md5
   }
 
-  getCurrentListInfoKey = async() => {
+  getCurrentListInfoKey = async () => {
     // const snapshotInfo = await this.snapshotDataManage.getSnapshotInfo()
     // if (snapshotInfo.latest) {
     //   return snapshotInfo.latest
@@ -37,20 +37,19 @@ export class ListManage {
     return this.createSnapshot()
   }
 
-  getDeviceCurrentSnapshotKey = async(clientId: string) => {
+  getDeviceCurrentSnapshotKey = async (clientId: string) => {
     return this.snapshotDataManage.getDeviceCurrentSnapshotKey(clientId)
   }
 
-  updateDeviceSnapshotKey = async(clientId: string, key: string) => {
+  updateDeviceSnapshotKey = async (clientId: string, key: string) => {
     await this.snapshotDataManage.updateDeviceSnapshotKey(clientId, key)
   }
 
-  removeDevice = async(clientId: string) => {
+  removeDevice = async (clientId: string) => {
     this.snapshotDataManage.removeSnapshotInfo(clientId)
   }
 
-  getListData = async(): Promise<LX.Sync.List.ListData> => {
+  getListData = async (): Promise<LX.Sync.List.ListData> => {
     return getLocalListData()
   }
 }
-

@@ -65,7 +65,7 @@ export const createUpdateStatement = () => {
  */
 export const createUpdatePositionStatement = () => {
   const db = getDB()
-  return db.prepare<[{ id: string, position: number }]>(`
+  return db.prepare<[{ id: string; position: number }]>(`
     UPDATE "main"."download_list"
     SET "position"=@position
     WHERE "id"=@id`)

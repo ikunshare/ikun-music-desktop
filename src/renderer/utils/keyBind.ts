@@ -73,10 +73,20 @@ const handleKeyDown = (event: LX.KeyEvent) => {
       keys.push('space')
       break
     default:
-      keys.push((event.code.includes('Numpad') ? event.code.replace(/^Numpad(\w{1,3})\w*$/i, 'num$1') : event.key).toLowerCase())
+      keys.push(
+        (event.code.includes('Numpad')
+          ? event.code.replace(/^Numpad(\w{1,3})\w*$/i, 'num$1')
+          : event.key
+        ).toLowerCase()
+      )
       break
   }
-  handleEvent('down', event, keys, event.target ? assertStopCallback(event.target as HTMLElement) : false)
+  handleEvent(
+    'down',
+    event,
+    keys,
+    event.target ? assertStopCallback(event.target as HTMLElement) : false
+  )
 }
 
 const handleKeyUp = (event: LX.KeyEvent) => {
@@ -91,13 +101,30 @@ const handleKeyUp = (event: LX.KeyEvent) => {
       keys.push('space')
       break
     default:
-      keys.push((event.code.includes('Numpad') ? event.code.replace(/^Numpad(\w{1,3})\w*$/i, 'num$1') : event.key).toLowerCase())
+      keys.push(
+        (event.code.includes('Numpad')
+          ? event.code.replace(/^Numpad(\w{1,3})\w*$/i, 'num$1')
+          : event.key
+        ).toLowerCase()
+      )
       break
   }
-  handleEvent('up', event, keys, event.target ? assertStopCallback(event.target as HTMLElement) : false)
+  handleEvent(
+    'up',
+    event,
+    keys,
+    event.target ? assertStopCallback(event.target as HTMLElement) : false
+  )
 }
 
-type HandleSendEvent = (key: Key, eventKey: EventKey, type: KeyActionType, event: Event, keys: Keys, isEditing: boolean) => void
+type HandleSendEvent = (
+  key: Key,
+  eventKey: EventKey,
+  type: KeyActionType,
+  event: Event,
+  keys: Keys,
+  isEditing: boolean
+) => void
 let handleSendEvent: HandleSendEvent
 
 const bindKey = (handle: HandleSendEvent = () => {}) => {

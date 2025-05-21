@@ -156,15 +156,23 @@ const handler: LX.Sync.ServerSyncHandlerListActions<LX.Sync.Server.Socket> = {
     const currentUserName = socket.userInfo.name
     const currentId = socket.keyInfo.clientId
     socket.broadcast((client) => {
-      if (client.keyInfo.clientId == currentId || !client.moduleReadys?.list || client.userInfo.name != currentUserName) return
-      void client.remoteQueueList.onListSyncAction(action).then(async() => {
-        return userSpace.listManage.updateDeviceSnapshotKey(client.keyInfo.clientId, key)
-      }).catch(err => {
-        // TODO send status
-        client.close(SYNC_CLOSE_CODE.failed)
-        // client.moduleReadys.list = false
-        console.log(err.message)
-      })
+      if (
+        client.keyInfo.clientId == currentId ||
+        !client.moduleReadys?.list ||
+        client.userInfo.name != currentUserName
+      )
+        return
+      void client.remoteQueueList
+        .onListSyncAction(action)
+        .then(async () => {
+          return userSpace.listManage.updateDeviceSnapshotKey(client.keyInfo.clientId, key)
+        })
+        .catch((err) => {
+          // TODO send status
+          client.close(SYNC_CLOSE_CODE.failed)
+          // client.moduleReadys.list = false
+          console.log(err.message)
+        })
     })
   },
 }

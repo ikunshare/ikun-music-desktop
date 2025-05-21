@@ -12,7 +12,7 @@ export const registerEvent = (socket: LX.Sync.Client.Socket) => {
   unregisterEvent()
   unregisterLocalListAction = registerListActionEvent((action) => {
     if (!socket.moduleReadys?.list) return
-    void socket.remoteQueueList.onListSyncAction(action).catch(err => {
+    void socket.remoteQueueList.onListSyncAction(action).catch((err) => {
       // TODO send status
       socket.moduleReadys.list = false
       socket.close(SYNC_CLOSE_CODE.failed)

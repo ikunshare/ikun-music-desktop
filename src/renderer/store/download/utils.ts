@@ -17,7 +17,7 @@ export const buildSavePath = (musicInfo: LX.Download.ListItem) => {
         dirName = window.i18n.t(loveList.name)
         break
       default:
-        dirName = userLists.find(list => list.id === listId)?.name
+        dirName = userLists.find((list) => list.id === listId)?.name
         break
     }
     if (dirName) dirName = filterFileName(dirName)

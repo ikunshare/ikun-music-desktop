@@ -1,5 +1,8 @@
 import { onBeforeUnmount, watch } from '@common/utils/vueTools'
-import { setPlaybackRate as setPlayerPlaybackRate, setPreservesPitch } from '@renderer/plugins/player'
+import {
+  setPlaybackRate as setPlayerPlaybackRate,
+  setPreservesPitch,
+} from '@renderer/plugins/player'
 
 import { debounce } from '@common/utils'
 // import { HOTKEY_PLAYER } from '@common/hotKey'
@@ -12,7 +15,6 @@ export default () => {
   setPlaybackRate(appSetting['player.playbackRate'])
   setPlayerPlaybackRate(appSetting['player.playbackRate'])
   setPreservesPitch(appSetting['player.preservesPitch'])
-
 
   const handleSetPlaybackRate = (num: number) => {
     const rate = num < 0.5 ? 0.5 : num > 2 ? 2 : num
@@ -33,19 +35,23 @@ export default () => {
   //   handleSetPlaybackRateDown()
   // }
 
-  watch(playbackRate, rate => {
+  watch(playbackRate, (rate) => {
     handleSavePlaybackRate(rate)
     setPlayerPlaybackRate(rate)
   })
-  watch(() => appSetting['player.playbackRate'], rate => {
-    setPlaybackRate(rate)
-  })
+  watch(
+    () => appSetting['player.playbackRate'],
+    (rate) => {
+      setPlaybackRate(rate)
+    }
+  )
 
-
-  watch(() => appSetting['player.preservesPitch'], preservesPitch => {
-    setPreservesPitch(preservesPitch)
-  })
-
+  watch(
+    () => appSetting['player.preservesPitch'],
+    (preservesPitch) => {
+      setPreservesPitch(preservesPitch)
+    }
+  )
 
   // window.key_event.on(HOTKEY_PLAYER.volume_up.action, hotkeyVolumeUp)
   // window.key_event.on(HOTKEY_PLAYER.volume_down.action, hotkeyVolumeDown)

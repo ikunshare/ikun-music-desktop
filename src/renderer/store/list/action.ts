@@ -35,7 +35,11 @@ export const setUpdateTime = (id: string, time: string) => {
   listUpdateTimes[id] = time
 }
 
-export const addListMusics = async(id: string, musicInfos: LX.Music.MusicInfo[], addMusicLocationType?: LX.AddMusicLocationType) => {
+export const addListMusics = async (
+  id: string,
+  musicInfos: LX.Music.MusicInfo[],
+  addMusicLocationType?: LX.AddMusicLocationType
+) => {
   return addListMusicsAction({
     id,
     musicInfos: toRaw(musicInfos),
@@ -43,7 +47,12 @@ export const addListMusics = async(id: string, musicInfos: LX.Music.MusicInfo[],
   })
 }
 
-export const moveListMusics = async(fromId: string, toId: string, musicInfos: LX.Music.MusicInfo[], addMusicLocationType?: LX.AddMusicLocationType) => {
+export const moveListMusics = async (
+  fromId: string,
+  toId: string,
+  musicInfos: LX.Music.MusicInfo[],
+  addMusicLocationType?: LX.AddMusicLocationType
+) => {
   return moveListMusicsAction({
     fromId,
     toId,
@@ -52,7 +61,14 @@ export const moveListMusics = async(fromId: string, toId: string, musicInfos: LX
   })
 }
 
-export const createUserList = async({ name, id = `userlist_${Date.now()}`, list = [], source, sourceListId, position = -1 }: {
+export const createUserList = async ({
+  name,
+  id = `userlist_${Date.now()}`,
+  list = [],
+  source,
+  sourceListId,
+  position = -1,
+}: {
   name?: string
   id?: string
   list?: LX.Music.MusicInfo[]
@@ -75,8 +91,7 @@ export const createUserList = async({ name, id = `userlist_${Date.now()}`, list 
   if (list) await addListMusics(id, list)
 }
 
-
-export const setTempList = async(id: string, list: LX.Music.MusicInfoOnline[]) => {
+export const setTempList = async (id: string, list: LX.Music.MusicInfoOnline[]) => {
   tempListMeta.id = id
   await overwriteListMusics({
     listId: LIST_IDS.TEMP,
@@ -84,10 +99,7 @@ export const setTempList = async(id: string, list: LX.Music.MusicInfoOnline[]) =
   })
 }
 
-export {
-  addListMusicsAction,
-  moveListMusicsAction,
-}
+export { addListMusicsAction, moveListMusicsAction }
 
 export {
   getUserLists,

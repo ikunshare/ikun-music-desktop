@@ -37,7 +37,6 @@ type Tags = Partial<Record<LX.OnlineSource, TagInfo>>
 
 export const tags = shallowReactive<Tags>({})
 
-
 export interface ListInfoItem {
   play_count: string
   id: string

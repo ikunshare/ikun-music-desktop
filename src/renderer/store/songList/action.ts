@@ -10,12 +10,7 @@ import {
   isVisibleListDetail,
   openSongListInputInfo,
 } from './state'
-import type {
-  ListDetailInfo,
-  ListInfoItem,
-  ListInfo,
-  TagInfo,
-} from './state'
+import type { ListDetailInfo, ListInfoItem, ListInfo, TagInfo } from './state'
 
 const cache = new Map<string, any>()
 
@@ -77,10 +72,9 @@ export const clearListDetail = () => {
   listDetailInfo.noItemLabel = ''
 }
 
-export const getTags = async<T extends LX.OnlineSource>(source: T) => {
+export const getTags = async <T extends LX.OnlineSource>(source: T) => {
   return musicSdk[source]?.songList.getTags() as Promise<TagInfo<T>>
 }
-
 
 /**
  * 获取歌单列表
@@ -91,7 +85,13 @@ export const getTags = async<T extends LX.OnlineSource>(source: T) => {
  * @param isRefresh 是否跳过缓存
  * @returns
  */
-export const getAndSetList = async(source: LX.OnlineSource, tabId: string, sortId: string, page: number, isRefresh = false) => {
+export const getAndSetList = async (
+  source: LX.OnlineSource,
+  tabId: string,
+  sortId: string,
+  page: number,
+  isRefresh = false
+) => {
   // let source = rootState.setting.songList.source
   // let tabId = rootState.setting.songList.tagInfo.id
   // let sortId = rootState.setting.songList.sortId
@@ -109,16 +109,19 @@ export const getAndSetList = async(source: LX.OnlineSource, tabId: string, sortI
   listInfo.noItemLabel = window.i18n.t('list__loading')
   listInfo.key = key
   // clearList()
-  return musicSdk[source]?.songList.getList(sortId, tabId, page).then((result: ListInfo) => {
-    cache.set(key, result)
-    if (key != listInfo.key) return
-    setList(result, tabId, sortId, page)
-  }).catch((error: any) => {
-    clearList()
-    listInfo.noItemLabel = window.i18n.t('list__load_failed')
-    console.log(error)
-    throw error
-  })
+  return musicSdk[source]?.songList
+    .getList(sortId, tabId, page)
+    .then((result: ListInfo) => {
+      cache.set(key, result)
+      if (key != listInfo.key) return
+      setList(result, tabId, sortId, page)
+    })
+    .catch((error: any) => {
+      clearList()
+      listInfo.noItemLabel = window.i18n.t('list__load_failed')
+      console.log(error)
+      throw error
+    })
 }
 
 /**
@@ -128,12 +131,19 @@ export const getAndSetList = async(source: LX.OnlineSource, tabId: string, sortI
  * @param isRefresh 是否跳过缓存
  * @returns
  */
-export const getListDetail = async(id: string, source: LX.OnlineSource, page: number, isRefresh = false): Promise<ListDetailInfo> => {
+export const getListDetail = async (
+  id: string,
+  source: LX.OnlineSource,
+  page: number,
+  isRefresh = false
+): Promise<ListDetailInfo> => {
   let key = `sdetail__${source}__${id}__${page}`
   if (!isRefresh && cache.has(key)) return cache.get(key)
 
   return musicSdk[source]?.songList.getListDetail(id, page).then((result: ListDetailInfo) => {
-    result.list = markRawList(deduplicationList(result.list.map(m => toNewMusicInfo(m)) as LX.Music.MusicInfoOnline[]))
+    result.list = markRawList(
+      deduplicationList(result.list.map((m) => toNewMusicInfo(m)) as LX.Music.MusicInfoOnline[])
+    )
     cache.set(key, result)
     return result
   })
@@ -146,7 +156,11 @@ export const getListDetail = async(id: string, source: LX.OnlineSource, page: nu
  * @param isRefresh 是否跳过缓存
  * @returns
  */
-export const getListDetailAll = async(id: string, source: LX.OnlineSource, isRefresh = false): Promise<LX.Music.MusicInfoOnline[]> => {
+export const getListDetailAll = async (
+  id: string,
+  source: LX.OnlineSource,
+  isRefresh = false
+): Promise<LX.Music.MusicInfoOnline[]> => {
   // console.log(source, id)
 
   const loadData = (id: string, page: number): Promise<ListDetailInfo> => {
@@ -154,28 +168,37 @@ export const getListDetailAll = async(id: string, source: LX.OnlineSource, isRef
     if (isRefresh && cache.has(key)) cache.delete(key)
     return cache.has(key)
       ? Promise.resolve(cache.get(key))
-      : musicSdk[source]?.songList.getListDetail(id, page).then((result: ListDetailInfo) => {
-        result.list = markRawList(deduplicationList(result.list.map(m => toNewMusicInfo(m)) as LX.Music.MusicInfoOnline[]))
-        cache.set(key, result)
-        return result
-      }) ?? Promise.reject(new Error('source not found' + source))
+      : (musicSdk[source]?.songList.getListDetail(id, page).then((result: ListDetailInfo) => {
+          result.list = markRawList(
+            deduplicationList(
+              result.list.map((m) => toNewMusicInfo(m)) as LX.Music.MusicInfoOnline[]
+            )
+          )
+          cache.set(key, result)
+          return result
+        }) ?? Promise.reject(new Error('source not found' + source)))
   }
 
-  return loadData(id, 1).then((result: ListDetailInfo) => {
-    if (result.total <= result.limit) return result.list
+  return loadData(id, 1)
+    .then((result: ListDetailInfo) => {
+      if (result.total <= result.limit) return result.list
 
-    let maxPage = Math.ceil(result.total / result.limit)
+      let maxPage = Math.ceil(result.total / result.limit)
 
-    const loadDetail = (loadPage = 2): Promise<ListDetailInfo['list']> => {
-      return loadPage == maxPage
-        ? loadData(id, loadPage).then((result: ListDetailInfo) => result.list)
-
-        : loadData(id, loadPage).then((result1: ListDetailInfo) => loadDetail(++loadPage).then((result2: ListDetailInfo['list']) => [...result1.list, ...result2]))
-    }
-    return loadDetail().then(result2 => [...result.list, ...result2])
-  }).then((list: ListDetailInfo['list']) => deduplicationList(list))
+      const loadDetail = (loadPage = 2): Promise<ListDetailInfo['list']> => {
+        return loadPage == maxPage
+          ? loadData(id, loadPage).then((result: ListDetailInfo) => result.list)
+          : loadData(id, loadPage).then((result1: ListDetailInfo) =>
+              loadDetail(++loadPage).then((result2: ListDetailInfo['list']) => [
+                ...result1.list,
+                ...result2,
+              ])
+            )
+      }
+      return loadDetail().then((result2) => [...result.list, ...result2])
+    })
+    .then((list: ListDetailInfo['list']) => deduplicationList(list))
 }
-
 
 /**
  * 获取并设置歌单内单页歌曲
@@ -184,7 +207,12 @@ export const getListDetailAll = async(id: string, source: LX.OnlineSource, isRef
  * @param isRefresh 是否跳过缓存
  * @returns
  */
-export const getAndSetListDetail = async(id: string, source: LX.OnlineSource, page: number, isRefresh = false) => {
+export const getAndSetListDetail = async (
+  id: string,
+  source: LX.OnlineSource,
+  page: number,
+  isRefresh = false
+) => {
   let key = `sdetail__${source}__${id}__${page}`
 
   if (!isRefresh && listDetailInfo.key == key && listDetailInfo.list.length) return
@@ -192,15 +220,17 @@ export const getAndSetListDetail = async(id: string, source: LX.OnlineSource, pa
   listDetailInfo.key = key
   listDetailInfo.noItemLabel = window.i18n.t('list__loading')
 
-  return getListDetail(id, source, page, isRefresh).then((result: ListDetailInfo) => {
-    if (key != listDetailInfo.key) return
-    setListDetail(result, id, page)
-  }).catch((error: any) => {
-    clearListDetail()
-    listDetailInfo.noItemLabel = window.i18n.t('list__load_failed')
-    console.log(error)
-    throw error
-  })
+  return getListDetail(id, source, page, isRefresh)
+    .then((result: ListDetailInfo) => {
+      if (key != listDetailInfo.key) return
+      setListDetail(result, id, page)
+    })
+    .catch((error: any) => {
+      clearListDetail()
+      listDetailInfo.noItemLabel = window.i18n.t('list__load_failed')
+      console.log(error)
+      throw error
+    })
 }
 
 export const setVisibleListDetail = (visible: boolean) => {

@@ -12,15 +12,24 @@ declare namespace LX {
     type ServerSyncListActions = WarpPromiseRecord<{
       onListSyncAction: (action: LX.Sync.List.ActionList) => void
     }>
-    type ServerSyncHandlerListActions<Socket> = WarpSyncHandlerActions<Socket, ServerSyncListActions>
+    type ServerSyncHandlerListActions<Socket> = WarpSyncHandlerActions<
+      Socket,
+      ServerSyncListActions
+    >
 
     type ServerSyncDislikeActions = WarpPromiseRecord<{
       onDislikeSyncAction: (action: LX.Sync.Dislike.ActionList) => void
     }>
-    type ServerSyncHandlerDislikeActions<Socket> = WarpSyncHandlerActions<Socket, ServerSyncDislikeActions>
+    type ServerSyncHandlerDislikeActions<Socket> = WarpSyncHandlerActions<
+      Socket,
+      ServerSyncDislikeActions
+    >
 
     type ClientSyncActions = WarpPromiseRecord<{
-      getEnabledFeatures: (serverType: ServerType, supportedFeatures: SupportedFeatures) => EnabledFeatures
+      getEnabledFeatures: (
+        serverType: ServerType,
+        supportedFeatures: SupportedFeatures
+      ) => EnabledFeatures
       finished: () => void
     }>
     type ClientSyncHandlerActions<Socket> = WarpSyncHandlerActions<Socket, ClientSyncActions>
@@ -33,7 +42,10 @@ declare namespace LX {
       list_sync_set_list_data: (data: LX.Sync.List.ListData) => void
       list_sync_finished: () => void
     }>
-    type ClientSyncHandlerListActions<Socket> = WarpSyncHandlerActions<Socket, ClientSyncListActions>
+    type ClientSyncHandlerListActions<Socket> = WarpSyncHandlerActions<
+      Socket,
+      ClientSyncListActions
+    >
 
     type ClientSyncDislikeActions = WarpPromiseRecord<{
       onDislikeSyncAction: (action: LX.Sync.Dislike.ActionList) => void
@@ -43,8 +55,9 @@ declare namespace LX {
       dislike_sync_set_list_data: (data: LX.Dislike.DislikeRules) => void
       dislike_sync_finished: () => void
     }>
-    type ClientSyncHandlerDislikeActions<Socket> = WarpSyncHandlerActions<Socket, ClientSyncDislikeActions>
+    type ClientSyncHandlerDislikeActions<Socket> = WarpSyncHandlerActions<
+      Socket,
+      ClientSyncDislikeActions
+    >
   }
 }
-
-

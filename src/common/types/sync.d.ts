@@ -1,6 +1,5 @@
 declare namespace LX {
   namespace Sync {
-
     interface EnableServer {
       enable: boolean
       port: string
@@ -11,33 +10,36 @@ declare namespace LX {
       authCode?: string
     }
 
-    interface SyncActionBase <A> {
+    interface SyncActionBase<A> {
       action: A
     }
     interface SyncActionData<A, D> extends SyncActionBase<A> {
       data: D
     }
-    type SyncAction<A, D = undefined> = D extends undefined ? SyncActionBase<A> : SyncActionData<A, D>
-
+    type SyncAction<A, D = undefined> = D extends undefined
+      ? SyncActionBase<A>
+      : SyncActionData<A, D>
 
     interface ModeTypes {
       list: LX.Sync.List.SyncMode
       dislike: LX.Sync.Dislike.SyncMode
     }
 
-    type ModeType = { [K in keyof ModeTypes]: { type: K, mode: ModeTypes[K] } }[keyof ModeTypes]
+    type ModeType = { [K in keyof ModeTypes]: { type: K; mode: ModeTypes[K] } }[keyof ModeTypes]
 
-    type SyncMainWindowActions = SyncAction<'select_mode', { deviceName: string, type: keyof ModeTypes }>
-    | SyncAction<'close_select_mode'>
-    | SyncAction<'client_status', ClientStatus>
-    | SyncAction<'server_status', ServerStatus>
+    type SyncMainWindowActions =
+      | SyncAction<'select_mode', { deviceName: string; type: keyof ModeTypes }>
+      | SyncAction<'close_select_mode'>
+      | SyncAction<'client_status', ClientStatus>
+      | SyncAction<'server_status', ServerStatus>
 
-    type SyncServiceActions = SyncAction<'select_mode', ModeType>
-    | SyncAction<'get_server_status'>
-    | SyncAction<'get_client_status'>
-    | SyncAction<'generate_code'>
-    | SyncAction<'enable_server', EnableServer>
-    | SyncAction<'enable_client', EnableClient>
+    type SyncServiceActions =
+      | SyncAction<'select_mode', ModeType>
+      | SyncAction<'get_server_status'>
+      | SyncAction<'get_client_status'>
+      | SyncAction<'generate_code'>
+      | SyncAction<'enable_server', EnableServer>
+      | SyncAction<'enable_client', EnableClient>
 
     type ServerDevices = ServerKeyInfo[]
 

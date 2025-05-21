@@ -1,7 +1,5 @@
-
 // import Vue from 'vue'
 import { createRouter, createWebHashHistory } from 'vue-router'
-
 
 const router = createRouter({
   history: createWebHashHistory(),
@@ -67,6 +65,5 @@ const router = createRouter({
   linkActiveClass: 'active-link',
   linkExactActiveClass: 'exact-active-link',
 })
-
 
 export default router

@@ -41,7 +41,8 @@ const winEvent = () => {
         'desktopLyric.width': bounds.width,
         'desktopLyric.height': bounds.height,
       })
-    } else if (isWin) { // Linux 不允许将窗口设置出屏幕之外，MacOS未知，故只在Windows下执行强制设置
+    } else if (isWin) {
+      // Linux 不允许将窗口设置出屏幕之外，MacOS未知，故只在Windows下执行强制设置
       // 非主动调整窗口触发的窗口位置变化将重置回设置值
       browserWindow!.setBounds({
         x: global.lx.appSetting['desktopLyric.x'] ?? 0,
@@ -75,13 +76,19 @@ const winEvent = () => {
   browserWindow.once('ready-to-show', () => {
     showWindow()
     if (global.lx.appSetting['desktopLyric.isLock']) {
-      browserWindow!.setIgnoreMouseEvents(true, { forward: !isLinux && global.lx.appSetting['desktopLyric.isHoverHide'] })
+      browserWindow!.setIgnoreMouseEvents(true, {
+        forward: !isLinux && global.lx.appSetting['desktopLyric.isHoverHide'],
+      })
     }
     // linux下每次重开时貌似要重新设置置顶
     // if (isLinux && global.lx.appSetting['desktopLyric.isAlwaysOnTop']) {
     //   browserWindow!.setAlwaysOnTop(global.lx.appSetting['desktopLyric.isAlwaysOnTop'], 'screen-saver')
     // }
-    if (global.lx.appSetting['desktopLyric.isAlwaysOnTop'] && global.lx.appSetting['desktopLyric.isAlwaysOnTopLoop']) alwaysOnTopTools.startLoop()
+    if (
+      global.lx.appSetting['desktopLyric.isAlwaysOnTop'] &&
+      global.lx.appSetting['desktopLyric.isAlwaysOnTopLoop']
+    )
+      alwaysOnTopTools.startLoop()
     browserWindow!.blur()
   })
 }
@@ -141,8 +148,14 @@ export const createWindow = () => {
     },
   })
 
-  const winURL = process.env.NODE_ENV !== 'production' ? 'http://localhost:9081/lyric.html' : `file://${path.join(encodePath(__dirname), 'lyric.html')}`
-  void browserWindow.loadURL(winURL + `?os=${getPlatform()}&dark=${shouldUseDarkColors}&theme=${encodeURIComponent(JSON.stringify(theme))}`)
+  const winURL =
+    process.env.NODE_ENV !== 'production'
+      ? 'http://localhost:9081/lyric.html'
+      : `file://${path.join(encodePath(__dirname), 'lyric.html')}`
+  void browserWindow.loadURL(
+    winURL +
+      `?os=${getPlatform()}&dark=${shouldUseDarkColors}&theme=${encodeURIComponent(JSON.stringify(theme))}`
+  )
 
   winEvent()
   // browserWindow.webContents.openDevTools()
@@ -181,8 +194,10 @@ export const setBounds = (bounds: Electron.Rectangle) => {
   browserWindow.setBounds(bounds)
 }
 
-
-export const setIgnoreMouseEvents = (ignore: boolean, options?: Electron.IgnoreMouseEventsOptions) => {
+export const setIgnoreMouseEvents = (
+  ignore: boolean,
+  options?: Electron.IgnoreMouseEventsOptions
+) => {
   if (!browserWindow) return
   browserWindow.setIgnoreMouseEvents(ignore, options)
 }
@@ -192,7 +207,20 @@ export const setSkipTaskbar = (skip: boolean) => {
   browserWindow.setSkipTaskbar(skip)
 }
 
-export const setAlwaysOnTop = (flag: boolean, level?: 'normal' | 'floating' | 'torn-off-menu' | 'modal-panel' | 'main-menu' | 'status' | 'pop-up-menu' | 'screen-saver' | undefined, relativeLevel?: number | undefined) => {
+export const setAlwaysOnTop = (
+  flag: boolean,
+  level?:
+    | 'normal'
+    | 'floating'
+    | 'torn-off-menu'
+    | 'modal-panel'
+    | 'main-menu'
+    | 'status'
+    | 'pop-up-menu'
+    | 'screen-saver'
+    | undefined,
+  relativeLevel?: number | undefined
+) => {
   if (!browserWindow) return
   browserWindow.setAlwaysOnTop(flag, level, relativeLevel)
 }

@@ -35,7 +35,7 @@ export default () => {
     })
   }
 
-  const handlePlayList = async(index: number) => {
+  const handlePlayList = async (index: number) => {
     let targetSong = listInfo.value.list[index]
 
     if (!assertApiSupport(targetSong.source)) return
@@ -44,7 +44,7 @@ export default () => {
 
     await addListMusics(LIST_IDS.DEFAULT, [targetSong])
 
-    let targetIndex = defaultListMusics.findIndex(s => s.id === targetSong.id)
+    let targetIndex = defaultListMusics.findIndex((s) => s.id === targetSong.id)
     if (targetIndex > -1) playList(LIST_IDS.DEFAULT, targetIndex)
   }
 

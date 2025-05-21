@@ -16,8 +16,10 @@ export default () => {
   // const setLockDesktopLyric = useCommit('setLockDesktopLyric')
   let collect = false
 
-  const updateCollectStatus = async() => {
-    let status = !!playMusicInfo.musicInfo && await checkListExistMusic(loveList.id, playMusicInfo.musicInfo.id)
+  const updateCollectStatus = async () => {
+    let status =
+      !!playMusicInfo.musicInfo &&
+      (await checkListExistMusic(loveList.id, playMusicInfo.musicInfo.id))
     if (collect == status) return false
     collect = status
     return true
@@ -36,7 +38,7 @@ export default () => {
   const handleError = () => {
     sendPlayerStatus({ status: 'error' })
   }
-  const handleSetPlayInfo = async() => {
+  const handleSetPlayInfo = async () => {
     await updateCollectStatus()
     sendPlayerStatus({
       collect,
@@ -71,7 +73,7 @@ export default () => {
   // const handleSetTaskbarThumbnailClip = (clip) => {
   //   setTaskbarThumbnailClip(clip)
   // }
-  const throttleListChange = throttle(async listIds => {
+  const throttleListChange = throttle(async (listIds) => {
     if (!listIds.includes(loveList.id)) return
     if (await updateCollectStatus()) sendPlayerStatus({ collect })
   })
@@ -81,7 +83,7 @@ export default () => {
   //   buttons.lockLrc = setting.desktopLyric.isLock
   //   setButtons()
   // }
-  const rTaskbarThumbarClick = onPlayerAction(async({ params: action }) => {
+  const rTaskbarThumbarClick = onPlayerAction(async ({ params: action }) => {
     switch (action) {
       case 'play':
         play()
@@ -97,12 +99,23 @@ export default () => {
         break
       case 'collect':
         if (!playMusicInfo.musicInfo) return
-        void addListMusics(loveList.id, ['progress' in playMusicInfo.musicInfo ? playMusicInfo.musicInfo.metadata.musicInfo : playMusicInfo.musicInfo])
+        void addListMusics(loveList.id, [
+          'progress' in playMusicInfo.musicInfo
+            ? playMusicInfo.musicInfo.metadata.musicInfo
+            : playMusicInfo.musicInfo,
+        ])
         if (await updateCollectStatus()) sendPlayerStatus({ collect })
         break
       case 'unCollect':
         if (!playMusicInfo.musicInfo) return
-        void removeListMusics({ listId: loveList.id, ids: ['progress' in playMusicInfo.musicInfo ? playMusicInfo.musicInfo.metadata.musicInfo.id : playMusicInfo.musicInfo.id] })
+        void removeListMusics({
+          listId: loveList.id,
+          ids: [
+            'progress' in playMusicInfo.musicInfo
+              ? playMusicInfo.musicInfo.metadata.musicInfo.id
+              : playMusicInfo.musicInfo.id,
+          ],
+        })
         if (await updateCollectStatus()) sendPlayerStatus({ collect })
         break
       // case 'lrc':
@@ -123,18 +136,27 @@ export default () => {
       //   break
     }
   })
-  watch(() => playProgress.nowPlayTime, (newValue, oldValue) => {
-    // console.log(playProgress.nowPlayTime, newValue, oldValue)
-    // if (newValue.toFixed(2) === oldValue.toFixed(2)) return
-    // console.log(playProgress.nowPlayTime)
-    sendPlayerStatus({ progress: newValue })
-  })
-  watch(() => playProgress.maxPlayTime, (newValue) => {
-    sendPlayerStatus({ duration: newValue })
-  })
-  watch(() => appSetting['player.playbackRate'], rate => {
-    sendPlayerStatus({ playbackRate: rate })
-  })
+  watch(
+    () => playProgress.nowPlayTime,
+    (newValue, oldValue) => {
+      // console.log(playProgress.nowPlayTime, newValue, oldValue)
+      // if (newValue.toFixed(2) === oldValue.toFixed(2)) return
+      // console.log(playProgress.nowPlayTime)
+      sendPlayerStatus({ progress: newValue })
+    }
+  )
+  watch(
+    () => playProgress.maxPlayTime,
+    (newValue) => {
+      sendPlayerStatus({ duration: newValue })
+    }
+  )
+  watch(
+    () => appSetting['player.playbackRate'],
+    (rate) => {
+      sendPlayerStatus({ playbackRate: rate })
+    }
+  )
 
   window.app_event.on('play', handlePlay)
   window.app_event.on('pause', handlePause)
@@ -161,7 +183,7 @@ export default () => {
     window.app_event.off('myListUpdate', throttleListChange)
   })
 
-  return async() => {
+  return async () => {
     // const setting = store.getters.setting
     // buttons.lrc = setting.desktopLyric.enable
     // buttons.lockLrc = setting.desktopLyric.isLock

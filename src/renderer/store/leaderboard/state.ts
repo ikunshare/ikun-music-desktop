@@ -44,4 +44,3 @@ export const listDetailInfo = reactive<ListDetailInfo>({
   id: '',
   noItemLabel: '',
 })
-

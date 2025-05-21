@@ -152,9 +152,7 @@ const defaultSetting: LX.AppSetting = {
 
   'odc.isAutoClearSearchInput': false,
   'odc.isAutoClearSearchList': false,
-
 }
-
 
 // 使用新年皮肤
 if (new Date().getMonth() < 2) {
@@ -162,6 +160,4 @@ if (new Date().getMonth() < 2) {
   defaultSetting['desktopLyric.style.lyricPlayedColor'] = 'rgba(255, 57, 71, 1)'
 }
 
-
 export default defaultSetting
-

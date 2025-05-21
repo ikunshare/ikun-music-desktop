@@ -3,7 +3,6 @@ import music from '@renderer/utils/musicSdk'
 import { log } from '@common/utils'
 import { getListMusics, getUserLists, registerAction } from '@renderer/store/list/action'
 
-
 import useInitUserApi from './useInitUserApi'
 import { play, playList } from '@renderer/core/player'
 import { onBeforeUnmount } from '@common/utils/vueTools'
@@ -11,7 +10,7 @@ import { appSetting } from '@renderer/store/setting'
 import { playMusicInfo } from '@renderer/store/player/state'
 import { initDislikeInfo, registerRemoteDislikeAction } from '@renderer/core/dislikeList'
 
-const initPrevPlayInfo = async() => {
+const initPrevPlayInfo = async () => {
   const info = await getPlayInfo()
   window.lx.restorePlayInfo = null
   if (!info?.listId || info.index < 0) return
@@ -40,10 +39,10 @@ export default () => {
     if (unregisterDislikeEvent) unregisterDislikeEvent()
   })
 
-  return async() => {
+  return async () => {
     await Promise.all([
       initUserApi(), // 自定义API
-    ]).catch(err => {
+    ]).catch((err) => {
       log.error(err)
     })
     void music.init() // 初始化音乐sdk
@@ -53,7 +52,7 @@ export default () => {
     window.lxData.userLists = await getUserLists() // 获取用户列表
     unregisterDislikeEvent = registerRemoteDislikeAction()
     await initDislikeInfo() // 获取不喜欢列表
-    await initPrevPlayInfo().catch(err => {
+    await initPrevPlayInfo().catch((err) => {
       log.error(err)
     }) // 初始化上次的歌曲播放信息
   }

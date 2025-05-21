@@ -15,7 +15,8 @@ export const init = () => {
       setText(text, Math.max(line, 0))
       // console.log(line, text)
     },
-    onSetLyric(lines, offset) { // listening lyrics seting event
+    onSetLyric(lines, offset) {
+      // listening lyrics seting event
       // console.log(lines) // lines is array of all lyric text
       setLines(markRawList([...lines]))
       setText(lines[0] ?? '', 0)
@@ -45,10 +46,9 @@ export const setLyric = () => {
   if (setting['player.isShowLyricRoma'] && lyrics.rlyric) extendedLyrics.push(lyrics.rlyric)
   lrc.setLyric(
     setting['player.isPlayLxlrc'] && lyrics.lxlyric ? lyrics.lxlyric : lyrics.lyric,
-    extendedLyrics,
+    extendedLyrics
   )
 }
-
 
 export const play = (time: number) => {
   if (!lyrics.lyric) return

@@ -6,7 +6,6 @@ import { pause } from './action'
 
 const time = ref(-1)
 
-
 const timeoutTools: {
   isRunning: boolean
   // time: number
@@ -83,8 +82,12 @@ const formatTime = (time: number): string => {
   let h: number | string = Math.trunc(time / 3600)
   h = h ? h.toString() + ':' : ''
   time = time % 3600
-  const m = Math.trunc(time / 60).toString().padStart(2, '0')
-  const s = Math.trunc(time % 60).toString().padStart(2, '0')
+  const m = Math.trunc(time / 60)
+    .toString()
+    .padStart(2, '0')
+  const s = Math.trunc(time % 60)
+    .toString()
+    .padStart(2, '0')
   return `${h}${m}:${s}`
 }
 export const useTimeout = () => {

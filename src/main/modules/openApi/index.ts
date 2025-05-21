@@ -4,7 +4,12 @@ import type { Socket } from 'node:net'
 import { getAddress } from '@common/utils/nodejs'
 import { sendTaskbarButtonClick } from '@main/modules/winMain'
 
-const sendResponse = (res: http.ServerResponse, code = 200, msg: string | Record<any, unknown> = 'OK', contentType = 'text/plain; charset=utf-8') => {
+const sendResponse = (
+  res: http.ServerResponse,
+  code = 200,
+  msg: string | Record<any, unknown> = 'OK',
+  contentType = 'text/plain; charset=utf-8'
+) => {
   res.writeHead(code, {
     'Content-Type': contentType,
     'Access-Control-Allow-Origin': '*',
@@ -43,7 +48,7 @@ const defaultFilter = [
 const parseFilter = (filter: any) => {
   if (typeof filter != 'string') return defaultFilter
   filter = filter.split(',')
-  const subKeys = playerStatusKeys.filter(k => filter.includes(k))
+  const subKeys = playerStatusKeys.filter((k) => filter.includes(k))
   return subKeys.length ? subKeys : defaultFilter
 }
 const handleSendStatus = (res: http.ServerResponse<http.IncomingMessage>, query?: string) => {
@@ -52,7 +57,11 @@ const handleSendStatus = (res: http.ServerResponse<http.IncomingMessage>, query?
   for (const k of keys) resp[k] = global.lx.player_status[k]
   sendResponse(res, 200, resp, 'application/json; charset=utf-8')
 }
-const handleSubscribePlayerStatus = (req: http.IncomingMessage, res: http.ServerResponse<http.IncomingMessage>, query?: string) => {
+const handleSubscribePlayerStatus = (
+  req: http.IncomingMessage,
+  res: http.ServerResponse<http.IncomingMessage>,
+  query?: string
+) => {
   res.writeHead(200, {
     'Content-Type': 'text/event-stream',
     Connection: 'keep-alive',
@@ -73,16 +82,17 @@ const handleSubscribePlayerStatus = (req: http.IncomingMessage, res: http.Server
   }
 }
 
-const handleStartServer = async(port: number, ip: string) => new Promise<void>((resolve, reject) => {
-  playerStatusKeys = Object.keys(global.lx.player_status) as SubscribeKeys[]
-  httpServer = http.createServer((req, res): void => {
-    const [endUrl, query] = `/${req.url?.split('/').at(-1) ?? ''}`.split('?')
-    let code = 200
-    let msg = 'OK'
-    switch (endUrl) {
-      case '/status':
-        handleSendStatus(res, query)
-        return
+const handleStartServer = async (port: number, ip: string) =>
+  new Promise<void>((resolve, reject) => {
+    playerStatusKeys = Object.keys(global.lx.player_status) as SubscribeKeys[]
+    httpServer = http.createServer((req, res): void => {
+      const [endUrl, query] = `/${req.url?.split('/').at(-1) ?? ''}`.split('?')
+      let code = 200
+      let msg = 'OK'
+      switch (endUrl) {
+        case '/status':
+          handleSendStatus(res, query)
+          return
         // case '/test':
         //   code = 200
         //   res.setHeader('Content-Type', 'text/html; charset=utf-8')
@@ -108,101 +118,101 @@ const handleStartServer = async(port: number, ip: string) => new Promise<void>((
         //           console.log('Connection opened')
         //       });
 
-      //       subscription.addEventListener('error', (err) => {
-      //           console.error(err)
-      //       });
-      //       subscription.addEventListener('lyricLineText', (event) => {
-      //           console.log(event.data)
-      //       });
-      //       subscription.addEventListener('progress', (event) => {
-      //           console.log(event.data)
-      //       });
-      //       subscription.addEventListener('name', (event) => {
-      //           console.log(event.data)
-      //       });
-      //       subscription.addEventListener('singer', (event) => {
-      //           console.log(event.data)
-      //       });
-      //       </script>
-      //     </body>
-      //   </html>`
-      //   break
-      case '/lyric':
-        msg = global.lx.player_status.lyric
-        break
-      case '/play':
-        sendTaskbarButtonClick('play')
-        break
-      case '/pause':
-        sendTaskbarButtonClick('pause')
-        break
-      case '/skip-next':
-        sendTaskbarButtonClick('next')
-        break
-      case '/skip-prev':
-        sendTaskbarButtonClick('prev')
-        break
-      case '/collect':
-        sendTaskbarButtonClick('collect')
-        break
-      case '/uncollect':
-        sendTaskbarButtonClick('unCollect')
-        break
-      case '/subscribe-player-status':
-        try {
-          handleSubscribePlayerStatus(req, res, query)
-          return
-        } catch (err) {
-          console.log(err)
-          code = 500
-          msg = 'Error'
-        }
-        break
-      default:
-        code = 401
-        msg = 'Forbidden'
-        break
-    }
-    sendResponse(res, code, msg)
-  })
-  httpServer.on('error', error => {
-    console.log(error)
-    reject(error)
-  })
-  httpServer.on('connection', (socket) => {
-    sockets.add(socket)
-    socket.once('close', () => {
-      sockets.delete(socket)
+        //       subscription.addEventListener('error', (err) => {
+        //           console.error(err)
+        //       });
+        //       subscription.addEventListener('lyricLineText', (event) => {
+        //           console.log(event.data)
+        //       });
+        //       subscription.addEventListener('progress', (event) => {
+        //           console.log(event.data)
+        //       });
+        //       subscription.addEventListener('name', (event) => {
+        //           console.log(event.data)
+        //       });
+        //       subscription.addEventListener('singer', (event) => {
+        //           console.log(event.data)
+        //       });
+        //       </script>
+        //     </body>
+        //   </html>`
+        //   break
+        case '/lyric':
+          msg = global.lx.player_status.lyric
+          break
+        case '/play':
+          sendTaskbarButtonClick('play')
+          break
+        case '/pause':
+          sendTaskbarButtonClick('pause')
+          break
+        case '/skip-next':
+          sendTaskbarButtonClick('next')
+          break
+        case '/skip-prev':
+          sendTaskbarButtonClick('prev')
+          break
+        case '/collect':
+          sendTaskbarButtonClick('collect')
+          break
+        case '/uncollect':
+          sendTaskbarButtonClick('unCollect')
+          break
+        case '/subscribe-player-status':
+          try {
+            handleSubscribePlayerStatus(req, res, query)
+            return
+          } catch (err) {
+            console.log(err)
+            code = 500
+            msg = 'Error'
+          }
+          break
+        default:
+          code = 401
+          msg = 'Forbidden'
+          break
+      }
+      sendResponse(res, code, msg)
     })
-    socket.setTimeout(4000)
+    httpServer.on('error', (error) => {
+      console.log(error)
+      reject(error)
+    })
+    httpServer.on('connection', (socket) => {
+      sockets.add(socket)
+      socket.once('close', () => {
+        sockets.delete(socket)
+      })
+      socket.setTimeout(4000)
+    })
+
+    httpServer.on('listening', () => {
+      const addr = httpServer.address()
+      // console.log(addr)
+      if (!addr) {
+        reject(new Error('address is null'))
+        return
+      }
+      resolve()
+    })
+    httpServer.listen(port, ip)
   })
 
-  httpServer.on('listening', () => {
-    const addr = httpServer.address()
-    // console.log(addr)
-    if (!addr) {
-      reject(new Error('address is null'))
-      return
-    }
-    resolve()
+const handleStopServer = async () =>
+  new Promise<void>((resolve, reject) => {
+    if (!httpServer) return
+    httpServer.close((err) => {
+      if (err) {
+        reject(err)
+        return
+      }
+      resolve()
+    })
+    for (const socket of sockets) socket.destroy()
+    sockets.clear()
+    responses.clear()
   })
-  httpServer.listen(port, ip)
-})
-
-const handleStopServer = async() => new Promise<void>((resolve, reject) => {
-  if (!httpServer) return
-  httpServer.close((err) => {
-    if (err) {
-      reject(err)
-      return
-    }
-    resolve()
-  })
-  for (const socket of sockets) socket.destroy()
-  sockets.clear()
-  responses.clear()
-})
-
 
 const sendStatus = (status: Partial<LX.Player.Status>) => {
   if (!responses.size) return
@@ -214,7 +224,7 @@ const sendStatus = (status: Partial<LX.Player.Status>) => {
     }
   }
 }
-export const stopServer = async() => {
+export const stopServer = async () => {
   global.lx.event_app.off('player_status', sendStatus)
   if (!status.status) {
     status.status = false
@@ -222,30 +232,34 @@ export const stopServer = async() => {
     status.address = ''
     return status
   }
-  await handleStopServer().then(() => {
-    status.status = false
-    status.message = ''
-    status.address = ''
-  }).catch(err => {
-    console.log(err)
-    status.message = err.message
-  })
+  await handleStopServer()
+    .then(() => {
+      status.status = false
+      status.message = ''
+      status.address = ''
+    })
+    .catch((err) => {
+      console.log(err)
+      status.message = err.message
+    })
   return status
 }
-export const startServer = async(port: number, bindLan: boolean) => {
+export const startServer = async (port: number, bindLan: boolean) => {
   if (status.status) await stopServer()
-  await handleStartServer(port, bindLan ? '0.0.0.0' : '127.0.0.1').then(() => {
-    status.status = true
-    status.message = ''
-    let address = ['127.0.0.1']
-    if (bindLan) address = [...address, ...getAddress()]
-    status.address = address.join(', ')
-  }).catch(err => {
-    console.log(err)
-    status.status = false
-    status.message = err.message
-    status.address = ''
-  })
+  await handleStartServer(port, bindLan ? '0.0.0.0' : '127.0.0.1')
+    .then(() => {
+      status.status = true
+      status.message = ''
+      let address = ['127.0.0.1']
+      if (bindLan) address = [...address, ...getAddress()]
+      status.address = address.join(', ')
+    })
+    .catch((err) => {
+      console.log(err)
+      status.status = false
+      status.message = err.message
+      status.address = ''
+    })
   global.lx.event_app.on('player_status', sendStatus)
   return status
 }

@@ -1,6 +1,5 @@
 import { APP_EVENT_NAMES } from './constants'
 
-
 const keyName = {
   common: APP_EVENT_NAMES.winMainName,
   player: APP_EVENT_NAMES.winMainName,

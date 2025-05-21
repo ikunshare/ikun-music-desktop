@@ -1,7 +1,15 @@
 import initRendererEvent, { handleKeyDown, hotKeyConfigUpdate } from './rendererEvent'
 
 import { APP_EVENT_NAMES } from '@common/constants'
-import { createWindow, minimize, setProgressBar, setProxy, setThumbarButtons, toggleHide, toggleMinimize } from './main'
+import {
+  createWindow,
+  minimize,
+  setProgressBar,
+  setProxy,
+  setThumbarButtons,
+  toggleHide,
+  toggleMinimize,
+} from './main'
 import initUpdate from './autoUpdate'
 import { HOTKEY_COMMON } from '@common/hotKey'
 import { quitApp } from '@main/app'
@@ -39,7 +47,7 @@ export default () => {
     createWindow()
   })
 
-  const keys = (['status', 'collect'] as const) satisfies Array<keyof LX.Player.Status>
+  const keys = ['status', 'collect'] as const satisfies Array<keyof LX.Player.Status>
   const taskBarButtonFlags: LX.TaskBarButtonFlags = {
     empty: true,
     collect: false,
@@ -83,12 +91,14 @@ export default () => {
         })
       }
     }
-    if (keys.some(k => status[k] != null)) {
+    if (keys.some((k) => status[k] != null)) {
       if (status.collect != null) taskBarButtonFlags.collect = status.collect
       setThumbarButtons(taskBarButtonFlags)
     }
     if (showProgress && status.progress != null) {
-      const progress = global.lx.player_status.duration ? status.progress / global.lx.player_status.duration : 0
+      const progress = global.lx.player_status.duration
+        ? status.progress / global.lx.player_status.duration
+        : 0
       if (progress.toFixed(2) != progressStatus.progress.toFixed(2)) {
         progressStatus.progress = progress < 0.01 ? 0.01 : progress
         setProgressBar(progressStatus.progress, {
@@ -108,7 +118,11 @@ export default () => {
         setProgressBar(-1, { mode: 'none' })
       }
     }
-    if (keys.includes('network.proxy.enable') || (global.lx.appSetting['network.proxy.enable'] && keys.some(k => k.includes('network.proxy.')))) {
+    if (
+      keys.includes('network.proxy.enable') ||
+      (global.lx.appSetting['network.proxy.enable'] &&
+        keys.some((k) => k.includes('network.proxy.')))
+    ) {
       setProxy()
     }
   })
@@ -116,4 +130,3 @@ export default () => {
 
 export * from './main'
 export * from './rendererEvent'
-

@@ -3,7 +3,7 @@ import iconv from 'iconv-lite'
 import { mainHandle } from '@common/mainIpc'
 import { WIN_MAIN_RENDERER_EVENT_NAME } from '@common/ipcNames'
 
-const handleInflate = async(data: Buffer) => {
+const handleInflate = async (data: Buffer) => {
   return new Promise((resolve: (result: Buffer) => void, reject) => {
     inflate(data, (err, result) => {
       if (err) {
@@ -18,7 +18,7 @@ const handleInflate = async(data: Buffer) => {
 const buf_key = Buffer.from('yeelion')
 const buf_key_len = buf_key.length
 
-const decodeLyric = async(buf: Buffer, isGetLyricx: boolean) => {
+const decodeLyric = async (buf: Buffer, isGetLyricx: boolean) => {
   // const info = buf.slice(0, index).toString()
   // if (!info.startsWith('tp=content')) return null
   // const isLyric = info.includes('\r\nlrcx=0\r\n')
@@ -44,10 +44,12 @@ const decodeLyric = async(buf: Buffer, isGetLyricx: boolean) => {
   return iconv.decode(Buffer.from(output), 'gb18030')
 }
 
-
 export default () => {
-  mainHandle<{ lrcBase64: string, isGetLyricx: boolean }, string>(WIN_MAIN_RENDERER_EVENT_NAME.handle_kw_decode_lyric, async({ params: { lrcBase64, isGetLyricx } }) => {
-    const lrc = await decodeLyric(Buffer.from(lrcBase64, 'base64'), isGetLyricx)
-    return Buffer.from(lrc).toString('base64')
-  })
+  mainHandle<{ lrcBase64: string; isGetLyricx: boolean }, string>(
+    WIN_MAIN_RENDERER_EVENT_NAME.handle_kw_decode_lyric,
+    async ({ params: { lrcBase64, isGetLyricx } }) => {
+      const lrc = await decodeLyric(Buffer.from(lrcBase64, 'base64'), isGetLyricx)
+      return Buffer.from(lrc).toString('base64')
+    }
+  )
 }

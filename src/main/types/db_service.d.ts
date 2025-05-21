@@ -1,6 +1,5 @@
 declare namespace LX {
   namespace DBService {
-
     interface MusicInfo {
       id: string
       listId: string
@@ -41,17 +40,19 @@ declare namespace LX {
       locationUpdateTime: number | null
     }
 
-    type Lyricnfo = {
-      id: string
-      type: 'lyric'
-      text: string
-      source: 'raw' | 'edited'
-    } | {
-      id: string
-      type: keyof Omit<LX.Music.LyricInfo, 'lyric'>
-      text: string | null
-      source: 'raw' | 'edited'
-    }
+    type Lyricnfo =
+      | {
+          id: string
+          type: 'lyric'
+          text: string
+          source: 'raw' | 'edited'
+        }
+      | {
+          id: string
+          type: keyof Omit<LX.Music.LyricInfo, 'lyric'>
+          text: string | null
+          source: 'raw' | 'edited'
+        }
 
     interface MusicUrlInfo {
       id: string
@@ -84,6 +85,5 @@ declare namespace LX {
       source_id: string
       order: number
     }
-
   }
 }

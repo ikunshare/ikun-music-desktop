@@ -87,7 +87,6 @@ export const countRawLyric = () => {
   return (countStatement.get() as { count: number }).count
 }
 
-
 /**
  * 查询已编辑歌词
  * @param id 歌曲id
@@ -141,7 +140,6 @@ export const clearEditedLyric = () => {
   const rawLyricClearStatement = createEditedLyricClearStatement()
   rawLyricClearStatement.run()
 }
-
 
 /**
  * 统计已编辑歌词数量

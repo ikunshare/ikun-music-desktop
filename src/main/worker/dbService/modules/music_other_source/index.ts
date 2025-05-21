@@ -6,8 +6,10 @@ import {
   countMusicInfo,
 } from './dbHelper'
 
-
-const toDBMusicInfo = (id: string, musicInfos: LX.Music.MusicInfo[]): LX.DBService.MusicInfoOtherSource[] => {
+const toDBMusicInfo = (
+  id: string,
+  musicInfos: LX.Music.MusicInfo[]
+): LX.DBService.MusicInfoOtherSource[] => {
   return musicInfos.map((info, index) => {
     return {
       ...info,
@@ -24,16 +26,18 @@ const toDBMusicInfo = (id: string, musicInfos: LX.Music.MusicInfo[]): LX.DBServi
  * @returns 歌词信息
  */
 export const getMusicInfoOtherSource = (id: string): LX.Music.MusicInfoOnline[] => {
-  const list = queryMusicInfo(id).sort((a, b) => a.order - b.order).map(info => {
-    return {
-      id: info.id,
-      name: info.name,
-      singer: info.singer,
-      source: info.source,
-      interval: info.interval,
-      meta: JSON.parse(info.meta),
-    }
-  })
+  const list = queryMusicInfo(id)
+    .sort((a, b) => a.order - b.order)
+    .map((info) => {
+      return {
+        id: info.id,
+        name: info.name,
+        singer: info.singer,
+        source: info.source,
+        interval: info.interval,
+        meta: JSON.parse(info.meta),
+      }
+    })
 
   return list
 }
@@ -62,11 +66,9 @@ export const musicInfoOtherSourceClear = () => {
   clearMusicInfo()
 }
 
-
 /**
  * 统计歌曲信息信息数量
  */
 export const musicInfoOtherSourceCount = () => {
   return countMusicInfo()
 }
-

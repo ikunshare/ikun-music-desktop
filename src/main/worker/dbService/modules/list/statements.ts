@@ -1,6 +1,5 @@
 import { getDB } from '../../db'
 
-
 /**
  * 创建列表查询语句
  * @returns 查询语句
@@ -93,7 +92,6 @@ export const createMusicInfoUpdateStatement = () => {
     WHERE "id"=@id AND "listId"=@listId`)
 }
 
-
 /**
  * 创建清空音乐信息语句
  * @returns 删除语句
@@ -118,7 +116,9 @@ export const createMusicInfoDeleteByListIdStatement = () => {
  */
 export const createMusicInfoDeleteStatement = () => {
   const db = getDB()
-  return db.prepare<[LX.DBService.MusicInfoRemove]>('DELETE FROM "main"."my_list_music_info" WHERE "id"=@id AND "listId"=@listId')
+  return db.prepare<[LX.DBService.MusicInfoRemove]>(
+    'DELETE FROM "main"."my_list_music_info" WHERE "id"=@id AND "listId"=@listId'
+  )
 }
 
 /**
@@ -127,7 +127,9 @@ export const createMusicInfoDeleteStatement = () => {
  */
 export const createMusicInfoByListAndMusicInfoIdQueryStatement = () => {
   const db = getDB()
-  return db.prepare<[LX.DBService.ListMusicInfoQuery]>(`SELECT "id", "name", "singer", "source", "interval", "meta"
+  return db.prepare<
+    [LX.DBService.ListMusicInfoQuery]
+  >(`SELECT "id", "name", "singer", "source", "interval", "meta"
     FROM "main"."my_list_music_info"
     WHERE "id"=@musicInfoId
     AND "listId"=@listId`)
@@ -143,7 +145,6 @@ export const createMusicInfoByMusicInfoIdQueryStatement = () => {
     FROM "main"."my_list_music_info"
     WHERE "id"=?`)
 }
-
 
 /**
  * 创建音乐信息排序插入语句
@@ -180,7 +181,7 @@ export const createMusicInfoOrderDeleteByListIdStatement = () => {
  */
 export const createMusicInfoOrderDeleteStatement = () => {
   const db = getDB()
-  return db.prepare<[LX.DBService.MusicInfoRemove]>('DELETE FROM "main"."my_list_music_info_order" WHERE "musicInfoId"=@id AND "listId"=@listId')
+  return db.prepare<[LX.DBService.MusicInfoRemove]>(
+    'DELETE FROM "main"."my_list_music_info_order" WHERE "musicInfoId"=@id AND "listId"=@listId'
+  )
 }
-
-

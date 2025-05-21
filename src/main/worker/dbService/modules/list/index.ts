@@ -23,7 +23,11 @@ import {
 let userLists: LX.DBService.UserListInfo[]
 let musicLists = new Map<string, LX.Music.MusicInfo[]>()
 
-const toDBMusicInfo = (musicInfos: LX.Music.MusicInfo[], listId: string, offset: number = 0): LX.DBService.MusicInfo[] => {
+const toDBMusicInfo = (
+  musicInfos: LX.Music.MusicInfo[],
+  listId: string,
+  offset: number = 0
+): LX.DBService.MusicInfo[] => {
   return musicInfos.map((info, index) => {
     return {
       ...info,
@@ -41,7 +45,7 @@ const toDBMusicInfo = (musicInfos: LX.Music.MusicInfo[], listId: string, offset:
 export const getAllUserList = (): LX.List.UserListInfo[] => {
   userLists ??= queryAllUserList()
 
-  return userLists.map(list => {
+  return userLists.map((list) => {
     const { position, ...newList } = list
     return newList
   })
@@ -108,14 +112,16 @@ export const updateUserLists = (lists: LX.List.UserListInfo[]) => {
   for (const list of userLists) {
     positionMap.set(list.id, list.position)
   }
-  const dbList: LX.DBService.UserListInfo[] = lists.map(list => {
-    const position = positionMap.get(list.id)
-    if (position == null) return null
-    return {
-      ...list,
-      position,
-    }
-  }).filter(Boolean) as LX.DBService.UserListInfo[]
+  const dbList: LX.DBService.UserListInfo[] = lists
+    .map((list) => {
+      const position = positionMap.get(list.id)
+      if (position == null) return null
+      return {
+        ...list,
+        position,
+      }
+    })
+    .filter(Boolean) as LX.DBService.UserListInfo[]
   updateUserListsFromDB(dbList)
   userLists &&= queryAllUserList()
 }
@@ -157,7 +163,7 @@ export const updateUserListsPosition = (position: number, ids: string[]) => {
 export const getListMusics = (listId: string): LX.Music.MusicInfo[] => {
   let targetList: LX.Music.MusicInfo[] | undefined = musicLists.get(listId)
   if (targetList == null) {
-    targetList = queryMusicInfoByListId(listId).map(info => {
+    targetList = queryMusicInfoByListId(listId).map((info) => {
       return {
         id: info.id,
         name: info.name,
@@ -193,12 +199,16 @@ export const musicOverwrite = (listId: string, musicInfos: LX.Music.MusicInfo[])
  * @param musicInfos 添加的歌曲信息
  * @param addMusicLocationType 添加在到列表的位置
  */
-export const musicsAdd = (listId: string, musicInfos: LX.Music.MusicInfo[], addMusicLocationType: LX.AddMusicLocationType) => {
+export const musicsAdd = (
+  listId: string,
+  musicInfos: LX.Music.MusicInfo[],
+  addMusicLocationType: LX.AddMusicLocationType
+) => {
   let targetList = getListMusics(listId)
 
   const set = new Set<string>()
   for (const item of targetList) set.add(item.id)
-  musicInfos = musicInfos.filter(item => {
+  musicInfos = musicInfos.filter((item) => {
     if (set.has(item.id)) return false
     set.add(item.id)
     return true
@@ -206,7 +216,11 @@ export const musicsAdd = (listId: string, musicInfos: LX.Music.MusicInfo[], addM
 
   switch (addMusicLocationType) {
     case 'top':
-      insertMusicInfoListAndRefreshOrder(toDBMusicInfo(musicInfos, listId), listId, toDBMusicInfo(targetList, listId, musicInfos.length))
+      insertMusicInfoListAndRefreshOrder(
+        toDBMusicInfo(musicInfos, listId),
+        listId,
+        toDBMusicInfo(targetList, listId, musicInfos.length)
+      )
       arrUnshift(targetList, musicInfos)
       break
     case 'bottom':
@@ -227,7 +241,10 @@ export const musicsRemove = (listId: string, ids: string[]) => {
   if (!targetList.length) return
   removeMusicInfos(listId, ids)
   const idsSet = new Set<string>(ids)
-  musicLists.set(listId, targetList.filter(mInfo => !idsSet.has(mInfo.id)))
+  musicLists.set(
+    listId,
+    targetList.filter((mInfo) => !idsSet.has(mInfo.id))
+  )
 }
 
 /**
@@ -237,15 +254,20 @@ export const musicsRemove = (listId: string, ids: string[]) => {
  * @param musicInfos 添加的歌曲信息
  * @param addMusicLocationType 添加在到列表的位置
  */
-export const musicsMove = (fromId: string, toId: string, musicInfos: LX.Music.MusicInfo[], addMusicLocationType: LX.AddMusicLocationType) => {
+export const musicsMove = (
+  fromId: string,
+  toId: string,
+  musicInfos: LX.Music.MusicInfo[],
+  addMusicLocationType: LX.AddMusicLocationType
+) => {
   let fromList = getListMusics(fromId)
   let toList = getListMusics(toId)
 
-  const ids = musicInfos.map(musicInfo => musicInfo.id)
+  const ids = musicInfos.map((musicInfo) => musicInfo.id)
 
   let listSet = new Set<string>()
   for (const item of toList) listSet.add(item.id)
-  musicInfos = musicInfos.filter(item => {
+  musicInfos = musicInfos.filter((item) => {
     if (listSet.has(item.id)) return false
     listSet.add(item.id)
     return true
@@ -253,7 +275,13 @@ export const musicsMove = (fromId: string, toId: string, musicInfos: LX.Music.Mu
 
   switch (addMusicLocationType) {
     case 'top':
-      moveMusicInfoAndRefreshOrder(fromId, ids, toId, toDBMusicInfo(musicInfos, toId), toDBMusicInfo(toList, toId, musicInfos.length))
+      moveMusicInfoAndRefreshOrder(
+        fromId,
+        ids,
+        toId,
+        toDBMusicInfo(musicInfos, toId),
+        toDBMusicInfo(toList, toId, musicInfos.length)
+      )
       arrUnshift(toList, musicInfos)
       break
     case 'bottom':
@@ -264,7 +292,10 @@ export const musicsMove = (fromId: string, toId: string, musicInfos: LX.Music.Mu
   }
 
   listSet = new Set<string>(ids)
-  musicLists.set(fromId, fromList.filter(mInfo => !listSet.has(mInfo.id)))
+  musicLists.set(
+    fromId,
+    fromList.filter((mInfo) => !listSet.has(mInfo.id))
+  )
 }
 
 /**
@@ -272,18 +303,20 @@ export const musicsMove = (fromId: string, toId: string, musicInfos: LX.Music.Mu
  * @param musicInfos 歌曲&列表信息
  */
 export const musicsUpdate = (musicInfos: LX.List.ListActionMusicUpdate) => {
-  updateMusicInfos(musicInfos.map(({ id, musicInfo }) => {
-    return {
-      ...musicInfo,
-      listId: id,
-      meta: JSON.stringify(musicInfo.meta),
-      order: 0,
-    }
-  }))
+  updateMusicInfos(
+    musicInfos.map(({ id, musicInfo }) => {
+      return {
+        ...musicInfo,
+        listId: id,
+        meta: JSON.stringify(musicInfo.meta),
+        order: 0,
+      }
+    })
+  )
   for (const { id, musicInfo } of musicInfos) {
     const targetList = musicLists.get(id)
     if (targetList == null) continue
-    const targetMusic = targetList.find(item => item.id == musicInfo.id)
+    const targetMusic = targetList.find((item) => item.id == musicInfo.id)
     if (!targetMusic) continue
     targetMusic.name = musicInfo.name
     targetMusic.singer = musicInfo.singer
@@ -325,16 +358,19 @@ export const musicsPositionUpdate = (listId: string, position: number, ids: stri
     infos.push(map.get(id)!)
     map.delete(id)
   }
-  newTargetList = newTargetList.filter(mInfo => map.has(mInfo.id))
+  newTargetList = newTargetList.filter((mInfo) => map.has(mInfo.id))
   arrPushByPosition(newTargetList, infos, Math.min(position, newTargetList.length))
 
-  updateMusicInfoOrder(listId, newTargetList.map((info, index) => {
-    return {
-      listId,
-      musicInfoId: info.id,
-      order: index,
-    }
-  }))
+  updateMusicInfoOrder(
+    listId,
+    newTargetList.map((info, index) => {
+      return {
+        listId,
+        musicInfoId: info.id,
+        order: index,
+      }
+    })
+  )
   musicLists.set(listId, newTargetList)
 }
 
@@ -388,5 +424,5 @@ export const checkListExistMusic = (listId: string, musicInfoId: string): boolea
  */
 export const getMusicExistListIds = (musicInfoId: string): string[] => {
   const musicInfos = queryMusicInfoByMusicInfoId(musicInfoId)
-  return musicInfos.map(m => m.listId)
+  return musicInfos.map((m) => m.listId)
 }

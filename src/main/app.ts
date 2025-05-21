@@ -67,9 +67,7 @@ export const initGlobalData = () => {
   }
 
   global.staticPath =
-    process.env.NODE_ENV !== 'production'
-      ? webpackStaticPath
-      : path.join(__dirname, 'static')
+    process.env.NODE_ENV !== 'production' ? webpackStaticPath : path.join(__dirname, 'static')
 }
 
 export const initSingleInstanceHandle = () => {
@@ -99,7 +97,8 @@ export const initSingleInstanceHandle = () => {
 export const applyElectronEnvParams = () => {
   // Is disable hardware acceleration
   if (global.envParams.cmdParams.dha) app.disableHardwareAcceleration()
-  if (global.envParams.cmdParams.dhmkh) app.commandLine.appendSwitch('disable-features', 'HardwareMediaKeyHandling')
+  if (global.envParams.cmdParams.dhmkh)
+    app.commandLine.appendSwitch('disable-features', 'HardwareMediaKeyHandling')
 
   // fix linux transparent fail. https://github.com/electron/electron/issues/25153#issuecomment-843688494
   if (process.platform == 'linux') app.commandLine.appendSwitch('use-gl', 'desktop')
@@ -112,7 +111,10 @@ export const applyElectronEnvParams = () => {
   // proxy
   if (global.envParams.cmdParams['proxy-server']) {
     app.commandLine.appendSwitch('proxy-server', global.envParams.cmdParams['proxy-server'])
-    app.commandLine.appendSwitch('proxy-bypass-list', global.envParams.cmdParams['proxy-bypass-list'] ?? '<local>')
+    app.commandLine.appendSwitch(
+      'proxy-bypass-list',
+      global.envParams.cmdParams['proxy-bypass-list'] ?? '<local>'
+    )
   }
 }
 
@@ -162,10 +164,13 @@ export const listenerAppEvent = (startApp: () => void) => {
   app.on('web-contents-created', (event, contents) => {
     contents.on('will-navigate', (event, navigationUrl) => {
       if (process.env.NODE_ENV !== 'production') {
-        console.log('navigation to url:', navigationUrl.length > 130 ? navigationUrl.substring(0, 130) + '...' : navigationUrl)
+        console.log(
+          'navigation to url:',
+          navigationUrl.length > 130 ? navigationUrl.substring(0, 130) + '...' : navigationUrl
+        )
         return
       }
-      if (!navigationUrlWhiteList.some(url => url.test(navigationUrl))) {
+      if (!navigationUrlWhiteList.some((url) => url.test(navigationUrl))) {
         event.preventDefault()
         return
       }
@@ -187,7 +192,7 @@ export const listenerAppEvent = (startApp: () => void) => {
       webPreferences.nodeIntegration = false
 
       // Verify URL being loaded
-      if (!navigationUrlWhiteList.some(url => url.test(params.src))) {
+      if (!navigationUrlWhiteList.some((url) => url.test(params.src))) {
         event.preventDefault()
       }
     })
@@ -255,7 +260,7 @@ const initTheme = () => {
 }
 
 let isInitialized = false
-export const initAppSetting = async() => {
+export const initAppSetting = async () => {
   if (!global.lx.inited) {
     const config = await initHotKey()
     global.lx.hotKey.config.local = config.local
@@ -277,7 +282,10 @@ export const initAppSetting = async() => {
       dbFileExists = await global.lx.worker.dbService.init(global.lxDataPath)
     }
     global.lx.appSetting = (await initSetting()).setting
-    if (!dbFileExists) await migrateDBData().catch(err => { log.error(err) })
+    if (!dbFileExists)
+      await migrateDBData().catch((err) => {
+        log.error(err)
+      })
     initTheme()
   }
   // global.lx.theme = getTheme()

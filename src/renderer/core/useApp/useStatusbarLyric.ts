@@ -12,7 +12,7 @@ export default () => {
     }
   })
 
-  return async() => {
+  return async () => {
     if (appSetting['player.isShowStatusBarLyric']) {
       handleEnable(true)
     }

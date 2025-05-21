@@ -12,7 +12,7 @@ export const STATUS = {
 } as const
 
 const httpsRxp = /^https:/
-export const getRequestAgent = (url: string, proxy?: { host: string, port: number }) => {
+export const getRequestAgent = (url: string, proxy?: { host: string; port: number }) => {
   let options
   if (proxy) {
     options = {

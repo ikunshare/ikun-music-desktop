@@ -2,15 +2,7 @@ import { onBeforeUnmount, watch } from '@common/utils/vueTools'
 import { debounce } from '@common/utils/common'
 // import { setDesktopLyricInfo, onGetDesktopLyricInfo } from '@renderer/utils/ipc'
 // import { musicInfo } from '@renderer/store/player/state'
-import {
-  pause,
-  play,
-  setLyric,
-  stop,
-  init,
-  sendInfo,
-  setPlaybackRate,
-} from '@renderer/core/lyric'
+import { pause, play, setLyric, stop, init, sendInfo, setPlaybackRate } from '@renderer/core/lyric'
 import { appSetting } from '@renderer/store/setting'
 
 const handleApplyPlaybackRate = debounce(setPlaybackRate, 300)

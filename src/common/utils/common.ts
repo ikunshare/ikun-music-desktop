@@ -5,8 +5,8 @@
  * @param {*} min
  * @param {*} max
  */
-export const getRandom = (min: number, max: number): number => Math.floor(Math.random() * (max - min)) + min
-
+export const getRandom = (min: number, max: number): number =>
+  Math.floor(Math.random() * (max - min)) + min
 
 export const sizeFormate = (size: number): string => {
   // https://gist.github.com/thomseddon/3511330
@@ -33,12 +33,13 @@ export const toDateObj = (date: any): Date | '' => {
 
     case 'object':
       break
-    default: return ''
+    default:
+      return ''
   }
   return date
 }
 
-const numFix = (n: number): string => n < 10 ? (`0${n}`) : n.toString()
+const numFix = (n: number): string => (n < 10 ? `0${n}` : n.toString())
 /**
  * 时间格式化
  * @param _date 时间
@@ -57,7 +58,6 @@ export const dateFormat = (_date: any, format = 'Y-M-D h:m:s') => {
     .replace('s', numFix(date.getSeconds()))
 }
 
-
 export const formatPlayTime = (time: number) => {
   let m = Math.trunc(time / 60)
   let s = Math.trunc(time % 60)
@@ -69,7 +69,6 @@ export const formatPlayTime2 = (time: number) => {
   let s = Math.trunc(time % 60)
   return numFix(m) + ':' + numFix(s)
 }
-
 
 export const isUrl = (path: string) => /https?:\/\//.test(path)
 
@@ -91,7 +90,10 @@ export const parseUrlParams = (str: string): Record<string, string> => {
  * @param delay 延迟
  * @returns
  */
-export function throttle<Args extends any[]>(fn: (...args: Args) => void | Promise<void>, delay = 100) {
+export function throttle<Args extends any[]>(
+  fn: (...args: Args) => void | Promise<void>,
+  delay = 100
+) {
   let timer: NodeJS.Timeout | null = null
   let _args: Args
   return (...args: Args) => {
@@ -110,7 +112,10 @@ export function throttle<Args extends any[]>(fn: (...args: Args) => void | Promi
  * @param delay 延迟
  * @returns
  */
-export function debounce<Args extends any[]>(fn: (...args: Args) => void | Promise<void>, delay = 100) {
+export function debounce<Args extends any[]>(
+  fn: (...args: Args) => void | Promise<void>,
+  delay = 100
+) {
   let timer: NodeJS.Timeout | null = null
   let _args: Args
   return (...args: Args) => {
@@ -126,7 +131,6 @@ export function debounce<Args extends any[]>(fn: (...args: Args) => void | Promi
 const fileNameRxp = /[\\/:*?#"<>|]/g
 export const filterFileName = (name: string): string => name.replace(fileNameRxp, '')
 
-
 // https://blog.csdn.net/xcxy2015/article/details/77164126#comments
 /**
  *
@@ -135,7 +139,8 @@ export const filterFileName = (name: string): string => name.replace(fileNameRxp
  */
 export const similar = (a: string, b: string) => {
   if (!a || !b) return 0
-  if (a.length > b.length) { // 保证 a <= b
+  if (a.length > b.length) {
+    // 保证 a <= b
     let t = b
     b = a
     a = t
@@ -155,7 +160,7 @@ export const similar = (a: string, b: string) => {
       mp[j] = tmp
     }
   }
-  return 1 - (mp[bl] / bl)
+  return 1 - mp[bl] / bl
 }
 
 /**
@@ -163,7 +168,10 @@ export const similar = (a: string, b: string) => {
  * @param arr
  * @param data
  */
-export const sortInsert = <T>(arr: Array<{ num: number, data: T }>, data: { num: number, data: T }) => {
+export const sortInsert = <T>(
+  arr: Array<{ num: number; data: T }>,
+  data: { num: number; data: T }
+) => {
   let key = data.num
   let left = 0
   let right = arr.length - 1
@@ -191,7 +199,6 @@ export const encodePath = (path: string) => {
   return encodeURI(path.replaceAll('\\', '/'))
 }
 
-
 export const arrPush = <T>(list: T[], newList: T[]) => {
   for (let i = 0; i * 1000 < newList.length; i++) {
     list.push(...newList.slice(i * 1000, (i + 1) * 1000))
@@ -213,7 +220,6 @@ export const arrPushByPosition = <T>(list: T[], newList: T[], position: number) 
   return list
 }
 
-
 // https://stackoverflow.com/a/2450976
 export const arrShuffle = <T>(array: T[]) => {
   let currentIndex = array.length
@@ -223,11 +229,10 @@ export const arrShuffle = <T>(array: T[]) => {
   while (currentIndex != 0) {
     // Pick a remaining element.
     randomIndex = Math.floor(Math.random() * currentIndex)
-    currentIndex--;
+    currentIndex--
 
     // And swap it with the current element.
-    [array[currentIndex], array[randomIndex]] = [
-      array[randomIndex], array[currentIndex]]
+    ;[array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]]
   }
 
   return array

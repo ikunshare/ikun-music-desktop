@@ -7,12 +7,15 @@ let userApis: LX.UserApi.UserApiInfo[] | null
 let scripts = new Map<string, string>()
 
 const saveData = () => {
-  getStore(STORE_NAMES.USER_API).set('userApis', userApis!.map(api => {
-    return {
-      ...api,
-      script: scripts.get(api.id),
-    }
-  }))
+  getStore(STORE_NAMES.USER_API).set(
+    'userApis',
+    userApis!.map((api) => {
+      return {
+        ...api,
+        script: scripts.get(api.id),
+      }
+    })
+  )
 }
 
 export const getUserApis = (): LX.UserApi.UserApiInfo[] => {
@@ -40,7 +43,7 @@ export const getUserApis = (): LX.UserApi.UserApiInfo[] => {
     infoFull = defaultUserApis
     electronStore_userApi.set('userApis', userApis)
   }
-  userApis = infoFull.map(api => {
+  userApis = infoFull.map((api) => {
     if (api.allowShowUpdateAlert == null) api.allowShowUpdateAlert = false
     const { script, ...info } = api
     scripts.set(api.id, script)
@@ -70,7 +73,9 @@ const matchInfo = (scriptInfo: string) => {
     infos[key] = result[2].trim()
   }
 
-  for (const [key, len] of Object.entries(INFO_NAMES) as Array<{ [K in keyof INFO_NAMES_Type]: [K, INFO_NAMES_Type[K]] }[keyof INFO_NAMES_Type]>) {
+  for (const [key, len] of Object.entries(INFO_NAMES) as Array<
+    { [K in keyof INFO_NAMES_Type]: [K, INFO_NAMES_Type[K]] }[keyof INFO_NAMES_Type]
+  >) {
     infos[key] ||= ''
     if (infos[key] == null) infos[key] = ''
     else if (infos[key].length > len) infos[key] = infos[key].substring(0, len) + '...'
@@ -87,27 +92,29 @@ const parseScriptInfo = (script: string) => {
   scriptInfo.name ||= `user_api_${new Date().toLocaleString()}`
   return scriptInfo
 }
-const deflateScript = async(script: string) => new Promise<string>((resolve, reject) => {
-  zlib.deflate(Buffer.from(script, 'utf8'), (err, buf) => {
-    if (err) {
-      reject(err)
-      return
-    }
-    resolve('gz_' + buf.toString('base64'))
-  })
-})
-const inflateScript = async(script: string) => new Promise<string>((resolve, reject) => {
-  if (script.startsWith('gz_')) {
-    zlib.inflate(Buffer.from(script.substring(3), 'base64'), (err, buf) => {
+const deflateScript = async (script: string) =>
+  new Promise<string>((resolve, reject) => {
+    zlib.deflate(Buffer.from(script, 'utf8'), (err, buf) => {
       if (err) {
         reject(err)
         return
       }
-      resolve(buf.toString('utf8'))
+      resolve('gz_' + buf.toString('base64'))
     })
-  } else resolve(script)
-})
-export const importApi = async(scriptRaw: string): Promise<LX.UserApi.UserApiInfo> => {
+  })
+const inflateScript = async (script: string) =>
+  new Promise<string>((resolve, reject) => {
+    if (script.startsWith('gz_')) {
+      zlib.inflate(Buffer.from(script.substring(3), 'base64'), (err, buf) => {
+        if (err) {
+          reject(err)
+          return
+        }
+        resolve(buf.toString('utf8'))
+      })
+    } else resolve(script)
+  })
+export const importApi = async (scriptRaw: string): Promise<LX.UserApi.UserApiInfo> => {
   let scriptInfo = parseScriptInfo(scriptRaw)
   const apiInfo = {
     id: `user_api_${Math.random().toString().substring(2, 5)}_${Date.now()}`,
@@ -135,12 +142,12 @@ export const removeApi = (ids: string[]) => {
 }
 
 export const setAllowShowUpdateAlert = (id: string, enable: boolean) => {
-  const targetApi = userApis?.find(api => api.id == id)
+  const targetApi = userApis?.find((api) => api.id == id)
   if (!targetApi) return
   targetApi.allowShowUpdateAlert = enable
   saveData()
 }
 
-export const getScript = async(id: string) => {
+export const getScript = async (id: string) => {
   return inflateScript(scripts.get(id) ?? '')
 }

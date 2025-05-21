@@ -16,7 +16,6 @@ import useSettingSync from './useSettingSync'
 import { useRouter } from '@common/utils/vueRouter'
 import handleListAutoUpdate from './listAutoUpdate'
 
-
 export default () => {
   // apiSource.value = appSetting['common.apiSource']
   proxy.enable = appSetting['network.proxy.enable']
@@ -39,7 +38,7 @@ export default () => {
   useUpdate()
   useSettingSync()
 
-  void getEnvParams().then(envParams => {
+  void getEnvParams().then((envParams) => {
     // 移除代理相关的环境变量设置，防止请求库自动应用它们
     // const processEnv = ENVIRONMENT
     // for (const key of Object.keys(processEnv)) {
@@ -55,7 +54,7 @@ export default () => {
       }
     }
 
-    void getViewPrevState().then(state => {
+    void getViewPrevState().then((state) => {
       void router.push({ path: state.url, query: state.query })
     })
 

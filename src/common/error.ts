@@ -1,11 +1,8 @@
 import { log } from './utils'
 
-const ignoreErrorMessage = [
-  'Possible side-effect in debug-evaluate',
-  'Unexpected end of input',
-]
+const ignoreErrorMessage = ['Possible side-effect in debug-evaluate', 'Unexpected end of input']
 
-process.on('uncaughtException', err => {
+process.on('uncaughtException', (err) => {
   if (ignoreErrorMessage.includes(err?.message)) return
   console.error('An uncaught error occurred!')
   console.error(err)

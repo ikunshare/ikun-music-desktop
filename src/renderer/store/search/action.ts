@@ -1,13 +1,8 @@
-
 import { throttle } from '@common/utils/common'
 import { toRaw } from '@common/utils/vueTools'
-import {
-  getSearchHistoryList,
-  saveSearchHistoryList,
-} from '@renderer/utils/ipc'
+import { getSearchHistoryList, saveSearchHistoryList } from '@renderer/utils/ipc'
 import { appSetting } from '../setting'
 import { searchText, historyList } from './state'
-
 
 export const setSearchText = (text: string) => {
   searchText.value = text
@@ -18,13 +13,12 @@ const saveSearchHistoryListThrottle = throttle((list: LX.List.SearchHistoryList)
   saveSearchHistoryList(list)
 }, 500)
 
-
-export const getHistoryList = async() => {
+export const getHistoryList = async () => {
   if (isInitedSearchHistory || historyList.length) return
-  historyList.push(...(await getSearchHistoryList() ?? []))
+  historyList.push(...((await getSearchHistoryList()) ?? []))
   isInitedSearchHistory ||= true
 }
-export const addHistoryWord = async(word: string) => {
+export const addHistoryWord = async (word: string) => {
   if (!appSetting['search.isShowHistorySearch']) return
   if (!isInitedSearchHistory) await getHistoryList()
   let index = historyList.indexOf(word)

@@ -1,4 +1,3 @@
-
 // import { Event as WinMainEvent } from '@main/modules/winMain/event'
 // import { Event as WinLyricEvent } from '@main/modules/winLyric/event'
 import { type DislikeType, type AppType, type ListType } from '@main/event'
@@ -50,5 +49,3 @@ declare global {
   var lx: Lx
   var appWorder: AppWorder
 }
-
-

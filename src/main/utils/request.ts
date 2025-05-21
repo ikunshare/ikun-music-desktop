@@ -1,4 +1,10 @@
-import needle, { type NeedleHttpVerbs, type NeedleOptions, type BodyData, type NeedleCallback, type NeedleResponse } from 'needle'
+import needle, {
+  type NeedleHttpVerbs,
+  type NeedleOptions,
+  type BodyData,
+  type NeedleCallback,
+  type NeedleResponse,
+} from 'needle'
 // import progress from 'request-progress'
 import { httpOverHttp, httpsOverHttp } from 'tunnel'
 import { type ClientRequest } from 'node:http'
@@ -14,7 +20,6 @@ export const requestMsg = {
   cancelRequest: '取消http请求',
 } as const
 
-
 const httpsRxp = /^https:/
 const getRequestAgent = (url: string) => {
   const proxy = getProxy()
@@ -29,7 +34,11 @@ export interface RequestOptions extends NeedleOptions {
 }
 export type RequestCallback = NeedleCallback
 type RequestResponse = NeedleResponse
-const request = (url: string, options: RequestOptions, callback: RequestCallback): ClientRequest => {
+const request = (
+  url: string,
+  options: RequestOptions,
+  callback: RequestCallback
+): ClientRequest => {
   let data: BodyData = null
   if (options.body) {
     data = options.body
@@ -57,9 +66,9 @@ const request = (url: string, options: RequestOptions, callback: RequestCallback
   }).request
 }
 
-
 const defaultHeaders = {
-  'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36',
+  'User-Agent':
+    'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100 Safari/537.36',
 }
 // var proxyUrl = "http://" + user + ":" + password + "@" + host + ":" + port;
 // var proxiedRequest = request.defaults({'proxy': proxyUrl});
@@ -73,7 +82,7 @@ const defaultHeaders = {
  * @param {*} url
  * @param {*} options
  */
-const buildHttpPromose = async(url: string, options: RequestOptions): Promise<RequestResponse> => {
+const buildHttpPromose = async (url: string, options: RequestOptions): Promise<RequestResponse> => {
   return new Promise((resolve, reject) => {
     void fetchData(url, options.method, options, (err, resp, body) => {
       // options.isShowProgress && window.api.hideProgress()
@@ -130,8 +139,8 @@ const buildHttpPromose = async(url: string, options: RequestOptions): Promise<Re
  * @param {*} url
  * @param {*} options
  */
-export const httpFetch = async(url: string, options: RequestOptions = { method: 'get' }) => {
-  return buildHttpPromose(url, options).catch(async(err: any) => {
+export const httpFetch = async (url: string, options: RequestOptions = { method: 'get' }) => {
+  return buildHttpPromose(url, options).catch(async (err: any) => {
     // console.log('出错', err)
     if (err.message === 'socket hang up') {
       // window.globalObj.apiSource = 'temp'
@@ -166,24 +175,28 @@ export const httpFetch = async(url: string, options: RequestOptions = { method: 
   // return requestPromise
 }
 
-const fetchData = async(url: string, method: RequestOptions['method'], {
-  headers = {},
-  format = 'json',
-  timeout = 15000,
-  ...options
-}, callback: RequestCallback) => {
+const fetchData = async (
+  url: string,
+  method: RequestOptions['method'],
+  { headers = {}, format = 'json', timeout = 15000, ...options },
+  callback: RequestCallback
+) => {
   // console.log(url, options)
   console.log('---start---', url)
   headers = Object.assign({}, headers)
 
-  return request(url, {
-    ...options,
-    method,
-    headers: Object.assign({}, defaultHeaders, headers),
-    timeout,
-    agent: getRequestAgent(url),
-    json: format === 'json',
-  }, (err, resp, body) => {
-    callback(err, resp, body)
-  })
+  return request(
+    url,
+    {
+      ...options,
+      method,
+      headers: Object.assign({}, defaultHeaders, headers),
+      timeout,
+      agent: getRequestAgent(url),
+      json: format === 'json',
+    },
+    (err, resp, body) => {
+      callback(err, resp, body)
+    }
+  )
 }

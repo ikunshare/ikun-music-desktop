@@ -1,14 +1,30 @@
-import { checkPath, joinPath, extname, basename, readFile, getFileStats } from '@common/utils/nodejs'
+import {
+  checkPath,
+  joinPath,
+  extname,
+  basename,
+  readFile,
+  getFileStats,
+} from '@common/utils/nodejs'
 import { formatPlayTime } from '@common/utils/common'
 import type { IComment } from 'music-metadata/lib/type'
 import { decodeKrc } from '@common/utils/lyricUtils/kg'
 
-export const checkDownloadFileAvailable = async(musicInfo: LX.Download.ListItem, savePath: string): Promise<boolean> => {
-  return musicInfo.isComplate && !/\.ape$/.test(musicInfo.metadata.fileName) &&
-    (await checkPath(musicInfo.metadata.filePath) || await checkPath(joinPath(savePath, musicInfo.metadata.fileName)))
+export const checkDownloadFileAvailable = async (
+  musicInfo: LX.Download.ListItem,
+  savePath: string
+): Promise<boolean> => {
+  return (
+    musicInfo.isComplate &&
+    !/\.ape$/.test(musicInfo.metadata.fileName) &&
+    ((await checkPath(musicInfo.metadata.filePath)) ||
+      (await checkPath(joinPath(savePath, musicInfo.metadata.fileName))))
+  )
 }
 
-export const checkLocalFileAvailable = async(musicInfo: LX.Music.MusicInfoLocal): Promise<boolean> => {
+export const checkLocalFileAvailable = async (
+  musicInfo: LX.Music.MusicInfoLocal
+): Promise<boolean> => {
   return checkPath(musicInfo.meta.filePath)
 }
 
@@ -17,7 +33,10 @@ export const checkLocalFileAvailable = async(musicInfo: LX.Music.MusicInfoLocal)
  * @param musicInfo
  * @param savePath
  */
-export const checkMusicFileAvailable = async(musicInfo: LX.Music.MusicInfo | LX.Download.ListItem, savePath: string): Promise<boolean> => {
+export const checkMusicFileAvailable = async (
+  musicInfo: LX.Music.MusicInfo | LX.Download.ListItem,
+  savePath: string
+): Promise<boolean> => {
   if ('progress' in musicInfo) {
     return checkDownloadFileAvailable(musicInfo, savePath)
   } else if (musicInfo.source == 'local') {
@@ -25,7 +44,10 @@ export const checkMusicFileAvailable = async(musicInfo: LX.Music.MusicInfo | LX.
   } else return true
 }
 
-export const getDownloadFilePath = async(musicInfo: LX.Download.ListItem, savePath: string): Promise<string> => {
+export const getDownloadFilePath = async (
+  musicInfo: LX.Download.ListItem,
+  savePath: string
+): Promise<string> => {
   if (musicInfo.isComplate && !/\.ape$/.test(musicInfo.metadata.fileName)) {
     if (await checkPath(musicInfo.metadata.filePath)) return musicInfo.metadata.filePath
     const path = joinPath(savePath, musicInfo.metadata.fileName)
@@ -34,10 +56,9 @@ export const getDownloadFilePath = async(musicInfo: LX.Download.ListItem, savePa
   return ''
 }
 
-export const getLocalFilePath = async(musicInfo: LX.Music.MusicInfoLocal): Promise<string> => {
+export const getLocalFilePath = async (musicInfo: LX.Music.MusicInfoLocal): Promise<string> => {
   return (await checkPath(musicInfo.meta.filePath)) ? musicInfo.meta.filePath : ''
 }
-
 
 /**
  * 获取音乐文件路径
@@ -45,7 +66,10 @@ export const getLocalFilePath = async(musicInfo: LX.Music.MusicInfoLocal): Promi
  * @param savePath
  * @returns
  */
-export const getMusicFilePath = async(musicInfo: LX.Music.MusicInfo | LX.Download.ListItem, savePath: string): Promise<string> => {
+export const getMusicFilePath = async (
+  musicInfo: LX.Music.MusicInfo | LX.Download.ListItem,
+  savePath: string
+): Promise<string> => {
   if ('progress' in musicInfo) {
     return getDownloadFilePath(musicInfo, savePath)
   } else if (musicInfo.source == 'local') {
@@ -59,8 +83,10 @@ export const getMusicFilePath = async(musicInfo: LX.Music.MusicInfo | LX.Downloa
  * @param path 文件路径
  * @returns
  */
-export const createLocalMusicInfo = async(path: string): Promise<LX.Music.MusicInfoLocal | null> => {
-  if (!await checkPath(path)) return null
+export const createLocalMusicInfo = async (
+  path: string
+): Promise<LX.Music.MusicInfoLocal | null> => {
+  if (!(await checkPath(path))) return null
   const { parseFile } = await import('music-metadata')
 
   let metadata
@@ -75,7 +101,9 @@ export const createLocalMusicInfo = async(path: string): Promise<LX.Music.MusicI
   let ext = extname(path)
 
   let name = (metadata.common.title || basename(path, ext)).trim()
-  let singer = metadata.common.artists?.length ? metadata.common.artists.map(a => a.trim()).join('、') : ''
+  let singer = metadata.common.artists?.length
+    ? metadata.common.artists.map((a) => a.trim()).join('、')
+    : ''
   let interval = metadata.format.duration ? formatPlayTime(metadata.format.duration) : ''
   let albumName = metadata.common.album?.trim() ?? ''
 
@@ -102,21 +130,25 @@ let prevFileInfo: {
   path: '',
   promise: Promise.resolve(null),
 }
-const getFileMetadata = async(path: string) => {
+const getFileMetadata = async (path: string) => {
   if (prevFileInfo.path == path) return prevFileInfo.promise
   prevFileInfo.path = path
-  return prevFileInfo.promise = checkPath(path).then(async(isExist) => {
-    return isExist ? import('music-metadata').then(async({ parseFile }) => parseFile(path)).catch(err => {
-      console.log(err)
-      return null
-    }) : null
-  })
+  return (prevFileInfo.promise = checkPath(path).then(async (isExist) => {
+    return isExist
+      ? import('music-metadata')
+          .then(async ({ parseFile }) => parseFile(path))
+          .catch((err) => {
+            console.log(err)
+            return null
+          })
+      : null
+  }))
 }
 /**
  * 获取歌曲文件封面图片
  * @param path 路径
  */
-export const getLocalMusicFilePic = async(path: string) => {
+export const getLocalMusicFilePic = async (path: string) => {
   const filePath = new RegExp('\\' + extname(path) + '$')
   let picPath = path.replace(filePath, '.jpg')
   let stats = await getFileStats(picPath)
@@ -164,12 +196,11 @@ export const getLocalMusicFilePic = async(path: string) => {
 //   return lyricInfo
 // }
 
-
 /**
  * 获取歌曲文件歌词
  * @param path 路径
  */
-export const getLocalMusicFileLyric = async(path: string): Promise<LX.Music.LyricInfo | null> => {
+export const getLocalMusicFileLyric = async (path: string): Promise<LX.Music.LyricInfo | null> => {
   // 尝试读取同目录下的同名lrc文件
   const filePath = new RegExp('\\' + extname(path) + '$')
   let lrcPath = path.replace(filePath, '.lrc')
@@ -204,7 +235,6 @@ export const getLocalMusicFileLyric = async(path: string): Promise<LX.Music.Lyri
       console.log(e)
     }
   }
-
 
   // 尝试读取文件内歌词
   const metadata = await getFileMetadata(path)

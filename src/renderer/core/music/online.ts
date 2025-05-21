@@ -1,10 +1,6 @@
 import { updateListMusics } from '@renderer/store/list/action'
 import { appSetting } from '@renderer/store/setting'
-import {
-  saveLyric,
-  saveMusicUrl,
-  getMusicUrl as getStoreMusicUrl,
-} from '@renderer/utils/ipc'
+import { saveLyric, saveMusicUrl, getMusicUrl as getStoreMusicUrl } from '@renderer/utils/ipc'
 import {
   buildLyricInfo,
   getPlayQuality,
@@ -37,8 +33,13 @@ export const setPic = (datas: {
 }
  */
 
-
-export const getMusicUrl = async({ musicInfo, quality, isRefresh, allowToggleSource = true, onToggleSource = () => {} }: {
+export const getMusicUrl = async ({
+  musicInfo,
+  quality,
+  isRefresh,
+  allowToggleSource = true,
+  onToggleSource = () => {},
+}: {
   musicInfo: LX.Music.MusicInfoOnline
   quality?: LX.Quality
   isRefresh: boolean
@@ -55,14 +56,27 @@ export const getMusicUrl = async({ musicInfo, quality, isRefresh, allowToggleSou
   const cachedUrl = await getStoreMusicUrl(musicInfo, targetQuality)
   if (cachedUrl && !isRefresh) return cachedUrl
 
-  return handleGetOnlineMusicUrl({ musicInfo, quality, onToggleSource, isRefresh, allowToggleSource }).then(({ url, quality: targetQuality, musicInfo: targetMusicInfo, isFromCache }) => {
-    if (targetMusicInfo.id != musicInfo.id && !isFromCache) void saveMusicUrl(targetMusicInfo, targetQuality, url)
+  return handleGetOnlineMusicUrl({
+    musicInfo,
+    quality,
+    onToggleSource,
+    isRefresh,
+    allowToggleSource,
+  }).then(({ url, quality: targetQuality, musicInfo: targetMusicInfo, isFromCache }) => {
+    if (targetMusicInfo.id != musicInfo.id && !isFromCache)
+      void saveMusicUrl(targetMusicInfo, targetQuality, url)
     void saveMusicUrl(musicInfo, targetQuality, url)
     return url
   })
 }
 
-export const getPicUrl = async({ musicInfo, listId, isRefresh, allowToggleSource = true, onToggleSource = () => {} }: {
+export const getPicUrl = async ({
+  musicInfo,
+  listId,
+  isRefresh,
+  allowToggleSource = true,
+  onToggleSource = () => {},
+}: {
   musicInfo: LX.Music.MusicInfoOnline
   listId?: string | null
   isRefresh: boolean
@@ -70,17 +84,24 @@ export const getPicUrl = async({ musicInfo, listId, isRefresh, allowToggleSource
   onToggleSource?: (musicInfo?: LX.Music.MusicInfoOnline) => void
 }): Promise<string> => {
   if (musicInfo.meta.picUrl && !isRefresh) return musicInfo.meta.picUrl
-  return handleGetOnlinePicUrl({ musicInfo, onToggleSource, isRefresh, allowToggleSource }).then(({ url, musicInfo: targetMusicInfo, isFromCache }) => {
-    // picRequest = null
-    if (listId) {
-      musicInfo.meta.picUrl = url
-      void updateListMusics([{ id: listId, musicInfo }])
+  return handleGetOnlinePicUrl({ musicInfo, onToggleSource, isRefresh, allowToggleSource }).then(
+    ({ url, musicInfo: targetMusicInfo, isFromCache }) => {
+      // picRequest = null
+      if (listId) {
+        musicInfo.meta.picUrl = url
+        void updateListMusics([{ id: listId, musicInfo }])
+      }
+      // savePic({ musicInfo, url, listId })
+      return url
     }
-    // savePic({ musicInfo, url, listId })
-    return url
-  })
+  )
 }
-export const getLyricInfo = async({ musicInfo, isRefresh, allowToggleSource = true, onToggleSource = () => {} }: {
+export const getLyricInfo = async ({
+  musicInfo,
+  isRefresh,
+  allowToggleSource = true,
+  onToggleSource = () => {},
+}: {
   musicInfo: LX.Music.MusicInfoOnline
   isRefresh: boolean
   allowToggleSource?: boolean
@@ -92,12 +113,14 @@ export const getLyricInfo = async({ musicInfo, isRefresh, allowToggleSource = tr
   }
 
   // lrcRequest = music[musicInfo.source].getLyric(musicInfo)
-  return handleGetOnlineLyricInfo({ musicInfo, onToggleSource, isRefresh, allowToggleSource }).then(async({ lyricInfo, musicInfo: targetMusicInfo, isFromCache }) => {
-    // lrcRequest = null
-    if (isFromCache) return buildLyricInfo(lyricInfo)
-    if (targetMusicInfo.id == musicInfo.id) void saveLyric(musicInfo, lyricInfo)
-    else void saveLyric(targetMusicInfo, lyricInfo)
+  return handleGetOnlineLyricInfo({ musicInfo, onToggleSource, isRefresh, allowToggleSource }).then(
+    async ({ lyricInfo, musicInfo: targetMusicInfo, isFromCache }) => {
+      // lrcRequest = null
+      if (isFromCache) return buildLyricInfo(lyricInfo)
+      if (targetMusicInfo.id == musicInfo.id) void saveLyric(musicInfo, lyricInfo)
+      else void saveLyric(targetMusicInfo, lyricInfo)
 
-    return buildLyricInfo(lyricInfo)
-  })
+      return buildLyricInfo(lyricInfo)
+    }
+  )
 }

@@ -14,7 +14,7 @@ export interface PlayerMusicInfo {
   album: string
 }
 
-export const musicInfo = window.lxData.musicInfo = reactive<PlayerMusicInfo>({
+export const musicInfo = (window.lxData.musicInfo = reactive<PlayerMusicInfo>({
   id: null,
   pic: null,
   lrc: null,
@@ -26,11 +26,11 @@ export const musicInfo = window.lxData.musicInfo = reactive<PlayerMusicInfo>({
   name: '',
   singer: '',
   album: '',
-})
+}))
 
 export const isPlay = ref(false)
 
-export const status = window.lxData.status = ref('')
+export const status = (window.lxData.status = ref(''))
 
 export const statusText = ref('')
 
@@ -64,8 +64,9 @@ export const playInfo = shallowReactive<LX.Player.PlayInfo>({
   playerPlayIndex: -1,
 })
 
-
-export const playedList = window.lxData.playedList = shallowReactive<LX.Player.PlayMusicInfo[]>([])
+export const playedList = (window.lxData.playedList = shallowReactive<LX.Player.PlayMusicInfo[]>(
+  []
+))
 
 export const tempPlayList = shallowReactive<LX.Player.PlayMusicInfo[]>([])
 

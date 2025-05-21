@@ -1,6 +1,5 @@
 import { ref, reactive } from '@common/utils/vueTools'
 
-
 export default () => {
   const isShowDuplicateMusicModal = ref(false)
   const duplicateListInfo = reactive({ id: '', name: '' })

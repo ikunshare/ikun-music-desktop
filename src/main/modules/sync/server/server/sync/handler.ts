@@ -13,7 +13,7 @@ const handler: LX.Sync.ServerSyncHandlerActions<LX.Sync.Server.Socket> = {
       if (newStatus == null) continue
       beforeFeature[name] = feature[name]
       socket.moduleReadys[name] = false
-      if (feature[name]) await modules[name].sync(socket).catch(_ => _)
+      if (feature[name]) await modules[name].sync(socket).catch((_) => _)
     }
   },
 }

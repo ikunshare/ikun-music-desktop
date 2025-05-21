@@ -43,21 +43,26 @@ export default () => {
     handleToggleVolumeMute()
   }
 
-  watch(volume, _volume => {
+  watch(volume, (_volume) => {
     handleSaveVolume(_volume)
     setPlayerVolume(_volume)
   })
-  watch(isMute, mute => {
+  watch(isMute, (mute) => {
     saveVolumeIsMute(mute)
     setPlayerMute(mute)
   })
-  watch(() => appSetting['player.volume'], _volume => {
-    setVolume(_volume)
-  })
-  watch(() => appSetting['player.isMute'], muteStatus => {
-    setMute(muteStatus)
-  })
-
+  watch(
+    () => appSetting['player.volume'],
+    (_volume) => {
+      setVolume(_volume)
+    }
+  )
+  watch(
+    () => appSetting['player.isMute'],
+    (muteStatus) => {
+      setMute(muteStatus)
+    }
+  )
 
   window.key_event.on(HOTKEY_PLAYER.volume_up.action, hotkeyVolumeUp)
   window.key_event.on(HOTKEY_PLAYER.volume_down.action, hotkeyVolumeDown)

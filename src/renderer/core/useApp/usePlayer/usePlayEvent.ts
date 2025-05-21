@@ -86,7 +86,8 @@ export default () => {
     clearLoadingTimeout()
     if (window.lx.isPlayedStop) return
     if (!isEmpty()) setStop()
-    if (playMusicInfo.musicInfo && errCode !== 1 && retryNum < 2) { // 若音频URL无效则尝试刷新2次URL
+    if (playMusicInfo.musicInfo && errCode !== 1 && retryNum < 2) {
+      // 若音频URL无效则尝试刷新2次URL
       // console.log(this.retryNum)
       retryNum++
       setMusicUrl(playMusicInfo.musicInfo, true)
@@ -116,7 +117,6 @@ export default () => {
   //   clearDelayNextTimeout()
   //   clearLoadingTimeout()
   // }
-
 
   window.app_event.on('playerLoadstart', handleLoadstart)
   window.app_event.on('playerLoadeddata', handleLoadeddata)

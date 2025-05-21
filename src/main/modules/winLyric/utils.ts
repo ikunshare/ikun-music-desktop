@@ -2,7 +2,6 @@
 export let minWidth = 38
 export let minHeight = 38
 
-
 // const updateBounds = (bounds: Bounds) => {
 //   bounds.x = bounds.x
 //   return bounds
@@ -14,7 +13,10 @@ export let minHeight = 38
  * @param param 新设置（相对于当前设置）
  * @returns
  */
-export const getLyricWindowBounds = (bounds: Electron.Rectangle, { x, y, w, h }: LX.DesktopLyric.NewBounds): Electron.Rectangle => {
+export const getLyricWindowBounds = (
+  bounds: Electron.Rectangle,
+  { x, y, w, h }: LX.DesktopLyric.NewBounds
+): Electron.Rectangle => {
   if (w < minWidth) w = minWidth
   if (h < minHeight) h = minHeight
 
@@ -45,7 +47,6 @@ export const getLyricWindowBounds = (bounds: Electron.Rectangle, { x, y, w, h }:
   // console.log('util bounds', bounds)
   return { width: w, height: h, x, y }
 }
-
 
 export const watchConfigKeys = [
   'desktopLyric.enable',
@@ -85,7 +86,9 @@ export const watchConfigKeys = [
   'player.playbackRate',
 ] satisfies Array<keyof LX.AppSetting>
 
-export const buildLyricConfig = (appSetting: Partial<LX.AppSetting>): Partial<LX.DesktopLyric.Config> => {
+export const buildLyricConfig = (
+  appSetting: Partial<LX.AppSetting>
+): Partial<LX.DesktopLyric.Config> => {
   const setting: Partial<LX.DesktopLyric.Config> = {}
   for (const key of watchConfigKeys) {
     // @ts-expect-error
@@ -94,7 +97,12 @@ export const buildLyricConfig = (appSetting: Partial<LX.AppSetting>): Partial<LX
   return setting
 }
 
-export const initWindowSize = (x: LX.AppSetting['desktopLyric.x'], y: LX.AppSetting['desktopLyric.y'], width: LX.AppSetting['desktopLyric.width'], height: LX.AppSetting['desktopLyric.height']) => {
+export const initWindowSize = (
+  x: LX.AppSetting['desktopLyric.x'],
+  y: LX.AppSetting['desktopLyric.y'],
+  width: LX.AppSetting['desktopLyric.width'],
+  height: LX.AppSetting['desktopLyric.height']
+) => {
   if (x == null || y == null) {
     if (width < minWidth) width = minWidth
     if (height < minHeight) height = minHeight

@@ -34,9 +34,15 @@ const initDislikeList = () => {
     if (!item) continue
     let [name, singer] = item.content.split(SPLIT_CHAR.DISLIKE_NAME)
     if (name) {
-      name = name.replaceAll(SPLIT_CHAR.DISLIKE_NAME, SPLIT_CHAR.DISLIKE_NAME_ALIAS).toLocaleLowerCase().trim()
+      name = name
+        .replaceAll(SPLIT_CHAR.DISLIKE_NAME, SPLIT_CHAR.DISLIKE_NAME_ALIAS)
+        .toLocaleLowerCase()
+        .trim()
       if (singer) {
-        singer = singer.replaceAll(SPLIT_CHAR.DISLIKE_NAME, SPLIT_CHAR.DISLIKE_NAME_ALIAS).toLocaleLowerCase().trim()
+        singer = singer
+          .replaceAll(SPLIT_CHAR.DISLIKE_NAME, SPLIT_CHAR.DISLIKE_NAME_ALIAS)
+          .toLocaleLowerCase()
+          .trim()
         const rule = `${name}${SPLIT_CHAR.DISLIKE_NAME}${singer}`
         dislikeInfo.names.add(rule)
         list.push(rule)
@@ -45,7 +51,10 @@ const initDislikeList = () => {
         list.push(name)
       }
     } else if (singer) {
-      singer = singer.replaceAll(SPLIT_CHAR.DISLIKE_NAME, SPLIT_CHAR.DISLIKE_NAME_ALIAS).toLocaleLowerCase().trim()
+      singer = singer
+        .replaceAll(SPLIT_CHAR.DISLIKE_NAME, SPLIT_CHAR.DISLIKE_NAME_ALIAS)
+        .toLocaleLowerCase()
+        .trim()
       dislikeInfo.singerNames.add(singer)
       list.push(`${SPLIT_CHAR.DISLIKE_NAME}${singer}`)
     }
@@ -65,23 +74,23 @@ export const getDislikeListInfo = (): LX.Dislike.DislikeInfo => {
   return initDislikeList()
 }
 
-
 /**
  * 添加信息
  * @param lists 列表信息
  */
-export const dislikeInfoAdd = async(lists: LX.Dislike.DislikeMusicInfo[]) => {
-  await insertDislikeList(lists.map(info => ({ content: `${info.name}${SPLIT_CHAR.DISLIKE_NAME}${info.singer}` })))
+export const dislikeInfoAdd = async (lists: LX.Dislike.DislikeMusicInfo[]) => {
+  await insertDislikeList(
+    lists.map((info) => ({ content: `${info.name}${SPLIT_CHAR.DISLIKE_NAME}${info.singer}` }))
+  )
 }
 
 /**
  * 覆盖列表信息
  * @param rules 规则信息
  */
-export const dislikeInfoOverwrite = async(rules: string) => {
+export const dislikeInfoOverwrite = async (rules: string) => {
   await overwirteDislikeList(toDBDislikeInfo(rules.split('\n')))
 }
-
 
 // /**
 //  * 删除不喜欢列表
@@ -97,4 +106,3 @@ export const dislikeInfoOverwrite = async(rules: string) => {
 // export const dislikeInfoClear = () => {
 //   clearDislikeList()
 // }
-

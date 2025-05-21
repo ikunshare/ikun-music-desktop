@@ -21,7 +21,7 @@ const initAudio = () => {
     audio.pause()
   })
 }
-const checkMusicUrl = async(url: string): Promise<boolean> => {
+const checkMusicUrl = async (url: string): Promise<boolean> => {
   initAudio()
   return new Promise((resolve) => {
     const clear = () => {
@@ -56,7 +56,7 @@ const resetPreloadInfo = () => {
   preloadMusicInfo.info = null
   preloadMusicInfo.isLoading = false
 }
-const preloadNextMusicUrl = async(curTime: number) => {
+const preloadNextMusicUrl = async (curTime: number) => {
   if (preloadMusicInfo.isLoading || curTime - preloadMusicInfo.preProgress < 3) return
   preloadMusicInfo.isLoading = true
   console.log('preload next music url')
@@ -68,7 +68,9 @@ const preloadNextMusicUrl = async(curTime: number) => {
       console.log('preload url', url)
       const result = await checkMusicUrl(url)
       if (!result) {
-        const url = await getMusicUrl({ musicInfo: info.musicInfo, isRefresh: true }).catch(() => '')
+        const url = await getMusicUrl({ musicInfo: info.musicInfo, isRefresh: true }).catch(
+          () => ''
+        )
         void checkMusicUrl(url)
         console.log('preload url refresh', url)
       }
@@ -87,12 +89,15 @@ export default () => {
     resetPreloadInfo()
   }
 
-  watch(() => appSetting['player.togglePlayMethod'], () => {
-    if (!preloadMusicInfo.info || preloadMusicInfo.info.isTempPlay) return
-    resetRandomNextMusicInfo()
-    preloadMusicInfo.info = null
-    preloadMusicInfo.preProgress = playProgress.nowPlayTime
-  })
+  watch(
+    () => appSetting['player.togglePlayMethod'],
+    () => {
+      if (!preloadMusicInfo.info || preloadMusicInfo.info.isTempPlay) return
+      resetRandomNextMusicInfo()
+      preloadMusicInfo.info = null
+      preloadMusicInfo.preProgress = playProgress.nowPlayTime
+    }
+  )
 
   window.app_event.on('setProgress', setProgress)
   window.app_event.on('musicToggled', handleSetPlayInfo)
@@ -104,7 +109,6 @@ export default () => {
       void preloadNextMusicUrl(time)
     }
   })
-
 
   onBeforeUnmount(() => {
     rOnTimeupdate()

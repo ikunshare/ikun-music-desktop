@@ -6,7 +6,6 @@ import migrateData from './migrate'
 
 let db: Database.Database
 
-
 const initTables = (db: Database.Database) => {
   db.exec(`
     ${Array.from(tables.values()).join('\n')}
@@ -14,11 +13,13 @@ const initTables = (db: Database.Database) => {
   `)
 }
 
-
 // 打开、初始化数据库
 export const init = (lxDataPath: string): boolean | null => {
   const databasePath = path.join(lxDataPath, 'lx.data.db')
-  const nativeBinding = path.join(__dirname, '../node_modules/better-sqlite3/build/Release/better_sqlite3.node')
+  const nativeBinding = path.join(
+    __dirname,
+    '../node_modules/better-sqlite3/build/Release/better_sqlite3.node'
+  )
   let dbFileExists = true
 
   try {

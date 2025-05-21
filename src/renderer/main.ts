@@ -16,7 +16,6 @@ import App from './App.vue'
 import router from './router'
 // import store from './store'
 
-
 import { getSetting, updateSetting } from './utils/ipc'
 import { langList } from '@root/lang'
 import type { I18n } from '@root/lang/i18n'
@@ -38,10 +37,13 @@ router.afterEach((to) => {
   }
 })
 
-void getSetting().then(setting => {
+void getSetting().then((setting) => {
   // window.lx.appSetting = setting
   // Set language automatically
-  if (!setting['common.langId'] || !window.i18n.availableLocales.includes(setting['common.langId'])) {
+  if (
+    !setting['common.langId'] ||
+    !window.i18n.availableLocales.includes(setting['common.langId'])
+  ) {
     let langId: I18n['locale'] | null = null
     const locale = window.navigator.language.toLocaleLowerCase() as I18n['locale']
     if (window.i18n.availableLocales.includes(locale)) {
@@ -62,7 +64,12 @@ void getSetting().then(setting => {
   window.setLang(setting['common.langId'])
   window.i18n.setLanguage(setting['common.langId'])
 
-  if (!setting['common.startInFullscreen'] && (document.body.clientHeight > window.screen.availHeight || document.body.clientWidth > window.screen.availWidth) && setting['common.windowSizeId'] > 1) {
+  if (
+    !setting['common.startInFullscreen'] &&
+    (document.body.clientHeight > window.screen.availHeight ||
+      document.body.clientWidth > window.screen.availWidth) &&
+    setting['common.windowSizeId'] > 1
+  ) {
     void updateSetting({ 'common.windowSizeId': 1 })
   }
 

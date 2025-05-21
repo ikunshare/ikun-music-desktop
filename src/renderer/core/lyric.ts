@@ -31,14 +31,20 @@ const analyserTools: {
     }
     const dataArray = new Uint8Array(this.bufferLength)
     this.analyser.getByteFrequencyData(dataArray)
-    sendDesktopLyricInfo({
-      action: 'send_analyser_data_array',
-      data: dataArray,
-    }, [dataArray.buffer])
+    sendDesktopLyricInfo(
+      {
+        action: 'send_analyser_data_array',
+        data: dataArray,
+      },
+      [dataArray.buffer]
+    )
   },
 }
 
-export const sendDesktopLyricInfo = (info: LX.DesktopLyric.LyricActions, transferList?: Transferable[]) => {
+export const sendDesktopLyricInfo = (
+  info: LX.DesktopLyric.LyricActions,
+  transferList?: Transferable[]
+) => {
   if (desktopLyricPort == null) return
   if (transferList) desktopLyricPort.postMessage(info, transferList)
   else desktopLyricPort.postMessage(info)
@@ -90,7 +96,8 @@ export const init = () => {
       window.app_event.lyricLinePlay(text, line)
       // console.log(line, text)
     },
-    onSetLyric(lines, offset) { // listening lyrics seting event
+    onSetLyric(lines, offset) {
+      // listening lyrics seting event
       // console.log(lines) // lines is array of all lyric text
       setLines(markRawList([...lines]))
       setText(lines[0] ?? '', 0)
@@ -160,11 +167,12 @@ export const setLyric = () => {
   if (!musicInfo.id) return
   if (musicInfo.lrc) {
     const extendedLyrics = []
-    if (appSetting['player.isShowLyricTranslation'] && musicInfo.tlrc) extendedLyrics.push(musicInfo.tlrc)
+    if (appSetting['player.isShowLyricTranslation'] && musicInfo.tlrc)
+      extendedLyrics.push(musicInfo.tlrc)
     if (appSetting['player.isShowLyricRoma'] && musicInfo.rlrc) extendedLyrics.push(musicInfo.rlrc)
     lrc.setLyric(
       appSetting['player.isPlayLxlrc'] && musicInfo.lxlrc ? musicInfo.lxlrc : musicInfo.lrc,
-      extendedLyrics,
+      extendedLyrics
     )
     sendDesktopLyricInfo({
       action: 'set_lyric',
@@ -194,12 +202,11 @@ let sources = new Map<string, boolean>()
 let prevDisabled = false
 export const setDisableAutoPauseBySource = (disabled: boolean, source: string) => {
   sources.set(source, disabled)
-  const currentDisabled = Array.from(sources.values()).some(e => e)
+  const currentDisabled = Array.from(sources.values()).some((e) => e)
   if (prevDisabled == currentDisabled) return
   prevDisabled = currentDisabled
   setDisabledAutoPause(currentDisabled)
 }
-
 
 export const play = () => {
   // if (!musicInfo.lrc) return

@@ -1,7 +1,6 @@
 import { app, Menu } from 'electron'
 import { isMac } from '@common/utils'
 
-
 export default () => {
   if (isMac) {
     const template: Electron.MenuItemConstructorOptions[] = [

@@ -1,6 +1,4 @@
-import {
-  createAudio,
-} from '@renderer/plugins/player'
+import { createAudio } from '@renderer/plugins/player'
 import useMediaDevice from './useMediaDevice'
 import usePlayerEvent from './usePlayerEvent'
 import usePlayer from './usePlayer'
@@ -18,4 +16,3 @@ export default () => {
     void initPlayStatus()
   }
 }
-

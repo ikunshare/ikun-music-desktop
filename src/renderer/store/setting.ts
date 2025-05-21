@@ -2,12 +2,13 @@ import { reactive, computed } from '@common/utils/vueTools'
 import defaultSetting from '@common/defaultSetting'
 import { updateSetting as saveSetting } from '@renderer/utils/ipc'
 
-export const appSetting = window.lxData.appSetting = reactive<LX.AppSetting>({ ...defaultSetting })
+export const appSetting = (window.lxData.appSetting = reactive<LX.AppSetting>({
+  ...defaultSetting,
+}))
 
 export const isShowAnimation = computed(() => {
   return appSetting['common.isShowAnimation']
 })
-
 
 export const initSetting = (newSetting: LX.AppSetting) => {
   mergeSetting(newSetting)
@@ -20,10 +21,10 @@ export const mergeSetting = (newSetting: Partial<LX.AppSetting>) => {
   }
 }
 
-export const updateSetting = window.lxData.updateSetting = (setting: Partial<LX.AppSetting>) => {
+export const updateSetting = (window.lxData.updateSetting = (setting: Partial<LX.AppSetting>) => {
   // console.warn(setting)
   void saveSetting(setting)
-}
+})
 
 /**
  * 保存是否同意协议
@@ -64,7 +65,6 @@ export const saveVolumeIsMute = (isMute: boolean) => {
 export const savePlaybackRate = (rate: number) => {
   updateSetting({ 'player.playbackRate': rate })
 }
-
 
 /**
  * 设置是否开启桌面歌词

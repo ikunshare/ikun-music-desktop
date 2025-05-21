@@ -111,7 +111,6 @@ export class Event extends EventEmitter {
   }
 }
 
-
 type EventMethods = Omit<EventType, keyof EventEmitter>
 declare class EventType extends Event {
   on<K extends keyof EventMethods>(event: K, listener: EventMethods[K]): this

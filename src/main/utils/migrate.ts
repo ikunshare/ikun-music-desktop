@@ -8,7 +8,7 @@ import { APP_EVENT_NAMES, STORE_NAMES } from '@common/constants'
  * 读取配置文件
  * @returns
  */
-export const parseDataFile = async<T>(name: string): Promise<T | null> => {
+export const parseDataFile = async <T>(name: string): Promise<T | null> => {
   const path = joinPath(global.lxOldDataPath, name)
   if (await checkPath(path)) {
     try {
@@ -33,8 +33,13 @@ interface OldUserListInfo {
  * 迁移 v2.0.0 之前的 list data
  * @returns
  */
-export const migrateDBData = async() => {
-  let playList = await parseDataFile<{ defaultList?: { list: any[] }, loveList?: { list: any[] }, tempList?: { list: any[] }, userList?: OldUserListInfo[] }>('playList.json')
+export const migrateDBData = async () => {
+  let playList = await parseDataFile<{
+    defaultList?: { list: any[] }
+    loveList?: { list: any[] }
+    tempList?: { list: any[] }
+    userList?: OldUserListInfo[]
+  }>('playList.json')
   let listDataAll: LX.List.ListDataFull = {
     defaultList: [],
     loveList: [],
@@ -43,25 +48,34 @@ export const migrateDBData = async() => {
   }
   let isRequiredSave = false
   if (playList) {
-    if (playList.defaultList) listDataAll.defaultList = filterMusicList(playList.defaultList.list.map(m => toNewMusicInfo(m)))
-    if (playList.loveList) listDataAll.loveList = filterMusicList(playList.loveList.list.map(m => toNewMusicInfo(m)))
-    if (playList.tempList) listDataAll.tempList = filterMusicList(playList.tempList.list.map(m => toNewMusicInfo(m)))
+    if (playList.defaultList)
+      listDataAll.defaultList = filterMusicList(
+        playList.defaultList.list.map((m) => toNewMusicInfo(m))
+      )
+    if (playList.loveList)
+      listDataAll.loveList = filterMusicList(playList.loveList.list.map((m) => toNewMusicInfo(m)))
+    if (playList.tempList)
+      listDataAll.tempList = filterMusicList(playList.tempList.list.map((m) => toNewMusicInfo(m)))
     if (playList.userList) {
-      listDataAll.userList = playList.userList.map(l => {
+      listDataAll.userList = playList.userList.map((l) => {
         return {
           ...l,
           locationUpdateTime: l.locationUpdateTime ?? null,
-          list: filterMusicList(l.list.map(m => toNewMusicInfo(m))),
+          list: filterMusicList(l.list.map((m) => toNewMusicInfo(m))),
         }
       })
     }
     isRequiredSave = true
   } else {
-    const config = await parseDataFile<{ list?: { defaultList?: any[], loveList?: any[] } }>('config.json')
+    const config = await parseDataFile<{ list?: { defaultList?: any[]; loveList?: any[] } }>(
+      'config.json'
+    )
     if (config?.list) {
       const list = config.list
-      if (list.defaultList) listDataAll.defaultList = filterMusicList(list.defaultList.map(m => toNewMusicInfo(m)))
-      if (list.loveList) listDataAll.loveList = filterMusicList(list.loveList.map(m => toNewMusicInfo(m)))
+      if (list.defaultList)
+        listDataAll.defaultList = filterMusicList(list.defaultList.map((m) => toNewMusicInfo(m)))
+      if (list.loveList)
+        listDataAll.loveList = filterMusicList(list.loveList.map((m) => toNewMusicInfo(m)))
       isRequiredSave = true
     }
   }
@@ -76,15 +90,18 @@ export const migrateDBData = async() => {
 }
 
 // 迁移文件
-const migrateFile = async(name: string, targetName: string) => {
+const migrateFile = async (name: string, targetName: string) => {
   let path = joinPath(global.lxDataPath, targetName)
   let oldPath = joinPath(global.lxOldDataPath, name)
-  if (!await checkPath(path) && await checkPath(oldPath)) {
-    await fs.promises.copyFile(oldPath, path).catch(err => {
-      log.error(err)
-    }).catch(err => {
-      log.error(err)
-    })
+  if (!(await checkPath(path)) && (await checkPath(oldPath))) {
+    await fs.promises
+      .copyFile(oldPath, path)
+      .catch((err) => {
+        log.error(err)
+      })
+      .catch((err) => {
+        log.error(err)
+      })
   }
 }
 
@@ -92,7 +109,7 @@ const migrateFile = async(name: string, targetName: string) => {
  * 迁移 v2.0.0 之前的 data.json
  * @returns
  */
-export const migrateDataJson = async() => {
+export const migrateDataJson = async () => {
   const path = joinPath(global.lxDataPath, 'data.json')
   if (await checkPath(path)) return
   const oldDataFile = await parseDataFile<{
@@ -110,11 +127,10 @@ export const migrateDataJson = async() => {
   if (oldDataFile.listPosition) newData.listScrollPosition = oldDataFile.listPosition
   if (oldDataFile.listUpdateInfo) newData.listUpdateInfo = oldDataFile.listUpdateInfo
 
-  await fs.promises.writeFile(path, JSON.stringify(newData)).catch(err => {
+  await fs.promises.writeFile(path, JSON.stringify(newData)).catch((err) => {
     log.error(err)
   })
 }
-
 
 const hotKeyNameMap = {
   mainWindow: APP_EVENT_NAMES.winMainName,
@@ -122,14 +138,15 @@ const hotKeyNameMap = {
 } as const
 const updateHotKeyTypeName = (config: LX.HotKeyConfig) => {
   for (const keyConfig of Object.values(config.keys)) {
-    if (hotKeyNameMap[keyConfig.type as keyof typeof hotKeyNameMap]) keyConfig.type = hotKeyNameMap[keyConfig.type as keyof typeof hotKeyNameMap]
+    if (hotKeyNameMap[keyConfig.type as keyof typeof hotKeyNameMap])
+      keyConfig.type = hotKeyNameMap[keyConfig.type as keyof typeof hotKeyNameMap]
   }
 }
 /**
  * 迁移 v2.0.0 之前的 hotkey
  * @returns
  */
-export const migrateHotKey = async() => {
+export const migrateHotKey = async () => {
   const oldConfig = await parseDataFile<LX.HotKeyConfigAll>('hotKey.json')
   if (oldConfig) {
     let localConfig: LX.HotKeyConfig
@@ -158,4 +175,5 @@ export const migrateHotKey = async() => {
  * 迁移 v2.0.0 之前的user api
  * @returns
  */
-export const migrateUserApi = async() => migrateFile('userApi.json', STORE_NAMES.USER_API + '.json')
+export const migrateUserApi = async () =>
+  migrateFile('userApi.json', STORE_NAMES.USER_API + '.json')

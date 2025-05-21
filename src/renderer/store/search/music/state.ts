@@ -14,7 +14,7 @@ export declare interface ListInfo {
 }
 
 interface ListInfos extends Partial<Record<LX.OnlineSource, ListInfo>> {
-  'all': ListInfo
+  all: ListInfo
 }
 
 export const sources: Array<LX.OnlineSource | 'all'> = markRaw([])

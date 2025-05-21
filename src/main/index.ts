@@ -29,7 +29,6 @@ setUserDataPath()
 registerDeeplink(init)
 listenerAppEvent(init)
 
-
 // https://github.com/electron/electron/issues/16809
 void app.whenReady().then(() => {
   isLinux ? setTimeout(init, 300) : init()

@@ -13,7 +13,6 @@ autoUpdater.autoDownload = false
 
 log.info('App starting...')
 
-
 // -------------------------------------------------------------------
 // Open a window that displays the version
 //
@@ -29,7 +28,6 @@ function sendStatusToWindow(text: string) {
   log.info(text)
   // ipcMain.send('message', text)
 }
-
 
 // -------------------------------------------------------------------
 // Auto updates
@@ -70,7 +68,8 @@ interface WaitEvent {
 // let waitEvent: WaitEvent[] = []
 const handleSendEvent = (action: WaitEvent) => {
   if (isExistWindow()) {
-    setTimeout(() => { // 延迟发送事件，过早发送可能渲染进程还没启动完成
+    setTimeout(() => {
+      // 延迟发送事件，过早发送可能渲染进程还没启动完成
       sendEvent(action.type, action.info)
     }, 1000)
   }
@@ -80,26 +79,26 @@ export default () => {
   autoUpdater.on('checking-for-update', () => {
     sendStatusToWindow('Checking for update...')
   })
-  autoUpdater.on('update-available', info => {
+  autoUpdater.on('update-available', (info) => {
     sendStatusToWindow('Update available.')
     handleSendEvent({ type: WIN_MAIN_RENDERER_EVENT_NAME.update_available, info })
   })
-  autoUpdater.on('update-not-available', info => {
+  autoUpdater.on('update-not-available', (info) => {
     sendStatusToWindow('Update not available.')
     handleSendEvent({ type: WIN_MAIN_RENDERER_EVENT_NAME.update_not_available, info })
   })
-  autoUpdater.on('error', err => {
+  autoUpdater.on('error', (err) => {
     sendStatusToWindow('Error in auto-updater.')
     handleSendEvent({ type: WIN_MAIN_RENDERER_EVENT_NAME.update_error, info: err.message })
   })
-  autoUpdater.on('download-progress', progressObj => {
+  autoUpdater.on('download-progress', (progressObj) => {
     let log_message = `Download speed: ${progressObj.bytesPerSecond}`
     log_message = `${log_message} - Downloaded ${progressObj.percent}%`
     log_message = `${log_message} (progressObj.transferred/${progressObj.total})`
     sendStatusToWindow(log_message)
     handleSendEvent({ type: WIN_MAIN_RENDERER_EVENT_NAME.update_progress, info: progressObj })
   })
-  autoUpdater.on('update-downloaded', info => {
+  autoUpdater.on('update-downloaded', (info) => {
     sendStatusToWindow('Update downloaded.')
     handleSendEvent({ type: WIN_MAIN_RENDERER_EVENT_NAME.update_downloaded, info })
   })

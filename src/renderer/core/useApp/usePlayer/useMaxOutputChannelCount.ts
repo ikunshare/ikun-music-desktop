@@ -7,8 +7,10 @@ export default () => {
   // console.log(appSetting['player.soundEffect.panner.enable'])
   setMaxOutputChannelCount(appSetting['player.isMaxOutputChannelCount'])
 
-  watch(() => appSetting['player.isMaxOutputChannelCount'], (val) => {
-    setMaxOutputChannelCount(val)
-  })
+  watch(
+    () => appSetting['player.isMaxOutputChannelCount'],
+    (val) => {
+      setMaxOutputChannelCount(val)
+    }
+  )
 }
-

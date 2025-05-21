@@ -15,8 +15,7 @@ export default () => {
   const handleSonglistAction = useSonglistAction()
   const handlePlayerAction = usePlayerAction()
 
-
-  const handleLinkAction = async(link: string) => {
+  const handleLinkAction = async (link: string) => {
     // console.log(link)
     const [url, search] = link.split('?')
     const [type, action, ...paths] = url.replace('lxmusic://', '').split('/')
@@ -34,7 +33,7 @@ export default () => {
       }
       if (params.data) params.data = JSON.parse(decodeURIComponent(params.data))
     }
-    params.paths = paths.map(p => decodeURIComponent(p))
+    params.paths = paths.map((p) => decodeURIComponent(p))
     console.log(params)
     switch (type) {
       case 'music':
@@ -46,11 +45,12 @@ export default () => {
       case 'player':
         await handlePlayerAction(action as any)
         break
-      default: throw new Error('Unknown type: ' + type)
+      default:
+        throw new Error('Unknown type: ' + type)
     }
   }
 
-  const rDeeplink = onDeeplink(async({ params: link }) => {
+  const rDeeplink = onDeeplink(async ({ params: link }) => {
     console.log(link)
     if (!isInited) return
     clearEnvParamsDeeplink()
@@ -66,7 +66,7 @@ export default () => {
     rDeeplink()
   })
 
-  return async(envParams: LX.EnvParams) => {
+  return async (envParams: LX.EnvParams) => {
     if (envParams.deeplink) {
       clearEnvParamsDeeplink()
       try {

@@ -18,8 +18,7 @@ import {
   getLyricInfo as getLocalLyricInfo,
 } from './local'
 
-
-export const getMusicUrl = async({
+export const getMusicUrl = async ({
   musicInfo,
   quality,
   isRefresh = false,
@@ -41,7 +40,7 @@ export const getMusicUrl = async({
   }
 }
 
-export const getPicPath = async({
+export const getPicPath = async ({
   musicInfo,
   isRefresh = false,
   listId,
@@ -61,7 +60,7 @@ export const getPicPath = async({
   }
 }
 
-export const getLyricInfo = async({
+export const getLyricInfo = async ({
   musicInfo,
   isRefresh = false,
   onToggleSource,

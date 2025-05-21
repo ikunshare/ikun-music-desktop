@@ -75,8 +75,4 @@ export {
   withDefaults,
 }
 
-export type {
-  ComputedRef,
-  Ref,
-  ShallowRef,
-}
+export type { ComputedRef, Ref, ShallowRef }

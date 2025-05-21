@@ -14,12 +14,8 @@ declare global {
     os: 'windows' | 'linux' | 'mac'
   }
 
-  namespace LX {
-
-  }
-
+  namespace LX {}
 }
-
 
 // declare const ELECTRON_DISABLE_SECURITY_WARNINGS: string
 // declare const userApiPath: string

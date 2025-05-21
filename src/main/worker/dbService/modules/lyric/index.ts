@@ -16,17 +16,23 @@ import {
 
 const keys = ['lyric', 'tlyric', 'rlyric', 'lxlyric'] as const
 
-const toDBLyric = (id: string, source: LX.DBService.Lyricnfo['source'], lyricInfo: LX.Music.LyricInfo): LX.DBService.Lyricnfo[] => {
-  return (keys.map(k => [k, lyricInfo[k]])
-    .filter(([k, t]) => t != null) as Array<[LX.DBService.Lyricnfo['type'], string]>)
-    .map(([k, t]) => {
-      return {
-        id,
-        type: k,
-        text: Buffer.from(t).toString('base64'),
-        source,
-      }
-    })
+const toDBLyric = (
+  id: string,
+  source: LX.DBService.Lyricnfo['source'],
+  lyricInfo: LX.Music.LyricInfo
+): LX.DBService.Lyricnfo[] => {
+  return (
+    keys.map((k) => [k, lyricInfo[k]]).filter(([k, t]) => t != null) as Array<
+      [LX.DBService.Lyricnfo['type'], string]
+    >
+  ).map(([k, t]) => {
+    return {
+      id,
+      type: k,
+      text: Buffer.from(t).toString('base64'),
+      source,
+    }
+  })
 }
 
 /**
@@ -47,22 +53,26 @@ export const getPlayerLyric = (id: string): LX.Player.LyricInfo => {
     switch (lyric.source) {
       case 'edited':
         if (lyric.type == 'lyric') lyricInfo.lyric = Buffer.from(lyric.text, 'base64').toString()
-        else if (lyric.text != null) lyricInfo[lyric.type] = Buffer.from(lyric.text, 'base64').toString()
+        else if (lyric.text != null)
+          lyricInfo[lyric.type] = Buffer.from(lyric.text, 'base64').toString()
         break
       default:
         if (lyric.type == 'lyric') rawLyricInfo.lyric = Buffer.from(lyric.text, 'base64').toString()
-        else if (lyric.text != null) rawLyricInfo[lyric.type] = Buffer.from(lyric.text, 'base64').toString()
+        else if (lyric.text != null)
+          rawLyricInfo[lyric.type] = Buffer.from(lyric.text, 'base64').toString()
         break
     }
   }
 
-  return lyricInfo.lyric ? {
-    ...lyricInfo,
-    rawlrcInfo: rawLyricInfo,
-  } : {
-    ...rawLyricInfo,
-    rawlrcInfo: rawLyricInfo,
-  }
+  return lyricInfo.lyric
+    ? {
+        ...lyricInfo,
+        rawlrcInfo: rawLyricInfo,
+      }
+    : {
+        ...rawLyricInfo,
+        rawlrcInfo: rawLyricInfo,
+      }
 }
 
 /**
@@ -78,7 +88,8 @@ export const getRawLyric = (id: string): LX.Music.LyricInfo => {
   }
   for (const lyric of lyrics) {
     if (lyric.type == 'lyric') lyricInfo.lyric = Buffer.from(lyric.text, 'base64').toString()
-    else if (lyric.text != null) lyricInfo[lyric.type] = Buffer.from(lyric.text, 'base64').toString()
+    else if (lyric.text != null)
+      lyricInfo[lyric.type] = Buffer.from(lyric.text, 'base64').toString()
   }
 
   return lyricInfo
@@ -124,7 +135,6 @@ export const rawLyricCount = () => {
   return countRawLyric()
 }
 
-
 /**
  * 获取已编辑歌词
  * @param id 歌曲id
@@ -138,7 +148,8 @@ export const getEditedLyric = (id: string): LX.Music.LyricInfo => {
   }
   for (const lyric of lyrics) {
     if (lyric.type == 'lyric') lyricInfo.lyric = Buffer.from(lyric.text, 'base64').toString()
-    else if (lyric.text != null) lyricInfo[lyric.type] = Buffer.from(lyric.text, 'base64').toString()
+    else if (lyric.text != null)
+      lyricInfo[lyric.type] = Buffer.from(lyric.text, 'base64').toString()
   }
 
   return lyricInfo
@@ -194,4 +205,3 @@ export const editedLyricUpdateAddAndUpdate = (id: string, lyricInfo: LX.Music.Ly
 export const editedLyricCount = () => {
   return countEditedLyric()
 }
-

@@ -10,7 +10,7 @@ export class DislikeManage {
     this.snapshotDataManage = new SnapshotDataManage(userDataManage)
   }
 
-  createSnapshot = async() => {
+  createSnapshot = async () => {
     const listData = await this.getDislikeRules()
     const md5 = toMD5(listData.trim())
     const snapshotInfo = await this.snapshotDataManage.getSnapshotInfo()
@@ -26,7 +26,7 @@ export class DislikeManage {
     return md5
   }
 
-  getCurrentListInfoKey = async() => {
+  getCurrentListInfoKey = async () => {
     // const snapshotInfo = await this.snapshotDataManage.getSnapshotInfo()
     // if (snapshotInfo.latest) {
     //   return snapshotInfo.latest
@@ -37,20 +37,19 @@ export class DislikeManage {
     return this.createSnapshot()
   }
 
-  getDeviceCurrentSnapshotKey = async(clientId: string) => {
+  getDeviceCurrentSnapshotKey = async (clientId: string) => {
     return this.snapshotDataManage.getDeviceCurrentSnapshotKey(clientId)
   }
 
-  updateDeviceSnapshotKey = async(clientId: string, key: string) => {
+  updateDeviceSnapshotKey = async (clientId: string, key: string) => {
     await this.snapshotDataManage.updateDeviceSnapshotKey(clientId, key)
   }
 
-  removeDevice = async(clientId: string) => {
+  removeDevice = async (clientId: string) => {
     this.snapshotDataManage.removeSnapshotInfo(clientId)
   }
 
-  getDislikeRules = async() => {
+  getDislikeRules = async () => {
     return getLocalDislikeData()
   }
 }
-

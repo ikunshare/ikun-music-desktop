@@ -1,6 +1,5 @@
 import { getDB } from '../../db'
 
-
 /**
  * 创建歌曲信息查询语句
  * @returns 查询语句

@@ -5,7 +5,11 @@ export default () => {
   const aside_font_color_ref = ref(null)
   let tools: PickrTools | null
 
-  const initAsideFontColor = (color: string, changed: (color: string) => void, reset: () => void) => {
+  const initAsideFontColor = (
+    color: string,
+    changed: (color: string) => void,
+    reset: () => void
+  ) => {
     if (!aside_font_color_ref.value) return
     tools = pickrTools.create(aside_font_color_ref.value, color, null, changed, reset)
   }

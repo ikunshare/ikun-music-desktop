@@ -15,7 +15,6 @@ export const formatPlayCount = (num: number): string => {
   return String(num)
 }
 
-
 /**
  * 时间格式化
  */
@@ -32,7 +31,6 @@ export const dateFormat2 = (time: number): string => {
   }
 }
 
-
 /**
  * 设置标题
  */
@@ -42,7 +40,6 @@ export const setTitle = (title: string | null) => {
   dom_title.innerText = title
 }
 
-
 // export const getProxyInfo = () => {
 //   return proxy.enable && proxy.host
 //     ? `http://${proxy.username}:${proxy.password}@${proxy.host}:${proxy.port}`
@@ -51,7 +48,6 @@ export const setTitle = (title: string | null) => {
 //       : undefined
 // }
 
-
 export const getFontSizeWithScreen = (screenWidth: number = window.innerWidth): number => {
   return screenWidth <= 1440
     ? 16
@@ -59,21 +55,24 @@ export const getFontSizeWithScreen = (screenWidth: number = window.innerWidth): 
       ? 18
       : screenWidth <= 2560
         ? 20
-        : screenWidth <= 2560 ? 20 : 22
+        : screenWidth <= 2560
+          ? 20
+          : 22
 }
-
 
 export const deduplicationList = <T extends LX.Music.MusicInfo>(list: T[]): T[] => {
   const ids = new Set<string>()
-  return list.filter(s => {
+  return list.filter((s) => {
     if (ids.has(s.id)) return false
     ids.add(s.id)
     return true
   })
 }
 
-export const langS2T = async(str: string) => {
-  return window.lx.worker.main.langS2t(Buffer.from(str).toString('base64')).then(b64 => Buffer.from(b64, 'base64').toString())
+export const langS2T = async (str: string) => {
+  return window.lx.worker.main
+    .langS2t(Buffer.from(str).toString('base64'))
+    .then((b64) => Buffer.from(b64, 'base64').toString())
 }
 
 export const decodeName = (str: string | null = '') => {

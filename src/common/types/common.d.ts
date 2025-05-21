@@ -75,19 +75,23 @@ declare namespace LX {
     key: string
     info: HotKey
   }
-  type HotKeyState = Map<string, {
-    status: boolean
-    info: HotKey
-  }>
+  type HotKeyState = Map<
+    string,
+    {
+      status: boolean
+      info: HotKey
+    }
+  >
   interface HotKeyActionWrap<T, D> {
     action: T
     data: D
     source?: string
   }
-  type HotKeyActions = HotKeyActionWrap<'config', HotKeyConfigAll>
-  | HotKeyActionWrap<'enable', boolean>
-  | HotKeyActionWrap<'register', RegisterKeyInfo>
-  | HotKeyActionWrap<'unregister', string>
+  type HotKeyActions =
+    | HotKeyActionWrap<'config', HotKeyConfigAll>
+    | HotKeyActionWrap<'enable', boolean>
+    | HotKeyActionWrap<'register', RegisterKeyInfo>
+    | HotKeyActionWrap<'unregister', string>
 
   interface HotKeyEvent {
     type: string

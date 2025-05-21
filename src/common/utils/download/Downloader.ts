@@ -31,8 +31,8 @@ const defaultOptions: Options = {
 class Task extends EventEmitter {
   resumeLastChunk: Buffer | null
   downloadUrl: string
-  chunkInfo: { path: string, startByte: string, endByte: string }
-  status: typeof STATUS[keyof typeof STATUS]
+  chunkInfo: { path: string; startByte: string; endByte: string }
+  status: (typeof STATUS)[keyof typeof STATUS]
   options: Options
   requestOptions: Options['requestOptions']
   ws: fs.WriteStream | null = null
@@ -44,7 +44,6 @@ class Task extends EventEmitter {
   private dataWriteQueueLength = 0
   private closeWaiting = false
   private timeout: null | NodeJS.Timeout = null
-
 
   constructor(url: string, savePath: string, filename: string, options: Partial<Options> = {}) {
     super()
@@ -58,8 +57,14 @@ class Task extends EventEmitter {
     // if (!this.chunkInfo.endByte) this.chunkInfo.endByte = ''
 
     this.options = Object.assign({}, defaultOptions, options)
-    this.requestOptions = Object.assign({}, defaultRequestOptions, this.options.requestOptions || {})
-    this.requestOptions.headers = this.requestOptions.headers ? { ...this.requestOptions.headers } : {}
+    this.requestOptions = Object.assign(
+      {},
+      defaultRequestOptions,
+      this.options.requestOptions || {}
+    )
+    this.requestOptions.headers = this.requestOptions.headers
+      ? { ...this.requestOptions.headers }
+      : {}
 
     this.status = STATUS.idle
   }
@@ -99,7 +104,7 @@ class Task extends EventEmitter {
                 reject(errRead)
                 return
               }
-              fs.close(fd, errClose => {
+              fs.close(fd, (errClose) => {
                 if (errClose) {
                   this.__handleError(errClose)
                   reject(errClose)
@@ -126,7 +131,7 @@ class Task extends EventEmitter {
     // console.log(options)
     let redirected = false
     this.requestInstance = request(url, options)
-      .on('response', response => {
+      .on('response', (response) => {
         if (response.statusCode !== 200 && response.statusCode !== 206) {
           if (response.statusCode == 416) {
             fs.unlink(this.chunkInfo.path, (err) => {
@@ -138,7 +143,11 @@ class Task extends EventEmitter {
             })
             return
           }
-          if ((response.statusCode == 301 || response.statusCode == 302) && response.headers.location && this.redirectNum < this.maxRedirectNum) {
+          if (
+            (response.statusCode == 301 || response.statusCode == 302) &&
+            response.headers.location &&
+            this.redirectNum < this.maxRedirectNum
+          ) {
             console.log('current url:', url)
             console.log('redirect to:', response.headers.location)
             redirected = true
@@ -165,7 +174,9 @@ class Task extends EventEmitter {
         this.__startTimeout()
         response
           .on('data', this.__handleWriteData.bind(this))
-          .on('error', err => { this.__handleError(err) })
+          .on('error', (err) => {
+            this.__handleError(err)
+          })
           .on('end', () => {
             if (response.complete) {
               this.__handleComplete()
@@ -175,7 +186,9 @@ class Task extends EventEmitter {
             }
           })
       })
-      .on('error', err => { this.__handleError(err) })
+      .on('error', (err) => {
+        this.__handleError(err)
+      })
       .on('close', () => {
         if (redirected) return
         void this.__closeWriteStream()
@@ -184,13 +197,16 @@ class Task extends EventEmitter {
   }
 
   __initDownload(response: http.IncomingMessage) {
-    this.progress.total = response.headers['content-length'] ? parseInt(response.headers['content-length']) : 0
+    this.progress.total = response.headers['content-length']
+      ? parseInt(response.headers['content-length'])
+      : 0
     if (!this.progress.total) {
       this.__handleError(new Error('Content length is 0'))
       return
     }
     let options: any = {}
-    let isResumable = this.options.forceResume ||
+    let isResumable =
+      this.options.forceResume ||
       response.headers['accept-ranges'] !== 'none' ||
       (typeof response.headers['accept-ranges'] == 'string' &&
         parseInt(response.headers['accept-ranges'].replace(/^bytes=(\d+)/, '$1')) > 0)
@@ -216,7 +232,7 @@ class Task extends EventEmitter {
       if (this.closeWaiting) return
       void this.__closeWriteStream()
     })
-    this.ws.on('error', err => {
+    this.ws.on('error', (err) => {
       fs.unlink(this.chunkInfo.path, (unlinkErr: any) => {
         this.__handleError(err)
         this.chunkInfo.startByte = '0'
@@ -263,7 +279,7 @@ class Task extends EventEmitter {
         this.closeWaiting ||= true
         this.ws.on('close', resolve)
       } else {
-        this.ws.close(err => {
+        this.ws.close((err) => {
           if (err) {
             this.status = STATUS.error
             this.emit('error', err)
@@ -315,7 +331,7 @@ class Task extends EventEmitter {
     this.dataWriteQueueLength++
     this.__startTimeout()
     this.__calculateProgress(chunk.length)
-    this.ws.write(chunk, err => {
+    this.ws.write(chunk, (err) => {
       this.dataWriteQueueLength--
       if (this.status == STATUS.running) this.__calculateProgress(0)
       if (err) {
@@ -333,13 +349,17 @@ class Task extends EventEmitter {
     let chunkLen = chunk.length
     let isOk
     if (chunkLen >= resumeLastChunkLen) {
-      isOk = chunk.subarray(0, resumeLastChunkLen).toString('hex') === this.resumeLastChunk!.toString('hex')
+      isOk =
+        chunk.subarray(0, resumeLastChunkLen).toString('hex') ===
+        this.resumeLastChunk!.toString('hex')
       if (!isOk) return null
 
       this.resumeLastChunk = null
       return chunk.subarray(resumeLastChunkLen)
     } else {
-      isOk = chunk.subarray(0, chunkLen).toString('hex') === this.resumeLastChunk!.subarray(0, chunkLen).toString('hex')
+      isOk =
+        chunk.subarray(0, chunkLen).toString('hex') ===
+        this.resumeLastChunk!.subarray(0, chunkLen).toString('hex')
       if (!isOk) return null
       this.resumeLastChunk = this.resumeLastChunk!.subarray(chunkLen)
       return chunk.subarray(chunkLen)
@@ -373,9 +393,11 @@ class Task extends EventEmitter {
     progress.downloaded += receivedBytes
     progress.progress = progress.total ? (progress.downloaded / progress.total) * 100 : -1
 
-
     // emit the progress every second or if finished
-    if ((progress.downloaded === progress.total && this.dataWriteQueueLength == 0) || elaspsedTime > 1000) {
+    if (
+      (progress.downloaded === progress.total && this.dataWriteQueueLength == 0) ||
+      elaspsedTime > 1000
+    ) {
       this.statsEstimate.time = currentTime
       this.statsEstimate.bytes = progress.downloaded - this.statsEstimate.prevBytes
       this.statsEstimate.prevBytes = progress.downloaded

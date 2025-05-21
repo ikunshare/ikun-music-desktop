@@ -78,9 +78,8 @@ export const openAPI = reactive({
   message: '',
 })
 
-
 export const windowSizeActive = computed(() => {
-  return windowSizeList.find(i => i.id === appSetting['common.windowSizeId']) ?? windowSizeList[0]
+  return windowSizeList.find((i) => i.id === appSetting['common.windowSizeId']) ?? windowSizeList[0]
 })
 
 export const getSourceI18nPrefix = () => {
@@ -95,10 +94,10 @@ export const sourceNames = computed(() => {
     kg: 'kg',
     mg: 'mg',
     wy: 'wy',
-    all: window.i18n.t(prefix + 'all' as any),
+    all: window.i18n.t((prefix + 'all') as any),
   }
   for (const { id } of music.sources) {
-    sourceNames[id as LX.OnlineSource] = window.i18n.t(prefix + id as any)
+    sourceNames[id as LX.OnlineSource] = window.i18n.t((prefix + id) as any)
   }
 
   return sourceNames
@@ -108,7 +107,7 @@ export const windowSizeList = markRaw(configWindowSizeList)
 
 export const isShowPact = ref(false)
 
-export const versionInfo = window.lxData.versionInfo = reactive<{
+export const versionInfo = (window.lxData.versionInfo = reactive<{
   version: string
   newVersion: {
     version: string
@@ -130,7 +129,7 @@ export const versionInfo = window.lxData.versionInfo = reactive<{
   isLatest: false,
   status: 'checking',
   downloadProgress: null,
-})
+}))
 export const userApi = reactive<{
   list: LX.UserApi.UserApiInfo[]
   status: boolean
@@ -145,14 +144,16 @@ export const userApi = reactive<{
 
 export const isShowChangeLog = ref(false)
 
-
 export const isFullscreen = ref(false)
-watch(isFullscreen, isFullscreen => {
-  window.lx.rootOffset = window.dt || isFullscreen ? 0 : 8
-}, { immediate: true })
+watch(
+  isFullscreen,
+  (isFullscreen) => {
+    window.lx.rootOffset = window.dt || isFullscreen ? 0 : 8
+  },
+  { immediate: true }
+)
 
 export const themeShouldUseDarkColors = ref(window.shouldUseDarkColors)
-
 
 export const qualityList = shallowRef<LX.QualityList>({})
 export const setQualityList = (_qualityList: LX.QualityList) => {

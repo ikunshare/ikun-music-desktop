@@ -48,7 +48,13 @@ export const init = () => {
       : { status: false, apiInfo: userApi, message }
     sendStatusChange(apiStatus)
   }
-  const handleResponse = ({ params: { status, data: { requestKey, result }, message } }: ResponseParams) => {
+  const handleResponse = ({
+    params: {
+      status,
+      data: { requestKey, result },
+      message,
+    },
+  }: ResponseParams) => {
     const request = requestQueue.get(requestKey)
     if (!request) return
     requestQueue.delete(requestKey)
@@ -89,13 +95,13 @@ export const clearRequestTimeout = (requestKey: string) => {
   }
 }
 
-export const loadApi = async(apiId: string) => {
+export const loadApi = async (apiId: string) => {
   if (!apiId) {
     apiStatus = { status: false, message: 'api id is null' }
     sendStatusChange(apiStatus)
     return
   }
-  const targetApi = getUserApis().find(api => api.id == apiId)
+  const targetApi = getUserApis().find((api) => api.id == apiId)
   if (!targetApi) throw new Error('api not found')
   userApi = targetApi
   console.log('load api', userApi.name)
@@ -120,26 +126,33 @@ export const cancelRequest = (requestKey: string) => {
   clearRequestTimeout(requestKey)
 }
 
-export const request = async({ requestKey, data }: LX.UserApi.UserApiRequestParams): Promise<any> => await new Promise((resolve, reject) => {
-  if (!userApi) {
-    reject(new Error('user api is not load'))
-  }
+export const request = async ({
+  requestKey,
+  data,
+}: LX.UserApi.UserApiRequestParams): Promise<any> =>
+  await new Promise((resolve, reject) => {
+    if (!userApi) {
+      reject(new Error('user api is not load'))
+    }
 
-  // const requestKey = `request__${Math.random().toString().substring(2)}`
-  const timeout = timeouts.get(requestKey)
-  if (timeout) {
-    clearTimeout(timeout)
-    timeouts.delete(requestKey)
-    cancelRequest(requestKey)
-  }
+    // const requestKey = `request__${Math.random().toString().substring(2)}`
+    const timeout = timeouts.get(requestKey)
+    if (timeout) {
+      clearTimeout(timeout)
+      timeouts.delete(requestKey)
+      cancelRequest(requestKey)
+    }
 
-  timeouts.set(requestKey, setTimeout(() => {
-    cancelRequest(requestKey)
-  }, 20000))
+    timeouts.set(
+      requestKey,
+      setTimeout(() => {
+        cancelRequest(requestKey)
+      }, 20000)
+    )
 
-  requestQueue.set(requestKey, [resolve, reject, data])
-  sendRequest({ requestKey, data })
-})
+    requestQueue.set(requestKey, [resolve, reject, data])
+    sendRequest({ requestKey, data })
+  })
 
 export const getStatus = (): LX.UserApi.UserApiStatus => apiStatus
 
@@ -148,6 +161,6 @@ export const setAllowShowUpdateAlert = (id: string, enable: boolean) => {
   userApi.allowShowUpdateAlert = enable
 }
 
-export const sendRequest = (reqData: { requestKey: string, data: any }) => {
+export const sendRequest = (reqData: { requestKey: string; data: any }) => {
   sendEvent(USER_API_RENDERER_EVENT_NAME.request, reqData)
 }

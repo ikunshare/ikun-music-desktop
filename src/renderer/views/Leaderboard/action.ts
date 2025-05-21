@@ -9,11 +9,11 @@ import { toMD5 } from '@renderer/utils'
 
 const getListId = (id: string) => `board__${id}`
 
-export const addSongListDetail = async(id: string, name: string, source: LX.OnlineSource) => {
+export const addSongListDetail = async (id: string, name: string, source: LX.OnlineSource) => {
   // console.log(this.listDetail.info)
   // if (!this.listDetail.info.name) return
   const listId = getListId(id)
-  const targetList = userLists.find(l => l.sourceListId == listId)
+  const targetList = userLists.find((l) => l.sourceListId == listId)
   if (targetList) {
     const confirm = await dialog.confirm({
       message: window.i18n.t('duplicate_list_tip', { name: targetList.name }),
@@ -35,7 +35,11 @@ export const addSongListDetail = async(id: string, name: string, source: LX.Onli
   })
 }
 
-export const playSongListDetail = async(id: string, list?: LX.Music.MusicInfoOnline[], index: number = 0) => {
+export const playSongListDetail = async (
+  id: string,
+  list?: LX.Music.MusicInfoOnline[],
+  index: number = 0
+) => {
   let isPlayingList = false
   // console.log(list)
   const listId = getListId(id)

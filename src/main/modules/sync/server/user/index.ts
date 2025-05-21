@@ -1,8 +1,5 @@
 import { UserDataManage } from './data'
-import {
-  ListManage,
-  DislikeManage,
-} from '../modules'
+import { ListManage, DislikeManage } from '../modules'
 
 export interface UserSpace {
   dataManage: UserDataManage
@@ -23,9 +20,12 @@ const clearDelayReleaseTimeout = (userName: string) => {
 }
 const seartDelayReleaseTimeout = (userName: string) => {
   clearDelayReleaseTimeout(userName)
-  delayReleaseTimeouts.set(userName, setTimeout(() => {
-    users.delete(userName)
-  }, delayTime))
+  delayReleaseTimeouts.set(
+    userName,
+    setTimeout(() => {
+      users.delete(userName)
+    }, delayTime)
+  )
 }
 
 export const getUserSpace = (userName = 'default') => {
@@ -37,18 +37,21 @@ export const getUserSpace = (userName = 'default') => {
     const dataManage = new UserDataManage(userName)
     const listManage = new ListManage(dataManage)
     const dislikeManage = new DislikeManage(dataManage)
-    users.set(userName, user = {
-      dataManage,
-      listManage,
-      dislikeManage,
-      async getDecices() {
-        return this.dataManage.getAllClientKeyInfo()
-      },
-      async removeDevice(clientId) {
-        await listManage.removeDevice(clientId)
-        await dataManage.removeClientKeyInfo(clientId)
-      },
-    })
+    users.set(
+      userName,
+      (user = {
+        dataManage,
+        listManage,
+        dislikeManage,
+        async getDecices() {
+          return this.dataManage.getAllClientKeyInfo()
+        },
+        async removeDevice(clientId) {
+          await listManage.removeDevice(clientId)
+          await dataManage.removeClientKeyInfo(clientId)
+        },
+      })
+    )
   }
   return user
 }
@@ -59,6 +62,5 @@ export const releaseUserSpace = (userName = 'default', force = false) => {
     users.delete(userName)
   } else seartDelayReleaseTimeout(userName)
 }
-
 
 export * from './data'

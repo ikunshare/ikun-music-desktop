@@ -27,7 +27,7 @@ const sendRequest = (url: string, options: Options, callback?: HttpCallback) => 
   }
 
   if (options.params) {
-    (httpOptions.path!) += `${urlParse.search ? '&' : '?'}${Object.entries(options.params)
+    httpOptions.path! += `${urlParse.search ? '&' : '?'}${Object.entries(options.params)
       .map(([key, value]) => `${key}=${encodeURIComponent(value)}`)
       .join('&')}`
   }
@@ -70,4 +70,3 @@ export function request(url: string, _options: Partial<Options>, callback?: Http
   if (options.timeout) applyTimeout(request, options.timeout)
   return request
 }
-

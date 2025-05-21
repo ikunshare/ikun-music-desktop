@@ -5,4 +5,8 @@ export interface MusicMeta {
   APIC: string | null
   lyrics: string | null
 }
-export function setMeta(filePath: string, meta: MusicMeta, proxy?: { host: string, port: number }): void
+export function setMeta(
+  filePath: string,
+  meta: MusicMeta,
+  proxy?: { host: string; port: number }
+): void

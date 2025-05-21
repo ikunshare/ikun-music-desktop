@@ -6,7 +6,7 @@ on:
       - main
 
 env:
-  IS_CI: "true"
+  IS_CI: 'true'
 
 jobs:
   Windows:

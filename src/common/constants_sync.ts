@@ -10,7 +10,6 @@ export const ENV_PARAMS = [
   'LX_USER_',
 ] as const
 
-
 export const LIST_IDS = {
   DEFAULT: 'default',
   LOVE: 'love',
@@ -26,7 +25,6 @@ export const SYNC_CODE = {
   msgAuthFailed: 'Auth failed',
   msgBlockedIp: 'Blocked IP',
   msgConnect: 'lx-music connect',
-
 
   authFailed: 'Auth failed',
   missingAuthCode: 'Missing auth code',
@@ -68,7 +66,4 @@ export const File = {
   syncAuthKeysJSON: 'syncAuthKey.json',
 } as const
 
-export const FeaturesList = [
-  'list',
-  'dislike',
-] as const
+export const FeaturesList = ['list', 'dislike'] as const

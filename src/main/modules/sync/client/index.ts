@@ -1,5 +1,10 @@
 import handleAuth from './auth'
-import { connect as socketConnect, disconnect as socketDisconnect, sendSyncStatus, sendSyncMessage } from './client'
+import {
+  connect as socketConnect,
+  disconnect as socketDisconnect,
+  sendSyncStatus,
+  sendSyncMessage,
+} from './client'
 // import { getSyncHost } from '@root/utils/data'
 import log from '../log'
 import { parseUrl } from './utils'
@@ -8,7 +13,7 @@ import { SYNC_CODE } from '@common/constants_sync'
 
 let connectId = 0
 
-const handleConnect = async(host: string, authCode?: string) => {
+const handleConnect = async (host: string, authCode?: string) => {
   // const hostInfo = await getSyncHost()
   // console.log(hostInfo)
   // if (!hostInfo || !hostInfo.host || !hostInfo.port) throw new Error(SYNC_CODE.unknownServiceAddress)
@@ -20,11 +25,11 @@ const handleConnect = async(host: string, authCode?: string) => {
   if (id != connectId) return
   socketConnect(urlInfo, keyInfo)
 }
-const handleDisconnect = async() => {
+const handleDisconnect = async () => {
   await socketDisconnect()
 }
 
-const connectServer = async(host: string, authCode?: string) => {
+const connectServer = async (host: string, authCode?: string) => {
   sendSyncStatus({
     status: false,
     message: SYNC_CODE.connecting,
@@ -32,7 +37,7 @@ const connectServer = async(host: string, authCode?: string) => {
   const id = connectId
   await migrateData(global.lxDataPath)
 
-  return handleConnect(host, authCode).catch(async err => {
+  return handleConnect(host, authCode).catch(async (err) => {
     if (id != connectId) return
     sendSyncStatus({
       status: false,
@@ -51,25 +56,23 @@ const connectServer = async(host: string, authCode?: string) => {
   })
 }
 
-const disconnectServer = async(isResetStatus = true) => handleDisconnect().then(() => {
-  log.info('disconnect...')
-  if (isResetStatus) {
-    connectId++
-    sendSyncStatus({
-      status: false,
-      message: '',
+const disconnectServer = async (isResetStatus = true) =>
+  handleDisconnect()
+    .then(() => {
+      log.info('disconnect...')
+      if (isResetStatus) {
+        connectId++
+        sendSyncStatus({
+          status: false,
+          message: '',
+        })
+      }
     })
-  }
-}).catch((err: any) => {
-  log.error(`disconnect error: ${err.message as string}`)
-  sendSyncMessage(err.message)
-})
+    .catch((err: any) => {
+      log.error(`disconnect error: ${err.message as string}`)
+      sendSyncMessage(err.message)
+    })
 
-export {
-  connectServer,
-  disconnectServer,
-}
+export { connectServer, disconnectServer }
 
-export {
-  getStatus,
-} from './client'
+export { getStatus } from './client'

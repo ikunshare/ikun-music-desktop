@@ -12,7 +12,6 @@ import {
   getErrorCode,
 } from '@renderer/plugins/player'
 
-
 export default () => {
   const rOnPlaying = onPlaying(() => {
     console.log('onPlaying')
@@ -57,7 +56,6 @@ export default () => {
     window.app_event.pause()
     window.app_event.playerWaiting()
   })
-
 
   onBeforeUnmount(() => {
     rOnPlaying()

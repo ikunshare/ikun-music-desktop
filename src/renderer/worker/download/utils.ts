@@ -10,18 +10,22 @@ import { clipFileNameLength, clipNameLength } from '@common/utils/tools'
  * @param {*} lrc
  * @param {*} format
  */
-export const saveLrc = async(lrcData: { lrc: string, tlrc: string | null, rlrc: string | null }, filePath: string, format: LX.LyricFormat) => {
+export const saveLrc = async (
+  lrcData: { lrc: string; tlrc: string | null; rlrc: string | null },
+  filePath: string,
+  format: LX.LyricFormat
+) => {
   const iconv = await import('iconv-lite')
   const lrc = mergeLyrics(lrcData.lrc, lrcData.tlrc, lrcData.rlrc)
   switch (format) {
     case 'gbk':
-      fs.writeFile(filePath, iconv.encode(lrc, 'gbk', { addBOM: true }), err => {
+      fs.writeFile(filePath, iconv.encode(lrc, 'gbk', { addBOM: true }), (err) => {
         if (err) console.log(err)
       })
       break
     case 'utf8':
     default:
-      fs.writeFile(filePath, iconv.encode(lrc, 'utf8', { addBOM: true }), err => {
+      fs.writeFile(filePath, iconv.encode(lrc, 'utf8', { addBOM: true }), (err) => {
         if (err) console.log(err)
       })
       break
@@ -50,7 +54,11 @@ export const getExt = (type: string): LX.Download.FileExt => {
  * @param type
  * @param qualityList
  */
-export const getMusicType = (musicInfo: LX.Music.MusicInfoOnline, type: LX.Quality, qualityList: LX.QualityList): LX.Quality => {
+export const getMusicType = (
+  musicInfo: LX.Music.MusicInfoOnline,
+  type: LX.Quality,
+  qualityList: LX.QualityList
+): LX.Quality => {
   let list = qualityList[musicInfo.source]
   if (!list) return '128k'
   if (!list.includes(type)) type = list[list.length - 1]
@@ -65,7 +73,13 @@ export const getMusicType = (musicInfo: LX.Music.MusicInfoOnline, type: LX.Quali
 //   return list.some(s => s.id === musicInfo.id && (s.metadata.type === type || s.metadata.ext === ext))
 // }
 
-export const createDownloadInfo = (musicInfo: LX.Music.MusicInfoOnline, type: LX.Quality, fileName: string, qualityList: LX.QualityList, listId?: string) => {
+export const createDownloadInfo = (
+  musicInfo: LX.Music.MusicInfoOnline,
+  type: LX.Quality,
+  fileName: string,
+  qualityList: LX.QualityList,
+  listId?: string
+) => {
   type = getMusicType(musicInfo, type, qualityList)
   let ext = getExt(type)
   const key = `${musicInfo.id}_${type}_${ext}`
@@ -87,9 +101,11 @@ export const createDownloadInfo = (musicInfo: LX.Music.MusicInfoOnline, type: LX
       ext,
       filePath: '',
       listId,
-      fileName: filterFileName(`${clipFileNameLength(fileName
-        .replace('歌名', musicInfo.name)
-        .replace('歌手', clipNameLength(musicInfo.singer)))}.${ext}`),
+      fileName: filterFileName(
+        `${clipFileNameLength(
+          fileName.replace('歌名', musicInfo.name).replace('歌手', clipNameLength(musicInfo.singer))
+        )}.${ext}`
+      ),
     },
   }
   // downloadInfo.metadata.filePath = joinPath(savePath, downloadInfo.metadata.fileName)

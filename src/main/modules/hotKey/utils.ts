@@ -10,7 +10,7 @@ const transformedKeyRxp = /(^|\+)[a-z]/g
 
 export const transformedKey = (key: string): string => {
   if (key.includes('arrow')) key = key.replace(/arrow/g, '')
-  return key.replace('mod', 'CommandOrControl').replace(transformedKeyRxp, l => l.toUpperCase())
+  return key.replace('mod', 'CommandOrControl').replace(transformedKeyRxp, (l) => l.toUpperCase())
 }
 
 export const registerHotkey = ({ key, info }: LX.RegisterKeyInfo): boolean => {
@@ -27,11 +27,11 @@ export const registerHotkey = ({ key, info }: LX.RegisterKeyInfo): boolean => {
     }
     global.lx.hotKey.state.set(key, targetKey)
   }
-  const status = targetKey.status = globalShortcut.isRegistered(transKey)
+  const status = (targetKey.status = globalShortcut.isRegistered(transKey)
     ? false
     : globalShortcut.register(transKey, () => {
-      handleKeyDown(key)
-    })
+        handleKeyDown(key)
+      }))
   return status
 }
 
@@ -47,12 +47,10 @@ export const unRegisterHotkeyAll = () => {
   globalShortcut.unregisterAll()
 }
 
-
 const handleRegisterHotkey = (data: LX.RegisterKeyInfo) => {
   let ret = registerHotkey(data)
   if (!ret) log.info('Register hot key failed:', data.key)
 }
-
 
 export const init = (isForce = false) => {
   unRegisterHotkeyAll()

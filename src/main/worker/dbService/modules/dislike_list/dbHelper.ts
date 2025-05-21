@@ -20,7 +20,7 @@ export const queryDislikeList = () => {
  * 批量插入不喜欢歌曲并刷新顺序
  * @param infos 列表
  */
-export const insertDislikeList = async(infos: LX.DBService.DislikeInfo[]) => {
+export const insertDislikeList = async (infos: LX.DBService.DislikeInfo[]) => {
   const db = getDB()
   const insertStatement = createInsertStatement()
   db.transaction((infos: LX.DBService.DislikeInfo[]) => {
@@ -32,7 +32,7 @@ export const insertDislikeList = async(infos: LX.DBService.DislikeInfo[]) => {
  * 覆盖并批量插入不喜欢歌曲并刷新顺序
  * @param infos 列表
  */
-export const overwirteDislikeList = async(infos: LX.DBService.DislikeInfo[]) => {
+export const overwirteDislikeList = async (infos: LX.DBService.DislikeInfo[]) => {
   const db = getDB()
   const clearStatement = createClearStatement()
   const insertStatement = createInsertStatement()
@@ -73,4 +73,3 @@ export const overwirteDislikeList = async(infos: LX.DBService.DislikeInfo[]) => 
 //   const clearStatement = createClearStatement()
 //   clearStatement.run()
 // }
-

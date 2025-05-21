@@ -1,5 +1,3 @@
-
-
 declare namespace LX {
   namespace Dislike {
     // interface ListItemMusicText {

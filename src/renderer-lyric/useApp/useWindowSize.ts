@@ -2,14 +2,15 @@ import { setting } from '@lyric/store/state'
 import { onBeforeUnmount, onMounted } from '@common/utils/vueTools'
 import { setWindowBounds } from '@lyric/utils/ipc'
 
-type Origin = 'left'
-| 'top'
-| 'right'
-| 'bottom'
-| 'top-left'
-| 'top-right'
-| 'bottom-left'
-| 'bottom-right'
+type Origin =
+  | 'left'
+  | 'top'
+  | 'right'
+  | 'bottom'
+  | 'top-left'
+  | 'top-right'
+  | 'bottom-left'
+  | 'bottom-right'
 
 export default () => {
   const resize: {
@@ -116,7 +117,6 @@ export default () => {
       handleMove(touch.clientX, touch.clientY)
     }
   }
-
 
   onMounted(() => {
     document.addEventListener('mousemove', handleMouseMove)
