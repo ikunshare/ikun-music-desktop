@@ -8,13 +8,9 @@ const name = pkg.name
 
 const address = [
   [`https://raw.githubusercontent.com/${author}/${name}/master/publish/version.json`, 'direct'],
-  ['https://registry.npmjs.org/ikun-music-desktop-version-info/latest', 'npm'],
-  [`https://cdn.jsdelivr.net/gh/${author}/${name}/publish/version.json`, 'direct'],
+  [`https://raw.dgithub.xyz/${author}/${name}/master/publish/version.json`, 'direct'],
   [`https://fastly.jsdelivr.net/gh/${author}/${name}/publish/version.json`, 'direct'],
   [`https://gcore.jsdelivr.net/gh/${author}/${name}/publish/version.json`, 'direct'],
-  ['https://registry.npmmirror.com/ikun-music-desktop-version-info/latest', 'npm'],
-  ['https://gitee.com/ikunshare/ikun-music-desktop-versions/raw/master/version.json', 'direct'],
-  ['http://cdn.stsky.cn/lx-music/desktop/version.json', 'direct'],
 ]
 
 const request = async (url, retryNum = 0) => {
