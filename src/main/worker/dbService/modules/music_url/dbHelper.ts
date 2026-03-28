@@ -15,7 +15,7 @@ import {
  */
 export const queryMusicUrl = (id: string) => {
   const queryStatement = createQueryStatement()
-  return queryStatement.get(id) as { url: string; ekey: string | null } | null
+  return (queryStatement.get(id) as { url: string } | null)?.url ?? null
 }
 
 /**

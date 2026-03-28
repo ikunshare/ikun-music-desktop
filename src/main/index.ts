@@ -1,4 +1,4 @@
-import { app, protocol } from 'electron'
+import { app } from 'electron'
 import './utils/logInit'
 import '@common/error'
 import {
@@ -12,18 +12,6 @@ import {
 import { isLinux } from '@common/utils'
 import { initAppSetting } from '@main/app'
 import registerModules from '@main/modules'
-
-// 注册自定义协议 scheme（必须在 app ready 之前）
-protocol.registerSchemesAsPrivileged([
-  {
-    scheme: 'lxmusic-audio',
-    privileges: {
-      stream: true,
-      supportFetchAPI: true,
-      bypassCSP: true,
-    },
-  },
-])
 
 // 初始化应用
 const init = () => {

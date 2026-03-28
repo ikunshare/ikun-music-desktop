@@ -85,27 +85,15 @@ const handleRequest = (context, { requestKey, data }) => {
         }
         switch (data.action) {
           case 'musicUrl':
-            {
-              let url
-              let ekey = null
-              if (typeof response == 'string') {
-                url = response
-              } else if (response && typeof response == 'object' && typeof response.url == 'string') {
-                url = response.url
-                if (typeof response.ekey == 'string' && response.ekey.length <= 1024) {
-                  ekey = response.ekey
-                }
-              }
-              if (!url || url.length > 2048 || !/^https?:/.test(url)) throw new Error('failed')
-              sendData.result = {
-                source: data.source,
-                action: data.action,
-                data: {
-                  type: data.info.type,
-                  url,
-                  ...(ekey ? { ekey } : {}),
-                },
-              }
+            if (typeof response != 'string' || response.length > 2048 || !/^https?:/.test(response))
+              throw new Error('failed')
+            sendData.result = {
+              source: data.source,
+              action: data.action,
+              data: {
+                type: data.info.type,
+                url: response,
+              },
             }
             break
           case 'lyric':

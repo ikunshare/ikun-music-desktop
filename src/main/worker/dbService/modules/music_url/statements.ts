@@ -7,7 +7,7 @@ import { getDB } from '../../db'
 export const createQueryStatement = () => {
   const db = getDB()
   return db.prepare<[string]>(`
-    SELECT "url", "ekey"
+    SELECT "url"
     FROM "main"."music_url"
     WHERE "id"=?
     `)
@@ -20,8 +20,8 @@ export const createQueryStatement = () => {
 export const createInsertStatement = () => {
   const db = getDB()
   return db.prepare<[LX.DBService.MusicUrlInfo]>(`
-    INSERT INTO "main"."music_url" ("id", "url", "ekey")
-    VALUES (@id, @url, @ekey)`)
+    INSERT INTO "main"."music_url" ("id", "url")
+    VALUES (@id, @url)`)
 }
 
 /**

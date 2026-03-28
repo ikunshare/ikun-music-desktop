@@ -21,7 +21,6 @@ import {
 } from '@renderer/store/player/action'
 import { appSetting } from '@renderer/store/setting'
 import { getMusicUrl, getPicPath, getLyricInfo } from '../music/index'
-import { registerDecryptRequest } from '@renderer/utils/ipc/music'
 import { filterList } from './utils'
 import { requestMsg } from '@renderer/utils/message'
 import { getRandom } from '@renderer/utils/index'
@@ -83,9 +82,9 @@ let cancelDelayRetry: (() => void) | null = null
 const delayRetry = async (
   musicInfo: LX.Music.MusicInfo | LX.Download.ListItem,
   isRefresh = false
-): Promise<{ url: string; ekey?: string | null } | null> => {
+): Promise<string | null> => {
   // if (cancelDelayRetry) cancelDelayRetry()
-  return new Promise<{ url: string; ekey?: string | null } | null>((resolve, reject) => {
+  return new Promise<string | null>((resolve, reject) => {
     const time = getRandom(2, 6)
     setAllStatus(window.i18n.t('player__getting_url_delay_retry', { time }))
     const tiemout = setTimeout(() => {
@@ -110,7 +109,7 @@ const getMusicPlayUrl = async (
   musicInfo: LX.Music.MusicInfo | LX.Download.ListItem,
   isRefresh = false,
   isRetryed = false
-): Promise<{ url: string; ekey?: string | null } | null> => {
+): Promise<string | null> => {
   // this.musicInfo.url = await getMusicPlayUrl(targetSong, type)
   setAllStatus(window.i18n.t('player__getting_url'))
   if (appSetting['player.autoSkipOnError']) addLoadTimeout()
@@ -138,10 +137,10 @@ const getMusicPlayUrl = async (
         },
       })
     })
-    .then((result) => {
+    .then((url) => {
       if (window.lx.isPlayedStop || diffCurrentMusicInfo(musicInfo)) return null
 
-      return result
+      return url
     })
     .catch((err) => {
       // console.log('err', err.message)
@@ -169,14 +168,9 @@ export const setMusicUrl = (
   if (cancelDelayRetry) cancelDelayRetry()
   gettingUrlId = createGettingUrlId(musicInfo)
   void getMusicPlayUrl(musicInfo, isRefresh)
-    .then(async (result) => {
-      if (!result) return
-      if (result.ekey) {
-        const token = await registerDecryptRequest(result.url, result.ekey)
-        setResource(`lxmusic-audio://play/${token}`)
-      } else {
-        setResource(result.url)
-      }
+    .then((url) => {
+      if (!url) return
+      setResource(url)
     })
     .catch((err: any) => {
       console.log(err)

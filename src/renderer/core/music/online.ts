@@ -45,7 +45,7 @@ export const getMusicUrl = async ({
   isRefresh: boolean
   allowToggleSource?: boolean
   onToggleSource?: (musicInfo?: LX.Music.MusicInfoOnline) => void
-}): Promise<{ url: string; ekey?: string | null }> => {
+}): Promise<string> => {
   // if (!musicInfo._types[type]) {
   //   // 兼容旧版酷我源搜索列表过滤128k音质的bug
   //   if (!(musicInfo.source == 'kw' && type == '128k')) throw new Error('该歌曲没有可播放的音频')
@@ -53,8 +53,8 @@ export const getMusicUrl = async ({
   //   // return Promise.reject(new Error('该歌曲没有可播放的音频'))
   // }
   const targetQuality = quality ?? getPlayQuality(appSetting['player.playQuality'], musicInfo)
-  const cached = await getStoreMusicUrl(musicInfo, targetQuality)
-  if (cached && !isRefresh) return cached
+  const cachedUrl = await getStoreMusicUrl(musicInfo, targetQuality)
+  if (cachedUrl && !isRefresh) return cachedUrl
 
   return handleGetOnlineMusicUrl({
     musicInfo,
@@ -62,11 +62,11 @@ export const getMusicUrl = async ({
     onToggleSource,
     isRefresh,
     allowToggleSource,
-  }).then(({ url, ekey, quality: targetQuality, musicInfo: targetMusicInfo, isFromCache }) => {
+  }).then(({ url, quality: targetQuality, musicInfo: targetMusicInfo, isFromCache }) => {
     if (targetMusicInfo.id != musicInfo.id && !isFromCache)
-      void saveMusicUrl(targetMusicInfo, targetQuality, url, ekey)
-    void saveMusicUrl(musicInfo, targetQuality, url, ekey)
-    return { url, ekey }
+      void saveMusicUrl(targetMusicInfo, targetQuality, url)
+    void saveMusicUrl(musicInfo, targetQuality, url)
+    return url
   })
 }
 

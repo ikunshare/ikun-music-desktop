@@ -56,13 +56,13 @@ export default () => {
   })
 
   // =========================歌曲URL=========================
-  mainHandle<string, { url: string; ekey: string | null } | ''>(WIN_MAIN_RENDERER_EVENT_NAME.get_music_url, async ({ params: id }) => {
+  mainHandle<string, string>(WIN_MAIN_RENDERER_EVENT_NAME.get_music_url, async ({ params: id }) => {
     return (await global.lx.worker.dbService.getMusicUrl(id)) ?? ''
   })
   mainHandle<LX.Music.MusicUrlInfo>(
     WIN_MAIN_RENDERER_EVENT_NAME.save_music_url,
-    async ({ params: { id, url, ekey } }) => {
-      await global.lx.worker.dbService.musicUrlSave([{ id, url, ekey: ekey ?? null }])
+    async ({ params: { id, url } }) => {
+      await global.lx.worker.dbService.musicUrlSave([{ id, url }])
     }
   )
   mainHandle(WIN_MAIN_RENDERER_EVENT_NAME.clear_music_url, async () => {

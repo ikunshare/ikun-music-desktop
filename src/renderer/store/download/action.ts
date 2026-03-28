@@ -8,7 +8,6 @@ import {
 import { downloadList } from './state'
 import { markRaw, toRaw } from '@common/utils/vueTools'
 import { getMusicUrl, getPicUrl, getLyricInfo } from '@renderer/core/music/online'
-import { decryptFile } from '@renderer/utils/ipc/music'
 import { appSetting } from '../setting'
 import { qualityList } from '..'
 import { proxyCallback } from '@renderer/worker/utils'
@@ -228,7 +227,7 @@ const downloadLyric = (downloadInfo: LX.Download.ListItem) => {
   })
 }
 
-const getUrl = async (downloadInfo: LX.Download.ListItem, isRefresh: boolean = false): Promise<{ url: string; ekey?: string | null }> => {
+const getUrl = async (downloadInfo: LX.Download.ListItem, isRefresh: boolean = false) => {
   let toggleMusicInfo = downloadInfo.metadata.musicInfo.meta.toggleMusicInfo
   return (
     toggleMusicInfo
@@ -248,8 +247,7 @@ const getUrl = async (downloadInfo: LX.Download.ListItem, isRefresh: boolean = f
         allowToggleSource: appSetting['download.isUseOtherSource'],
       })
     })
-    .then(result => typeof result === 'string' ? { url: result } : result)
-    .catch(() => ({ url: '' }))
+    .catch(() => '')
 }
 const handleRefreshUrl = (downloadInfo: LX.Download.ListItem) => {
   setStatusText(downloadInfo, window.i18n.t('download_status_error_refresh_url'))
@@ -272,8 +270,7 @@ const handleRefreshUrl = (downloadInfo: LX.Download.ListItem) => {
       })
     })
     .catch(() => '')
-    .then((result) => {
-      const url = typeof result === 'string' ? result : result.url
+    .then((url) => {
       // commit('setStatusText', { downloadInfo, text: '链接刷新成功' })
       setUrl(downloadInfo, url)
       void window.lx.worker.download.updateUrl(downloadInfo.id, url)
@@ -290,18 +287,15 @@ const handleError = (downloadInfo: LX.Download.ListItem, message?: string) => {
   void checkStartTask()
 }
 
-const downloadEkeyMap = new Map<string, string>()
-
 const handleStartTask = async (downloadInfo: LX.Download.ListItem) => {
   if (!downloadInfo.metadata.url) {
     setStatusText(downloadInfo, window.i18n.t('download_status_url_getting'))
-    const result = await getUrl(downloadInfo)
-    if (!result.url) {
+    const url = await getUrl(downloadInfo)
+    if (!url) {
       handleError(downloadInfo, window.i18n.t('download_status_error_url_failed'))
       return
     }
-    setUrl(downloadInfo, result.url)
-    if (result.ekey) downloadEkeyMap.set(downloadInfo.id, result.ekey)
+    setUrl(downloadInfo, url)
     if (downloadInfo.status != DOWNLOAD_STATUS.RUN) return
   }
 
@@ -321,34 +315,17 @@ const handleStartTask = async (downloadInfo: LX.Download.ListItem) => {
         case 'start':
           setStatus(downloadInfo, DOWNLOAD_STATUS.RUN)
           break
-        case 'complete': {
-          const ekey = downloadEkeyMap.get(downloadInfo.id)
-          const doComplete = () => {
-            downloadInfo.progress = 100
-            saveMeta(downloadInfo)
-            downloadLyric(downloadInfo)
-            void window.lx.worker.download.removeTask(downloadInfo.id)
-            runingTask.delete(downloadInfo.id)
-            downloadEkeyMap.delete(downloadInfo.id)
-            setStatus(downloadInfo, DOWNLOAD_STATUS.COMPLETED)
-            void checkStartTask()
-          }
-          if (ekey) {
-            setStatusText(downloadInfo, '正在解密...')
-            void decryptFile(downloadInfo.metadata.filePath, ekey)
-              .then(doComplete)
-              .catch((err) => {
-                console.error('decrypt file failed:', err)
-                handleError(downloadInfo, '解密失败: ' + (err.message ?? ''))
-              })
-          } else {
-            doComplete()
-          }
+        case 'complete':
+          downloadInfo.progress = 100
+          saveMeta(downloadInfo)
+          downloadLyric(downloadInfo)
+          void window.lx.worker.download.removeTask(downloadInfo.id)
+          runingTask.delete(downloadInfo.id)
+          setStatus(downloadInfo, DOWNLOAD_STATUS.COMPLETED)
+          void checkStartTask()
           break
-        }
         case 'refreshUrl':
           handleRefreshUrl(downloadInfo)
-          break
           break
         case 'statusText':
           setStatusText(downloadInfo, event.data)

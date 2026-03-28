@@ -29,7 +29,7 @@ export const getMusicUrl = async ({
     isRefresh,
     onToggleSource,
     allowToggleSource,
-  }).then(result => result.url)
+  })
 }
 
 export const getPicUrl = async ({

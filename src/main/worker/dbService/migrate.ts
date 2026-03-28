@@ -37,17 +37,6 @@ const migrateV1 = (db: Database.Database) => {
   }
 }
 
-const migrateV2 = (db: Database.Database) => {
-  db.exec('ALTER TABLE "main"."music_url" ADD COLUMN "ekey" TEXT')
-}
-
-const updateVersion = (db: Database.Database) => {
-  db.prepare('UPDATE "main"."db_info" SET "field_value"=@value WHERE "field_name"=@name').run({
-    name: 'version',
-    value: DB_VERSION,
-  })
-}
-
 export default (db: Database.Database) => {
   // PRAGMA user_version = x
   // console.log(db.prepare('PRAGMA user_version').get().user_version)
@@ -60,12 +49,10 @@ export default (db: Database.Database) => {
   switch (version) {
     case '1':
       migrateV1(db)
-      migrateV2(db)
-      updateVersion(db)
-      break
-    case '2':
-      migrateV2(db)
-      updateVersion(db)
+      db.prepare('UPDATE "main"."db_info" SET "field_value"=@value WHERE "field_name"=@name').run({
+        name: 'version',
+        value: DB_VERSION,
+      })
       break
   }
 }

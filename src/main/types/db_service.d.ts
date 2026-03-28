@@ -57,7 +57,6 @@ declare namespace LX {
     interface MusicUrlInfo {
       id: string
       url: string
-      ekey?: string | null
     }
 
     interface DownloadMusicInfo {

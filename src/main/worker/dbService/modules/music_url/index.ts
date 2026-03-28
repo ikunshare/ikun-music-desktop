@@ -11,8 +11,9 @@ import {
  * @param id 歌曲id
  * @returns 歌曲url
  */
-export const getMusicUrl = (id: string): { url: string; ekey: string | null } | null => {
-  return queryMusicUrl(id)
+export const getMusicUrl = (id: string): string | null => {
+  const url = queryMusicUrl(id)
+  return url
 }
 
 /**
