@@ -25,7 +25,7 @@ const options = {
     'node_modules/better-sqlite3/lib',
     'node_modules/better-sqlite3/package.json',
     'node_modules/better-sqlite3/build/Release/better_sqlite3.node',
-    'node_modules/electron-font-manager/index.js',
+    'node_modules/electron-font-manager/index.ts',
     'node_modules/electron-font-manager/package.json',
     'node_modules/electron-font-manager/build/Release/font_manager.node',
     'node_modules/node-gyp-build',

@@ -10,12 +10,12 @@ const patchs = [
   [
     path.join(rootPath, './node_modules/music-metadata/package.json'),
     '"default": "./lib/core.js"',
-    '"default": "./lib/index.js"',
+    '"default": "./lib/index.ts"',
   ],
   [
     path.join(rootPath, './node_modules/strtok3/package.json'),
     '"default": "./lib/core.js"',
-    '"default": "./lib/index.js"',
+    '"default": "./lib/index.ts"',
   ],
 ]
 

@@ -19,8 +19,8 @@ export default ({
     dom_list: dom_lists_list,
     dragingItemClassName: styles.dragingItem,
     filter: 'default-list',
-    onUpdate(newIndex: number, oldIndex: number) {
-      void updateUserListPosition({ ids: [userLists[oldIndex - 2].id], position: newIndex - 2 })
+    onUpdate(newIndex: number | undefined, oldIndex: number | undefined) {
+      void updateUserListPosition({ ids: [userLists[oldIndex! - 2].id], position: newIndex! - 2 })
     },
   })
 
