@@ -68,3 +68,9 @@ publish/assets
 publish/utils/githubToken.js
 
 src/**/*-internal.js
+package-lock.json
+pnpm-lock.yaml
+
+.trae
+.vs
+.codegraph

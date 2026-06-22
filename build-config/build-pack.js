@@ -2,6 +2,10 @@ const builder = require('electron-builder')
 const beforePack = require('./build-before-pack').default
 const afterPack = require('./build-after-pack')
 
+// 设置 electron-builder 镜像（解决国内网络下载失败问题）
+process.env.ELECTRON_MIRROR = process.env.ELECTRON_MIRROR || 'https://npmmirror.com/mirrors/electron/'
+process.env.ELECTRON_BUILDER_BINARIES_MIRROR = process.env.ELECTRON_BUILDER_BINARIES_MIRROR || 'https://npmmirror.com/mirrors/electron-builder-binaries/'
+
 /**
  * @type {import('electron-builder').Configuration}
  * @see https://www.electron.build/configuration/configuration
@@ -34,7 +38,7 @@ const options = {
     'dist/**/*',
   ],
   asar: {
-    smartUnpack: false,
+    smartUnpack: true,
   },
   extraResources: ['./licenses'],
   publish: [
@@ -62,6 +66,9 @@ const winOptions = {
     // differentialPackage: true,
     license: './licenses/license.rtf',
     shortcutName: 'IKUN Music',
+  },
+  portable: {
+    artifactName: '${productName}-v${version}-${arch}-portable.${ext}',
   },
 }
 /**

@@ -214,6 +214,8 @@
   "play_timeout_unit": "分鐘",
   "play_timeout_update": "更新定時",
   "player__add_music_to": "將目前歌曲加入到...",
+  "player__play_list": "播放列表",
+  "play_list_modal__title": "選擇要播放的列表",
   "player__buffering": "緩衝中...",
   "player__desktop_lyric_lock": "右擊鎖定歌詞",
   "player__desktop_lyric_off": "關閉歌詞視窗",

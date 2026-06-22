@@ -214,6 +214,8 @@
   "play_timeout_unit": "Minute(s)",
   "play_timeout_update": "Update timing",
   "player__add_music_to": "Add the current song to ...",
+  "player__play_list": "Play List",
+  "play_list_modal__title": "Select a list to play",
   "player__buffering": "Buffering...",
   "player__desktop_lyric_lock": "Right-click to lock lyric window",
   "player__desktop_lyric_off": "Hide lyric window",

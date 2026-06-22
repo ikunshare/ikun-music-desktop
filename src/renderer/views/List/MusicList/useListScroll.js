@@ -1,9 +1,9 @@
-import { onMounted, onBeforeUnmount } from '@common/utils/vueTools'
+import { onMounted, onBeforeUnmount, watch } from '@common/utils/vueTools'
 import { useRoute, useRouter } from '@common/utils/vueRouter'
 import { setListPosition, getListPosition } from '@renderer/utils/data'
 import { appSetting } from '@renderer/store/setting'
 
-export default ({ props, listRef, list, handleRestoreScroll }) => {
+export default ({ props, listRef, list, handleRestoreScroll, playerInfo }) => {
   const route = useRoute()
   const router = useRouter()
 
@@ -28,6 +28,18 @@ export default ({ props, listRef, list, handleRestoreScroll }) => {
 
     handleScrollList(index, isAnimation)
   }
+
+  // 自动定位到正在播放的音乐
+  let prevPlayIndex = -1
+  watch(
+    () => playerInfo.value,
+    (info) => {
+      if (!info.isPlayList || info.playIndex === prevPlayIndex || info.playIndex < 0) return
+      prevPlayIndex = info.playIndex
+      handleScrollList(info.playIndex, true)
+    },
+    { deep: true }
+  )
 
   onMounted(() => {
     handleRestoreScroll(route.query.scrollIndex, false)

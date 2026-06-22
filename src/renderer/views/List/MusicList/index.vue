@@ -411,6 +411,7 @@ export default {
       listRef,
       list,
       handleRestoreScroll,
+      playerInfo,
     })
 
     const handleListItemClick = (event, index) => {

@@ -91,7 +91,7 @@ export default {
   // max-width: 80%;
   color: var(--color-font);
   border-radius: 3px;
-  background: var(--color-content-background);
+  background: var(--color-main-background);
   overflow: hidden;
   pointer-events: none;
   // text-align: justify;

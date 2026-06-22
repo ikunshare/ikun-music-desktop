@@ -205,5 +205,11 @@ const toggleMode = (mode) => {
   flex-flow: row nowrap;
   font-size: 14px;
   gap: 10px;
+
+  .btn {
+    &:hover {
+      background-color: var(--color-primary-background-hover);
+    }
+  }
 }
 </style>

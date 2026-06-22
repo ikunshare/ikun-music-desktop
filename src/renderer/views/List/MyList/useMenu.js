@@ -1,8 +1,9 @@
 import { computed, ref, reactive, nextTick } from '@common/utils/vueTools'
 import { useI18n } from '@renderer/plugins/i18n'
-import { userLists, defaultList, loveList } from '@renderer/store/list/state'
+import { userLists, defaultList, loveList, allMusicList } from '@renderer/store/list/state'
 import musicSdk from '@renderer/utils/musicSdk'
 import { addLocalFile } from './actions'
+import { playList } from '@renderer/core/player/action'
 
 export default ({
   emit,
@@ -17,6 +18,7 @@ export default ({
   handleRemove,
 }) => {
   const menuControl = reactive({
+    play: true,
     rename: true,
     duplicate: true,
     sort: true,
@@ -33,6 +35,11 @@ export default ({
 
   const menus = computed(() => {
     return [
+      {
+        name: t('list__play'),
+        action: 'play',
+        disabled: !menuControl.play,
+      },
       {
         name: t('lists__rename'),
         action: 'rename',
@@ -104,12 +111,14 @@ export default ({
         menuControl.rename = false
         menuControl.remove = false
         menuControl.sync = false
+        menuControl.play = !!allMusicList.get(getListInfo(index)?.id)?.length
         break
       default:
         menuControl.rename = true
         menuControl.remove = true
         source = userLists[index].source
         menuControl.sync = !!source && !!musicSdk[source]?.songList
+        menuControl.play = !!allMusicList.get(userLists[index].id)?.length
         break
     }
     // menuControl.sort = !!getList(this.getTargetListInfo(index)?.id).length
@@ -152,6 +161,9 @@ export default ({
     if (!action) return
     const listInfo = getListInfo(index)
     switch (action.action) {
+      case 'play':
+        playList(listInfo.id, 0)
+        break
       case 'rename':
         handleRename(index)
         break
