@@ -125,15 +125,16 @@ const fullscreenExit = () => {
     right: 0;
     button {
       width: 46px;
-      height: 30px;
-      color: var(--color-font-label);
-      transition: background-color 0.2s ease-in-out;
+      height: 32px;
+      color: var(--color-text-primary);
+      transition: background-color 0.1s ease-in-out;
 
       &.hover {
-        background-color: var(--color-button-background-hover);
+        background-color: var(--color-caption-btn-hover);
 
         &.close {
-          background-color: var(--color-btn-close);
+          background-color: var(--color-caption-btn-close-hover);
+          color: #ffffff;
         }
       }
     }

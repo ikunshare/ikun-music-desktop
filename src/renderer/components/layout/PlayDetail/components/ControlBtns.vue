@@ -14,6 +14,7 @@ div(:class="$style.footerLeftControlBtns")
   button(:class="[$style.footerLeftControlBtn, {[$style.active]: isShowPlayComment}]" :aria-label="$t('comment__show')" @click="toggleVisibleComment")
     svg(version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" width="95%" viewBox="0 0 24 24" space="preserve")
       use(xlink:href="#icon-comment")
+  common-artwork-background-btn
   common-sound-effect-btn
   common-playback-rate-btn
   common-volume-btn
@@ -108,7 +109,7 @@ export default {
 
   button {
     width: 20px;
-    color: var(--color-font);
+    color: var(--artwork-font, var(--color-font));
   }
 
   .footerLeftControlBtn {
@@ -129,7 +130,7 @@ export default {
     }
 
     &.active {
-      color: var(--color-primary);
+      color: var(--artwork-accent, var(--color-primary));
       opacity: 0.8;
     }
   }

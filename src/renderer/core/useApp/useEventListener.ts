@@ -2,6 +2,7 @@ import { getFontSizeWithScreen } from '@renderer/utils'
 import {
   minWindow,
   onFocus,
+  onMaximizeChange,
   onSettingChanged,
   onThemeChange,
   openDevTools,
@@ -9,7 +10,7 @@ import {
   setFullScreen,
   showHideWindowToggle,
 } from '@renderer/utils/ipc'
-import { isFullscreen, themeId, themeShouldUseDarkColors } from '@renderer/store'
+import { isFullscreen, isMaximized, themeId, themeShouldUseDarkColors } from '@renderer/store'
 import { appSetting, isShowAnimation, mergeSetting } from '@renderer/store/setting'
 
 import { onBeforeUnmount, watch } from '@common/utils/vueTools'
@@ -115,6 +116,10 @@ export default () => {
     clearDownKeys()
   })
 
+  const rMaximizeChange = onMaximizeChange(({ params: value }) => {
+    isMaximized.value = value
+  })
+
   const rThemeChange = onThemeChange(({ params: setting }) => {
     // console.log(setting)
     if (themeShouldUseDarkColors.value == setting.shouldUseDarkColors) {
@@ -152,5 +157,6 @@ export default () => {
     rSetConfig()
     rFocus()
     rThemeChange()
+    rMaximizeChange()
   })
 }

@@ -1,6 +1,6 @@
 {
   "name": "ikun-music-desktop",
-  "version": "3.3.0-fix.7",
+  "version": "3.6.0-fix.1",
   "description": "一个免费的音乐查找助手",
   "main": "./dist/main.js",
   "scripts": {
@@ -64,8 +64,8 @@
     "lint": "eslint --ext .ts,.js,.vue -f node_modules/eslint-formatter-friendly src",
     "lint:fix": "eslint --ext .ts,.js,.vue -f node_modules/eslint-formatter-friendly --fix src",
     "postinstall": "electron-builder install-app-deps",
-    "dp": "cross-env ELECTRON_GET_USE_PROXY=true GLOBAL_AGENT_HTTPS_PROXY=http://127.0.0.1:2081 npm run pack",
-    "up": "cross-env ELECTRON_GET_USE_PROXY=true GLOBAL_AGENT_HTTPS_PROXY=http://127.0.0.1:2081 npm i",
+    "dp": "cross-env ELECTRON_GET_USE_PROXY=true GLOBAL_AGENT_HTTPS_PROXY=http://127.0.0.1:7890 npm run pack",
+    "up": "cross-env ELECTRON_GET_USE_PROXY=true GLOBAL_AGENT_HTTPS_PROXY=http://127.0.0.1:7890 npm i",
     "rebuild": "electron-rebuild -f -w better-sqlite3"
   },
   "browserslist": [
@@ -91,7 +91,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ikunshare/ikun-music-desktop.git"
+    "url": "git+https://github.com/xingnengmao666/ikun-music-desktop-next.git"
   },
   "keywords": [
     "music-player",
@@ -104,9 +104,9 @@
   },
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/ikunshare/ikun-music-desktop/issues"
+    "url": "https://github.com/xingnengmao666/ikun-music-desktop-next/issues"
   },
-  "homepage": "https://github.com/ikunshare/ikun-music-desktop#readme",
+  "homepage": "https://github.com/xingnengmao666/ikun-music-desktop-next#readme",
   "devDependencies": {
     "@babel/core": "^7.28.5",
     "@babel/eslint-parser": "^7.28.5",
@@ -220,6 +220,7 @@
     "braces": "latest",
     "node-gyp-build": "latest",
     "micromatch": "latest",
-    "http-cache-semantics": "latest"
+    "http-cache-semantics": "latest",
+    "node-gyp": "^13.1.0"
   }
 }

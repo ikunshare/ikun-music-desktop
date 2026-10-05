@@ -6,6 +6,7 @@ import { WIN_MAIN_RENDERER_EVENT_NAME } from '@common/ipcNames'
 import {
   minimize,
   maximize,
+  toggleMaximize,
   closeWindow,
   showWindow,
   setFullScreen,
@@ -49,6 +50,9 @@ export default () => {
   })
   mainOn(WIN_MAIN_RENDERER_EVENT_NAME.max, () => {
     maximize()
+  })
+  mainOn(WIN_MAIN_RENDERER_EVENT_NAME.max_toggle, () => {
+    toggleMaximize()
   })
   mainOn(WIN_MAIN_RENDERER_EVENT_NAME.focus, () => {
     showWindow()

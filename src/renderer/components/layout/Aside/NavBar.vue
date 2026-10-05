@@ -176,28 +176,29 @@ export default {
 
   // border-radius: @radius-border;
   .mixin-ellipsis-1();
+  // WinUI3 NavigationView 选中指示条：左边缘居中的一小段圆角 accent 竖条
   &:before {
     .mixin-after();
     left: 0;
-    top: 0;
+    top: 50%;
     width: 3px;
-    height: 100%;
-    background-color: var(--color-primary-dark-200-alpha-700);
-    border-radius: 4px;
+    height: 16px;
+    margin-top: -8px;
+    background-color: var(--color-accent);
+    border-radius: 2px;
     transform: translateX(-100%);
     transition: transform @transition-fast;
   }
 
   &.active {
-    // border-left-color: @color-theme-active;
-    background-color: var(--color-primary-light-300-alpha-700);
+    background-color: var(--color-control-fill-hover);
 
     &:before {
       transform: translateX(0);
     }
 
     &:hover {
-      background-color: var(--color-primary-light-300-alpha-800);
+      background-color: var(--color-control-fill-hover);
     }
   }
 
@@ -205,13 +206,11 @@ export default {
     color: var(--color-nav-font);
 
     &:not(.active) {
-      opacity: 0.8;
-      background-color: var(--color-primary-light-400-alpha-700);
+      background-color: var(--color-control-fill);
     }
   }
   &:active:not(.active) {
-    opacity: 0.6;
-    background-color: var(--color-primary-light-300-alpha-600);
+    background-color: var(--color-control-fill-active);
   }
 }
 

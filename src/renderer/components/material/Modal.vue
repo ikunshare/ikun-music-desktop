@@ -268,6 +268,7 @@ export default {
 .modal {
   width: 100%;
   height: 100%;
+  background-color: var(--color-smoke);
   // background-color: rgba(0, 0, 0, .2);
   // background-color: rgba(255, 255, 255, .6);
   // background-color: var(--color-primary-light-600-alpha-900);
@@ -296,8 +297,9 @@ export default {
 
 .content {
   position: relative;
-  border-radius: 4px;
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.25);
+  border-radius: var(--radius-overlay);
+  border: 1px solid var(--color-control-stroke);
+  box-shadow: var(--shadow-dialog);
   overflow: hidden;
   // max-height: 80%;
   // max-width: 76%;
@@ -306,25 +308,26 @@ export default {
   display: flex;
   flex-flow: column nowrap;
   z-index: 100;
-  background-color: var(--color-content-background);
+  background-color: var(--color-card-background);
 }
 
 .header {
   flex: none;
-  background-color: var(--color-primary-light-100-alpha-100);
+  background-color: var(--color-secondary-background);
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  height: 18px;
+  height: 32px;
 
   button {
     border: none;
     cursor: pointer;
-    padding: 4px 7px;
+    padding: 0 12px;
+    height: 32px;
     background-color: transparent;
-    color: var(--color-primary-dark-500-alpha-500);
+    color: var(--color-text-secondary);
     outline: none;
-    transition: background-color 0.2s ease;
+    transition: background-color 0.1s ease;
     line-height: 0;
 
     svg {
@@ -332,10 +335,11 @@ export default {
     }
 
     &:hover {
-      background-color: var(--color-primary-dark-100-alpha-600);
+      background-color: var(--color-caption-btn-hover);
+      color: var(--color-text-primary);
     }
     &:active {
-      background-color: var(--color-primary-dark-200-alpha-600);
+      background-color: var(--color-control-fill-active);
     }
   }
 }

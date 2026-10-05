@@ -7,7 +7,7 @@ import { navigationUrlWhiteList } from '@common/config'
 import defaultSetting from '@common/defaultSetting'
 import { isExistWindow as isExistMainWindow, showWindow as showMainWindow } from './modules/winMain'
 import { createAppEvent, createDislikeEvent, createListEvent } from '@main/event'
-import { isMac, log } from '@common/utils'
+import { isMac, isWin, log } from '@common/utils'
 import createWorkers from './worker'
 import { migrateDBData } from './utils/migrate'
 import { openDirInExplorer } from '@common/utils/electron'
@@ -335,7 +335,9 @@ export const initAppSetting = async () => {
       })
     initTheme()
     if (envParams.cmdParams.dt == null)
-      envParams.cmdParams.dt = !global.lx.appSetting['common.transparentWindow']
+      // WinUI3 外壳走不透明窗口 + Mica，渲染层必须用 disableTransparent 布局，
+      // 否则会在窗口里再画一圈透明内边距和外发光
+      envParams.cmdParams.dt = isWin || !global.lx.appSetting['common.transparentWindow']
   }
   // global.lx.theme = getTheme()
 

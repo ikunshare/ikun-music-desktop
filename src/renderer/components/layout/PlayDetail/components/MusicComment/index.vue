@@ -283,7 +283,7 @@ export default {
   display: flex;
   flex-flow: row nowrap;
   justify-content: flex-end;
-  color: var(--color-primary);
+  color: var(--artwork-accent, var(--color-primary));
 }
 
 .commentHeaderBtn {
@@ -345,7 +345,7 @@ export default {
 
 .commentLabel {
   padding: 15px;
-  color: var(--color-font-label);
+  color: var(--artwork-font-weak, var(--color-font-label));
   font-size: 14px;
 }
 
@@ -364,7 +364,7 @@ export default {
   }
 
   &.active {
-    color: var(--color-primary);
+    color: var(--artwork-accent, var(--color-primary));
   }
 }
 
@@ -386,6 +386,6 @@ export default {
   padding-top: 10%;
   text-align: center;
   font-size: 14px;
-  color: var(--color-font-label);
+  color: var(--artwork-font-weak, var(--color-font-label));
 }
 </style>

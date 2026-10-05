@@ -199,7 +199,7 @@ export default {
   top: 0;
   left: 0;
   width: 100%;
-  background-color: var(--color-content-background);
+  background-color: var(--color-card-background);
   opacity: 0;
   transform: scaleY(0) translateY(0);
   transform-origin: 0 (@selection-height / 2) 0;
@@ -207,7 +207,7 @@ export default {
   transition-property: transform, opacity;
   z-index: 10;
   border-radius: @form-radius;
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-flyout);
   overflow: auto;
   max-height: 200px;
 }

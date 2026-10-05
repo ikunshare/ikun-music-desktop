@@ -607,6 +607,20 @@ export const onThemeChange = (
 }
 
 /**
+ * On Maximize Change
+ * @param listener LX.IpcRendererEventListenerParams<isMaximized: boolean>
+ * @returns RemoveListener Fn
+ */
+export const onMaximizeChange = (
+  listener: LX.IpcRendererEventListenerParams<boolean>
+): RemoveListener => {
+  rendererOn(CMMON_EVENT_NAME.maximize_change, listener)
+  return () => {
+    rendererOff(CMMON_EVENT_NAME.maximize_change, listener)
+  }
+}
+
+/**
  * 选择路径
  */
 export const showSelectDialog = async (options: Electron.OpenDialogOptions) => {
@@ -827,6 +841,13 @@ export const minWindow = () => {
  */
 export const maxWindow = () => {
   rendererSend(WIN_MAIN_RENDERER_EVENT_NAME.max)
+}
+
+/**
+ * 最大化/还原窗口
+ */
+export const toggleMaximizeWindow = () => {
+  rendererSend(WIN_MAIN_RENDERER_EVENT_NAME.max_toggle)
 }
 
 /**

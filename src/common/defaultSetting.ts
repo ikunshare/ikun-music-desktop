@@ -31,6 +31,8 @@ const defaultSetting: LX.AppSetting = {
   'player.volume': 1,
   'player.powerSaveBlocker': true,
   'player.isMute': false,
+  'player.isVolumeFade': true,
+  'player.compressor': 0,
   'player.playbackRate': 1,
   'player.preservesPitch': true,
   'player.isMaxOutputChannelCount': false,
@@ -43,6 +45,7 @@ const defaultSetting: LX.AppSetting = {
   'player.isPlayLxlrc': !isMac,
   'player.isSavePlayTime': false,
   'player.audioVisualization': false,
+  'player.artworkColorBackground': true,
   'player.waitPlayEndStop': true,
   'player.waitPlayEndStopTime': '',
   'player.autoSkipOnError': true,
@@ -64,6 +67,11 @@ const defaultSetting: LX.AppSetting = {
   'player.soundEffect.panner.soundR': 5,
   'player.soundEffect.panner.speed': 25,
   'player.soundEffect.pitchShifter.playbackRate': 1,
+
+  'playDetail.artworkBackground.motion': 65,
+  'playDetail.artworkBackground.speed': 55,
+  'playDetail.artworkBackground.intensity': 60,
+  'playDetail.artworkBackground.duration': 45,
 
   'playDetail.isZoomActiveLrc': false,
   'playDetail.isShowLyricProgressSetting': false,
@@ -150,17 +158,17 @@ const defaultSetting: LX.AppSetting = {
   'openAPI.bindLan': false,
 
   // 'theme.id': 'blue_plus',
-  'theme.id': 'green',
-  'theme.lightId': 'green',
-  'theme.darkId': 'black',
+  'theme.id': 'fluent_light',
+  'theme.lightId': 'fluent_light',
+  'theme.darkId': 'fluent_dark',
 
   'odc.isAutoClearSearchInput': false,
   'odc.isAutoClearSearchList': false,
 }
 
 // 使用新年皮肤
+// 默认主题已是 Fluent，季节性皮肤不再顶掉它；只在旧版本升级路径里保留播放色
 if (new Date().getMonth() < 2) {
-  defaultSetting['theme.id'] = 'happy_new_year'
   defaultSetting['desktopLyric.style.lyricPlayedColor'] = 'rgba(255, 57, 71, 1)'
 }
 

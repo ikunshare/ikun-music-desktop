@@ -11,6 +11,7 @@ import {
   setConvolverMainGain,
   setConvolverSendGain,
   setPitchShifter,
+  setCompressor,
 } from '@renderer/plugins/player'
 
 import { appSetting } from '@renderer/store/setting'
@@ -77,6 +78,16 @@ export default () => {
   if (appSetting['player.soundEffect.pitchShifter.playbackRate'] != 1) {
     setPitchShifter(appSetting['player.soundEffect.pitchShifter.playbackRate'])
   }
+  if (appSetting['player.compressor'] > 0) {
+    setCompressor(appSetting['player.compressor'])
+  }
+
+  watch(
+    () => appSetting['player.compressor'],
+    (amount) => {
+      setCompressor(amount)
+    }
+  )
 
   watch(
     () => appSetting['player.soundEffect.panner.enable'],

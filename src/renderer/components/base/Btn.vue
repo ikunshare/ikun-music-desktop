@@ -30,16 +30,20 @@ export default {
 @import '@renderer/assets/styles/layout.less';
 
 .btn {
-  display: inline-block;
-  border: none;
-  border-radius: @form-radius;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 32px;
+  border: 1px solid var(--color-control-stroke);
+  border-radius: var(--radius-control);
   cursor: pointer;
-  padding: 8px 15px;
+  padding: 4px 12px;
   color: var(--color-button-font);
   outline: none;
-  transition: background-color 0.2s ease;
-  background-color: var(--color-button-background);
+  transition: background-color 0.1s ease;
+  background-color: var(--color-control-fill);
   font-size: 14px;
+  box-sizing: border-box;
   &[disabled] {
     opacity: 0.4;
     cursor: default;
@@ -47,18 +51,24 @@ export default {
 
   &.outline {
     background-color: transparent;
+    border-color: transparent;
+
+    &:hover {
+      border-color: var(--color-control-stroke);
+    }
   }
 
   &:hover {
-    background-color: var(--color-button-background-hover);
+    background-color: var(--color-control-fill-hover);
   }
   &:active {
-    background-color: var(--color-button-background-active);
+    background-color: var(--color-control-fill-active);
   }
 }
 
 .min {
-  padding: 3px 8px;
+  min-height: 24px;
+  padding: 1px 8px;
   font-size: 12px;
 }
 </style>

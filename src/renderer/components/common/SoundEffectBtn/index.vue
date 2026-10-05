@@ -22,6 +22,7 @@
       </div>
       <div :class="['scroll', $style.row]">
         <BiquadFilter />
+        <Compressor />
       </div>
     </div>
     <p v-if="showTip" :class="$style.tip">{{ $t('player__sound_effect_features_tip') }}</p>
@@ -41,6 +42,7 @@ import BiquadFilter from './BiquadFilter.vue'
 import AudioPanner from './AudioPanner.vue'
 import AudioConvolution from './AudioConvolution.vue'
 import PitchShifter from './PitchShifter.vue'
+import Compressor from './Compressor.vue'
 import { appSetting } from '@renderer/store/setting'
 
 defineProps({

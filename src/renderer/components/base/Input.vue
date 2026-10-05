@@ -95,14 +95,16 @@ export default {
 
 .input {
   display: inline-block;
-  border: none;
-  border-radius: @form-radius;
-  padding: 7px 8px;
+  border: 1px solid var(--color-control-stroke);
+  border-bottom-color: var(--color-text-secondary);
+  border-radius: var(--radius-control);
+  padding: 6px 8px;
   color: var(--color-button-font);
   outline: none;
-  transition: background-color 0.2s ease;
-  background-color: var(--color-primary-background);
+  transition: background-color 0.1s ease;
+  background-color: var(--color-control-fill);
   font-size: 13.3px;
+  box-sizing: border-box;
 
   &::-webkit-outer-spin-button,
   &::-webkit-inner-spin-button {
@@ -114,12 +116,15 @@ export default {
     opacity: 0.4;
   }
 
-  &:hover,
+  &:hover {
+    background-color: var(--color-control-fill-hover);
+  }
   &:focus {
-    background-color: var(--color-primary-background-hover);
+    // WinUI3 的聚焦下划线，用 inset 阴影避免撑高
+    box-shadow: inset 0 -2px 0 0 var(--color-accent);
   }
   &:active {
-    background-color: var(--color-primary-background-active);
+    background-color: var(--color-control-fill-active);
   }
 }
 

@@ -1,5 +1,9 @@
 import { onBeforeUnmount, watch } from '@common/utils/vueTools'
-import { setVolume as setPlayerVolume, setMute as setPlayerMute } from '@renderer/plugins/player'
+import {
+  setVolume as setPlayerVolume,
+  setMute as setPlayerMute,
+  setVolumeFadeEnabled,
+} from '@renderer/plugins/player'
 
 import { debounce } from '@common/utils'
 import { HOTKEY_PLAYER } from '@common/hotKey'
@@ -14,6 +18,7 @@ export default () => {
   setMute(appSetting['player.isMute'])
   setPlayerVolume(appSetting['player.volume'])
   setPlayerMute(appSetting['player.isMute'])
+  setVolumeFadeEnabled(appSetting['player.isVolumeFade'])
 
   const handleToggleVolumeMute = (_isMute?: boolean) => {
     let muteStatus = _isMute ?? !isMute.value
@@ -61,6 +66,12 @@ export default () => {
     () => appSetting['player.isMute'],
     (muteStatus) => {
       setMute(muteStatus)
+    }
+  )
+  watch(
+    () => appSetting['player.isVolumeFade'],
+    (enabled) => {
+      setVolumeFadeEnabled(enabled)
     }
   )
 

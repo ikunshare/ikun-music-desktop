@@ -2,6 +2,7 @@ import { BrowserWindow, dialog, session } from 'electron'
 import path from 'node:path'
 import { createTaskBarButtons, getWindowSizeInfo } from './utils'
 import { getPlatform, isLinux, isWin } from '@common/utils'
+import { windowSizeList } from '@common/config'
 import { getProxy, openDevTools as handleOpenDevTools } from '@main/utils'
 import { mainSend } from '@common/mainIpc'
 import { sendFocus, sendTaskbarButtonClick } from './rendererEvent'
@@ -51,12 +52,22 @@ const winEvent = () => {
 
   browserWindow.on('show', () => {
     global.lx.event_app.main_window_show()
+    // 渲染层挂载时机可能晚于 maximize/unmaximize 事件，显示时补一次当前状态
+    global.lx.event_app.maximize_change(browserWindow!.isMaximized())
 
     // 修复隐藏窗口后再显示时任务栏按钮丢失的问题
     setThumbarButtons()
   })
   browserWindow.on('hide', () => {
     global.lx.event_app.main_window_hide()
+  })
+
+  // 标题栏最大化/还原按钮要跟着窗口状态切换图标
+  browserWindow.on('maximize', () => {
+    global.lx.event_app.maximize_change(true)
+  })
+  browserWindow.on('unmaximize', () => {
+    global.lx.event_app.maximize_change(false)
   })
 }
 
@@ -81,9 +92,11 @@ export const createWindow = () => {
     hasShadow: global.envParams.cmdParams.dt,
     // enableRemoteModule: false,
     // icon: join(global.__static, isWin ? 'icons/256x256.ico' : 'icons/512x512.png'),
-    resizable: false,
-    maximizable: false,
+    resizable: isWin,
+    maximizable: isWin,
     fullscreenable: true,
+    minWidth: isWin ? windowSizeList[0].width : undefined,
+    minHeight: isWin ? windowSizeList[0].height : undefined,
     roundedCorners: global.envParams.cmdParams.dt,
     show: false,
     webPreferences: {
@@ -100,6 +113,14 @@ export const createWindow = () => {
   }
   if (global.envParams.cmdParams.dt)
     options.backgroundColor = theme.colors['--color-primary-light-1000']
+  if (isWin) {
+    // WinUI3：不透明窗口。不用 Mica/亚克力——系统材质会把桌面透出来，
+    // 只在窗口还没绘制到的地方露出窗帘/桌面残影。
+    options.transparent = false
+    options.hasShadow = true
+    options.roundedCorners = true
+    options.backgroundColor = theme.colors['--color-main-background']
+  }
   if (global.lx.appSetting['common.startInFullscreen']) {
     options.fullscreen = true
     if (isLinux) options.resizable = true
@@ -185,6 +206,10 @@ export const maximize = () => {
 export const unmaximize = () => {
   if (!browserWindow) return
   browserWindow.unmaximize()
+}
+export const toggleMaximize = () => {
+  if (!browserWindow) return
+  browserWindow.isMaximized() ? browserWindow.unmaximize() : browserWindow.maximize()
 }
 export const toggleHide = () => {
   if (!browserWindow) return

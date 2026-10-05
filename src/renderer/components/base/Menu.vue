@@ -95,9 +95,9 @@ export default {
   transform-origin: 0 0 0;
   transition: 0.14s ease;
   transition-property: transform, opacity;
-  border-radius: @radius-border;
-  background-color: var(--color-content-background);
-  box-shadow: 0 1px 8px 0 rgba(0, 0, 0, 0.2);
+  border-radius: var(--radius-overlay);
+  background-color: var(--color-card-background);
+  box-shadow: var(--shadow-flyout);
   z-index: 10;
   overflow: hidden;
   // will-change: transform;

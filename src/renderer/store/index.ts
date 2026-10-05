@@ -149,6 +149,7 @@ export const userApi = reactive<{
 export const isShowChangeLog = ref(false)
 
 export const isFullscreen = ref(false)
+export const isMaximized = ref(false)
 watch(
   isFullscreen,
   (isFullscreen: any) => {

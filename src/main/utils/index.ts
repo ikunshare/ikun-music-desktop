@@ -7,7 +7,11 @@ import defaultHotKey from '@common/defaultHotKey'
 import { migrateDataJson, migrateHotKey, migrateUserApi, parseDataFile } from './migrate'
 import { nativeTheme, powerSaveBlocker } from 'electron'
 import { joinPath } from '@common/utils/nodejs'
-import themes from '@common/theme/index.json'
+import themesJson from '@common/theme/index.json'
+
+// index.json 是 createThemes.js 生成的，主题之间 extInfo 的键不一定完全一致
+// （例如 Fluent 主题会多带一批令牌），这里按业务类型收口，避免 JSON 推断出的联合类型到处漏。
+const themes = themesJson as unknown as LX.Theme[]
 
 export const parseEnvParams = (
   argv = process.argv

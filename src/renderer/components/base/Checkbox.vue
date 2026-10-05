@@ -162,8 +162,9 @@ export default {
   &:checked {
     + .content {
       .container {
+        background-color: var(--color-checkbox-checked-fill);
         &:after {
-          border-color: var(--color-primary-font);
+          border-color: var(--color-accent);
         }
       }
       .icon {
@@ -180,12 +181,13 @@ export default {
 .container {
   flex: none;
   position: relative;
-  width: 1em;
-  height: 1em;
+  width: 20px;
+  height: 20px;
+  box-sizing: border-box;
   cursor: pointer;
   display: flex;
-  color: var(--color-primary);
-  // border: 1px solid #ccc;
+  border-radius: var(--radius-control);
+  color: var(--color-button-font-selected);
   &:after {
     position: absolute;
     content: ' ';
@@ -193,16 +195,15 @@ export default {
     bottom: 0;
     left: 0;
     right: 0;
-    border: 1px solid var(--color-font-label);
+    border: 1px solid var(--color-text-secondary);
     transition: border-color 0.2s ease;
-    border-radius: 2px;
+    border-radius: var(--radius-control);
   }
 }
 .icon {
   transition: 0.3s ease;
   transition-property: transform;
   transform: scale(0);
-  border-radius: 2px;
   // opacity: 0;
 }
 

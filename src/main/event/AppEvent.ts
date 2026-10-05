@@ -94,6 +94,10 @@ export class Event extends EventEmitter {
     this.emit('main_window_focus')
   }
 
+  maximize_change(isMaximized: boolean) {
+    this.emit('maximize_change', isMaximized)
+  }
+
   main_window_blur() {
     this.emit('main_window_blur')
   }

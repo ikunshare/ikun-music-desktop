@@ -11,12 +11,17 @@ export const registerRendererEvents = (
   const sendSystemThemeChange = () => {
     sendEvent(CMMON_EVENT_NAME.theme_change, global.lx.theme)
   }
+  const sendMaximizeChange = (isMaximized: boolean) => {
+    sendEvent(CMMON_EVENT_NAME.maximize_change, isMaximized)
+  }
 
   global.lx.event_app.on('deeplink', sendDeeplink)
   global.lx.event_app.on('theme_change', sendSystemThemeChange)
+  global.lx.event_app.on('maximize_change', sendMaximizeChange)
 
   return () => {
     global.lx.event_app.off('deeplink', sendDeeplink)
     global.lx.event_app.off('theme_change', sendSystemThemeChange)
+    global.lx.event_app.off('maximize_change', sendMaximizeChange)
   }
 }

@@ -82,18 +82,18 @@ export default {
   // padding: 5px 15px;
   cursor: pointer;
   transition: color @transition-normal;
+  color: var(--color-text-secondary);
 
   &:hover {
-    color: var(--color-primary);
+    color: var(--color-text-primary);
   }
 
   &.active {
-    color: var(--color-primary);
+    color: var(--color-text-primary);
     cursor: default;
 
     > .label {
       &:after {
-        // background-color: var(--color-primary);
         opacity: 1;
         transform: translateY(0);
       }
@@ -110,12 +110,11 @@ export default {
     left: 0;
     bottom: 0;
     width: 100%;
-    height: 2px;
-    border-radius: 20px;
-    background-color: transparent;
+    height: 3px;
+    border-radius: 2px;
     transform: translateY(-4px);
     opacity: 0;
-    background-color: var(--color-primary-alpha-300);
+    background-color: var(--color-accent);
     transition: @transition-fast;
     transition-property: transform, opacity;
   }

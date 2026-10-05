@@ -123,6 +123,16 @@ declare global {
       'player.isMute': boolean
 
       /**
+       * 播放/暂停时音量是否渐入渐出
+       */
+      'player.isVolumeFade': boolean
+
+      /**
+       * 压缩机强度，0 为关闭，100 为最强
+       */
+      'player.compressor': number
+
+      /**
        * 播放速率
        */
       'player.playbackRate': number
@@ -181,6 +191,11 @@ declare global {
        * 是否启用音频可视化
        */
       'player.audioVisualization': boolean
+
+      /**
+       * 播放详情页背景是否跟随封面取色
+       */
+      'player.artworkColorBackground': boolean
 
       /**
        * 定时暂停播放-是否等待歌曲播放完毕再暂停
@@ -286,6 +301,26 @@ declare global {
        * 点击相同列表内的歌曲切歌时是否清空已播放列表（随机模式下列表内所有歌曲会重新参与随机）
        */
       'player.isAutoCleanPlayedList': boolean
+
+      /**
+       * 播放详情页-封面动态背景的流动幅度（0-100）
+       */
+      'playDetail.artworkBackground.motion': number
+
+      /**
+       * 播放详情页-封面动态背景的流动速度（0-100）
+       */
+      'playDetail.artworkBackground.speed': number
+
+      /**
+       * 播放详情页-封面动态背景的背景浓度（0-100）
+       */
+      'playDetail.artworkBackground.intensity': number
+
+      /**
+       * 播放详情页-封面动态背景的切歌过渡时长（0-100）
+       */
+      'playDetail.artworkBackground.duration': number
 
       /**
        * 播放详情页-是否缩放当前播放的歌词行

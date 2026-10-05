@@ -299,7 +299,7 @@ export default {
   transition: 0.14s ease;
   transition-property: transform, opacity;
   border-radius: @radius-border;
-  background-color: var(--color-content-background);
+  background-color: var(--color-card-background);
   box-shadow: 0 1px 8px 0 rgba(0, 0, 0, 0.2);
   z-index: 10;
   overflow: hidden;
@@ -338,7 +338,7 @@ export default {
   transition-property: background-color, opacity;
   box-sizing: border-box;
   .mixin-ellipsis-1();
-  background-color: var(--color-content-background);
+  background-color: var(--color-card-background);
   border: none;
 
   &:hover {
@@ -348,7 +348,7 @@ export default {
     background-color: var(--color-primary-background-active);
   }
   &.active {
-    background-color: var(--color-content-background);
+    background-color: var(--color-card-background);
     color: var(--color-button-font-selected);
     cursor: default;
     opacity: 1;

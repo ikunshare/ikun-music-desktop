@@ -281,6 +281,20 @@ declare namespace LX {
         '--color-badge-primary': string
         '--color-badge-secondary': string
         '--color-badge-tertiary': string
+
+        // Fluency 令牌（主题可覆盖，index.less 里有对旧主题等价的默认值）
+        '--color-accent'?: string
+        '--color-text-primary'?: string
+        '--color-text-secondary'?: string
+        '--color-control-fill'?: string
+        '--color-control-fill-hover'?: string
+        '--color-control-fill-active'?: string
+        '--color-control-stroke'?: string
+        '--color-layer-background'?: string
+        '--color-card-background'?: string
+        '--color-divider'?: string
+        '--color-caption-btn-hover'?: string
+        '--color-caption-btn-close-hover'?: string
       }
     }
   }

@@ -68,7 +68,7 @@ export default {
 .content {
   padding: 12px 0;
   font-size: 13px;
-  color: var(--color-font);
+  color: var(--artwork-font, var(--color-font));
   display: flex;
 }
 .left {

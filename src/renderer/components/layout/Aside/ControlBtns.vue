@@ -40,14 +40,34 @@
         <use xlink:href="#icon-window-minimize" />
       </svg>
     </button>
+    <button
+      type="button"
+      :class="[$style.btn, $style.max]"
+      :aria-label="isMaximized ? $t('unmax') : $t('max')"
+      ignore-tip
+      :title="isMaximized ? $t('unmax') : $t('max')"
+      @click="toggleMaximizeWindow"
+    >
+      <svg
+        :class="$style.controlBtniIcon"
+        version="1.1"
+        xmlns="http://www.w3.org/2000/svg"
+        xlink="http://www.w3.org/1999/xlink"
+        width="100%"
+        viewBox="0 0 24 24"
+        space="preserve"
+      >
+        <use :xlink:href="isMaximized ? '#icon-window-restore-2' : '#icon-window-maximize-2'" />
+      </svg>
+    </button>
   </div>
 </template>
 
 <script setup>
-import { minWindow, closeWindow } from '@renderer/utils/ipc'
+import { minWindow, closeWindow, toggleMaximizeWindow } from '@renderer/utils/ipc'
 import { onMounted, onBeforeUnmount, ref, useCssModule } from '@common/utils/vueTools'
 // import { getRandom } from '../../utils'
-import { isFullscreen } from '@renderer/store'
+import { isFullscreen, isMaximized } from '@renderer/store'
 
 const dom_btns = ref()
 
@@ -111,22 +131,26 @@ onBeforeUnmount(() => {
   outline: none;
   padding: 1px;
   cursor: pointer;
-  border-radius: 50%;
-  color: var(--color-font);
+  border-radius: var(--radius-control);
+  color: var(--color-text-primary);
+  transition: background-color 0.1s ease-in-out;
 
-  &.min {
-    background-color: var(--color-btn-min);
+  &.min,
+  &.max {
+    &:hover {
+      background-color: var(--color-caption-btn-hover);
+    }
   }
-  // &.max {
-  //   background-color: var(--color-btn-max);
-  // }
   &.close {
-    background-color: var(--color-btn-close);
+    &:hover {
+      background-color: var(--color-caption-btn-close-hover);
+      color: #ffffff;
+    }
   }
 }
 
 .controlBtniIcon {
-  opacity: 0;
+  opacity: 1;
   transition: opacity 0.2s ease-in-out;
 }
 </style>

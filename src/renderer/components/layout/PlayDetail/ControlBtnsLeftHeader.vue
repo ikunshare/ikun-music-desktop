@@ -126,32 +126,33 @@ const fullscreenExit = () => {
     }
 
     button {
-      width: @control-btn-width;
-      height: @control-btn-width;
-      border-radius: 50%;
-      color: var(--color-font);
+      width: 46px;
+      height: 32px;
+      border-radius: var(--radius-control);
+      color: var(--color-text-primary);
+      transition: background-color 0.1s ease-in-out;
       + button {
-        margin-right: (@control-btn-width / 2);
+        margin-right: 4px;
       }
 
-      &.hide {
-        background-color: var(--color-btn-hide);
-      }
+      &.hide,
       &.min,
       &.fullscreenExit {
-        background-color: var(--color-btn-min);
+        &:hover {
+          background-color: var(--color-caption-btn-hover);
+        }
       }
-      // &.max {
-      //   background-color: var(--color-btn-max);
-      // }
       &.close {
-        background-color: var(--color-btn-close);
+        &:hover {
+          background-color: var(--color-caption-btn-close-hover);
+          color: #ffffff;
+        }
       }
     }
   }
 
   .controBtnIcon {
-    opacity: 0;
+    opacity: 1;
     transition: opacity 0.2s ease-in-out;
   }
 }

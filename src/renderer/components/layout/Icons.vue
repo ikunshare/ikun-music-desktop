@@ -277,6 +277,13 @@
           d="M13.46,12L19,17.54V19H17.54L12,13.46L6.46,19H5V17.54L10.54,12L5,6.46V5H6.46L12,10.54L17.54,5H19V6.46L13.46,12Z"
         />
       </g>
+      <!-- WinUI3 系统标题栏按钮：10x10 方框描边 -->
+      <g id="icon-window-maximize-2" fill="currentColor">
+        <path d="M6,6H18V7.5H6V6M4.5,4.5V19.5H19.5V4.5H4.5M6,6V18H18V6H6Z" />
+      </g>
+      <g id="icon-window-restore-2" fill="currentColor">
+        <path d="M8,4H20V16H18.5V5.5H8V4M4,8H16V20H4V8M5.5,9.5V18.5H14.5V9.5H5.5Z" />
+      </g>
       <g id="icon-list-loop" fill="currentColor">
         <!-- 0 0 24 24-->
         <path d="M0 0h24v24H0z" fill="none" />

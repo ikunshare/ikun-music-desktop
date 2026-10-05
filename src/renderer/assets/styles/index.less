@@ -301,6 +301,42 @@
   --background-image: none;
   --background-image-position: center;
   --background-image-size: cover;
+
+  // WinUI3/Fluent 令牌。默认值都引用上面的旧变量，所以旧主题外观不变，
+  // 只有 fluent_light / fluent_dark 两套主题会覆盖成 Fluent 实际值。
+  --color-accent: var(--color-primary);
+  --color-text-primary: var(--color-font);
+  --color-text-secondary: var(--color-font-label);
+  --color-control-fill: var(--color-button-background);
+  --color-control-fill-hover: var(--color-button-background-hover);
+  --color-control-fill-active: var(--color-button-background-active);
+  --color-control-stroke: var(--color-primary-alpha-900);
+  --color-layer-background: var(--color-main-background);
+  --color-card-background: var(--color-content-background);
+  --color-divider: var(--color-primary-alpha-900);
+  --color-caption-btn-hover: var(--color-button-background-hover);
+  --color-caption-btn-close-hover: var(--color-btn-close);
+
+  // 组件里引用过但一直没定义
+  --color-label: var(--color-font-label);
+  --color-border: var(--color-primary-alpha-900);
+  --color-secondary-background: var(--color-button-background);
+
+  // 旧主题保持原样的新令牌：默认透明，只有 Fluent 主题给实际值
+  --color-checkbox-checked-fill: transparent;
+  --color-smoke: transparent;
+  --color-dropdown-shadow: var(--color-primary-alpha-900);
+
+  --color-scrollbar-track: var(--color-primary-light-100-alpha-800);
+  --color-scrollbar-thumb: var(--color-primary-alpha-600);
+  --color-scrollbar-thumb-hover: var(--color-primary-alpha-400);
+
+  --radius-control: 4px;
+  --radius-overlay: 8px;
+  --radius-card: 8px;
+  --shadow-flyout: 0 8px 16px rgba(0, 0, 0, 0.14);
+  --shadow-dialog: 0 32px 64px rgba(0, 0, 0, 0.24), 0 2px 21px rgba(0, 0, 0, 0.14);
+  --shadow-card: 0 2px 4px rgba(0, 0, 0, 0.04);
 }
 
 html {
@@ -436,20 +472,17 @@ a {
     background-color: rgba(0, 0, 0, 0);
   }
   &::-webkit-scrollbar-track {
-    background-color: var(--color-primary-light-100-alpha-800);
+    background-color: var(--color-scrollbar-track);
     border-radius: 3px;
-    // background-color: rgba(0, 0, 0, 0.1);
   }
   &::-webkit-scrollbar-thumb {
     border-radius: 3px;
-    background-color: var(--color-primary-alpha-600);
-    // background-color: rgba(0, 0, 0, 0.2);
+    background-color: var(--color-scrollbar-thumb);
     transition: background-color 0.4s ease;
   }
   &::-webkit-scrollbar-thumb:hover {
     border-radius: 3px;
-    background-color: var(--color-primary-alpha-400);
-    // background-color: rgba(0, 0, 0, 0.4);
+    background-color: var(--color-scrollbar-thumb-hover);
     transition: background-color 0.4s ease;
   }
 }
@@ -632,4 +665,27 @@ table {
 .play-active-leave-to {
   transform: scale(0.3);
   opacity: 0;
+}
+
+// 播放详情页封面动态背景用的色标变量。注册成 <color> 后浏览器才会在换歌时
+// 平滑地插值这几个颜色（否则 background-image 里的渐变色只能硬切）。
+@property --artwork-c0 {
+  syntax: '<color>';
+  inherits: false;
+  initial-value: transparent;
+}
+@property --artwork-c1 {
+  syntax: '<color>';
+  inherits: false;
+  initial-value: transparent;
+}
+@property --artwork-c2 {
+  syntax: '<color>';
+  inherits: false;
+  initial-value: transparent;
+}
+@property --artwork-c3 {
+  syntax: '<color>';
+  inherits: false;
+  initial-value: transparent;
 }

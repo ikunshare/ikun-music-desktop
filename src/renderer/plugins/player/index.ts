@@ -176,6 +176,8 @@ let convolver: ConvolverNode
 let convolverSourceGainNode: GainNode
 let convolverOutputGainNode: GainNode
 let convolverDynamicsCompressor: DynamicsCompressorNode
+let compressorNode: DynamicsCompressorNode
+let compressorMakeupNode: GainNode
 let gainNode: GainNode
 let panner: PannerNode
 let pitchShifterNode: AudioWorkletNode
@@ -185,6 +187,86 @@ let pitchShifterNodeTempValue = 1
 let defaultChannelCount = 2
 export const soundR = 0.5
 
+// 播放/暂停音量渐变
+const FADE_DURATION = 300
+// 切歌时的渐出，比播放/暂停慢一点，接歌才不会突然
+const SWITCH_FADE_DURATION = 400
+const FADE_INTERVAL = 10
+let targetVolume = 1
+let fadeTimer: ReturnType<typeof setInterval> | null = null
+let isFadeInPending = false
+let isVolumeFadeEnabled = true
+
+// 当前跑的这段渐出是不是「切歌/停止」的渐出。渐出期间旧曲还在出声，
+// 它的 playing / ended 事件描述的是旧曲，不能拿去驱动界面状态。
+let isSwitchFadeRunning = false
+
+const clearFade = () => {
+  isSwitchFadeRunning = false
+  if (fadeTimer == null) return
+  clearInterval(fadeTimer)
+  fadeTimer = null
+}
+
+const fadeVolume = (
+  to: number,
+  onEnd?: () => void,
+  duration = FADE_DURATION,
+  isSwitchFade = false
+) => {
+  if (!audio) return
+  clearFade()
+  const from = audio.volume
+  if (from == to) {
+    onEnd?.()
+    return
+  }
+  isSwitchFadeRunning = isSwitchFade
+  const startTime = performance.now()
+  fadeTimer = setInterval(() => {
+    if (!audio) {
+      clearFade()
+      return
+    }
+    const progress = Math.min((performance.now() - startTime) / duration, 1)
+    audio.volume = from + (to - from) * progress
+    if (progress < 1) return
+    clearFade()
+    onEnd?.()
+  }, FADE_INTERVAL)
+}
+
+// 切歌时要把「换源」推迟到渐出结束，否则音频会被硬切。
+// 挂起的新音源放在这里而不是塞进渐出的回调里：任何一处 clearFade 都可能把回调丢掉，
+// 存成数据后，暂停/播放/改设置时补一次 applyPendingSrc 就不会把新歌弄丢。
+let pendingSrc: string | null = null
+
+/** 是否处在「旧曲渐出、新曲还没接上」的过程中，这期间旧曲的音频事件要忽略 */
+export const isSwitchingAudioSource = () => isSwitchFadeRunning
+
+const applyPendingSrc = () => {
+  const src = pendingSrc
+  if (!audio || !src) return
+  pendingSrc = null
+  clearFade()
+  if (isVolumeFadeEnabled) {
+    audio.volume = 0
+    isFadeInPending = true
+  } else {
+    isFadeInPending = false
+  }
+  audio.src = src
+}
+
+export const setVolumeFadeEnabled = (enabled: boolean) => {
+  isVolumeFadeEnabled = enabled
+  if (enabled) return
+  clearFade()
+  isFadeInPending = false
+  if (audio && !audio.paused) audio.volume = targetVolume
+  applyPendingSrc()
+}
+
 export const createAudio = () => {
   if (audio) return
   audio = new window.Audio() as HTMLAudioElementChrome
@@ -192,6 +274,11 @@ export const createAudio = () => {
   audio.autoplay = true
   audio.preload = 'auto'
   audio.crossOrigin = 'anonymous'
+  audio.addEventListener('playing', () => {
+    if (!isFadeInPending) return
+    isFadeInPending = false
+    fadeVolume(targetVolume)
+  })
 }
 
 const initAnalyser = () => {
@@ -235,6 +322,93 @@ const initGain = () => {
   gainNode = audioContext.createGain()
 }
 
+const initCompressor = () => {
+  compressorNode = audioContext.createDynamicsCompressor()
+  // 默认直通：ratio 1 / threshold 0 不产生任何增益衰减
+  compressorNode.threshold.value = 0
+  compressorNode.knee.value = 0
+  compressorNode.ratio.value = 1
+  compressorNode.attack.value = 0.003
+  compressorNode.release.value = 0.25
+  compressorMakeupNode = audioContext.createGain()
+}
+
+// 压缩机：压缩动态范围（响的更安静）+ 慢速增益跟随（让每首歌响度接近）
+const COMPRESSOR_AGC_INTERVAL = 250
+const COMPRESSOR_AGC_TARGET_DB = -20
+const COMPRESSOR_AGC_MAX_GAIN_DB = 12
+const COMPRESSOR_AGC_SILENCE_DB = -60
+// 每次最多调整 2 dB，避免“喘气”一样的音量抖动
+const COMPRESSOR_AGC_MAX_STEP_DB = 2
+let compressorAmount = 0
+let compressorAgcTimer: ReturnType<typeof setInterval> | null = null
+let compressorAgcGainDb = 0
+
+const stopCompressorAgc = () => {
+  if (compressorAgcTimer == null) return
+  clearInterval(compressorAgcTimer)
+  compressorAgcTimer = null
+}
+
+const handleCompressorAgc = () => {
+  if (!audio || audio.paused || audio.muted) return
+  // ponytail: 每 tick 新建 256 长度的临时数组，不值得为它做复用池
+  const buf = new Float32Array(analyser.fftSize)
+  analyser.getFloatTimeDomainData(buf)
+  let sum = 0
+  for (const value of buf) sum += value * value
+  const rms = Math.sqrt(sum / buf.length)
+  if (rms <= 0) return
+  const db = 20 * Math.log10(rms)
+  // 静音/极弱段落不做增益提升，否则会在安静处把底噪拉起来
+  if (db < COMPRESSOR_AGC_SILENCE_DB) return
+  const step = Math.min(
+    Math.max(COMPRESSOR_AGC_TARGET_DB - db, -COMPRESSOR_AGC_MAX_STEP_DB),
+    COMPRESSOR_AGC_MAX_STEP_DB
+  )
+  compressorAgcGainDb = Math.min(
+    Math.max(compressorAgcGainDb + step, -COMPRESSOR_AGC_MAX_GAIN_DB),
+    COMPRESSOR_AGC_MAX_GAIN_DB
+  )
+  compressorMakeupNode.gain.setTargetAtTime(
+    10 ** (compressorAgcGainDb / 20),
+    audioContext.currentTime,
+    0.2
+  )
+}
+
+const startCompressorAgc = () => {
+  if (compressorAgcTimer != null) return
+  compressorAgcTimer = setInterval(handleCompressorAgc, COMPRESSOR_AGC_INTERVAL)
+}
+
+// amount: 0 = 关闭，100 = 最强
+export const setCompressor = (amount: number) => {
+  initAdvancedAudioFeatures()
+  compressorAmount = Math.min(Math.max(amount, 0), 100)
+  const strength = compressorAmount / 100
+  if (strength == 0) {
+    compressorNode.ratio.value = 1
+    compressorNode.threshold.value = 0
+    compressorNode.knee.value = 0
+    compressorAgcGainDb = 0
+    compressorMakeupNode.gain.setTargetAtTime(1, audioContext.currentTime, 0.2)
+    stopCompressorAgc()
+    return
+  }
+  compressorNode.threshold.value = -6 - 24 * strength
+  compressorNode.ratio.value = 1 + 11 * strength
+  compressorNode.knee.value = 6 + 24 * strength
+  startCompressorAgc()
+}
+
+// 换歌时把增益跟随重置到中位，让新歌重新自己找响度
+export const resetCompressorAgc = () => {
+  if (compressorAmount == 0 || compressorMakeupNode == null) return
+  compressorAgcGainDb = 0
+  compressorMakeupNode.gain.setTargetAtTime(1, audioContext.currentTime, 0.3)
+}
+
 const initAdvancedAudioFeatures = () => {
   if (audioContext) return
   if (!audio) throw new Error('audio not defined')
@@ -246,14 +420,17 @@ const initAdvancedAudioFeatures = () => {
   initConvolver()
   initPanner()
   initGain()
-  // source -> analyser -> biquadFilter -> pitchShifter -> [(convolver & convolverSource)->convolverDynamicsCompressor] -> panner -> gain
+  initCompressor()
+  // source -> analyser -> biquadFilter -> pitchShifter -> [(convolver & convolverSource)->convolverDynamicsCompressor] -> compressor -> panner -> gain
   mediaSource = audioContext.createMediaElementSource(audio)
   mediaSource.connect(analyser)
   analyser.connect(biquads.get(`hz${freqs[0]}`)!)
   const lastBiquadFilter = biquads.get(`hz${freqs.at(-1)!}`)!
   lastBiquadFilter.connect(convolverSourceGainNode)
   lastBiquadFilter.connect(convolver)
-  convolverDynamicsCompressor.connect(panner)
+  convolverDynamicsCompressor.connect(compressorNode)
+  compressorNode.connect(compressorMakeupNode)
+  compressorMakeupNode.connect(panner)
   panner.connect(gainNode)
   gainNode.connect(audioContext.destination)
 
@@ -521,22 +698,71 @@ export const setPitchShifter = (val: number) => {
 export const hasInitedAdvancedAudioFeatures = (): boolean => audioContext != null
 
 export const setResource = (src: string) => {
-  if (audio) audio.src = src
+  if (!audio) return
+  resetCompressorAgc()
+  pendingSrc = src
+  // 上一首还在放就先渐出，等音量到 0 再换源，接歌的接缝才不会是硬切
+  if (isVolumeFadeEnabled && !audio.paused) {
+    isFadeInPending = false
+    fadeVolume(0, applyPendingSrc, SWITCH_FADE_DURATION, true)
+    return
+  }
+  applyPendingSrc()
 }
 
 export const setPlay = () => {
-  void audio?.play()
+  if (!audio) return
+  applyPendingSrc()
+  if (!audio.paused) {
+    // 暂停渐出未结束又重新播放时直接渐入
+    isFadeInPending = false
+    if (isVolumeFadeEnabled) fadeVolume(targetVolume)
+    else audio.volume = targetVolume
+    return
+  }
+  clearFade()
+  if (isVolumeFadeEnabled) {
+    audio.volume = 0
+    isFadeInPending = true
+  } else {
+    isFadeInPending = false
+    audio.volume = targetVolume
+  }
+  void audio.play()
 }
 
 export const setPause = () => {
-  audio?.pause()
+  if (!audio) return
+  applyPendingSrc()
+  if (audio.paused) return
+  if (!isVolumeFadeEnabled) {
+    audio.pause()
+    return
+  }
+  isFadeInPending = false
+  fadeVolume(0, () => {
+    audio?.pause()
+  })
+}
+
+const stopAudio = () => {
+  if (!audio) return
+  pendingSrc = null
+  clearFade()
+  isFadeInPending = false
+  audio.src = ''
+  audio.removeAttribute('src')
 }
 
 export const setStop = () => {
-  if (audio) {
-    audio.src = ''
-    audio.removeAttribute('src')
+  if (!audio) return
+  // 正在播放时先渐出再断源，停止/切歌都不会把声音一刀切掉
+  if (isVolumeFadeEnabled && !audio.paused) {
+    isFadeInPending = false
+    fadeVolume(0, stopAudio, SWITCH_FADE_DURATION, true)
+    return
   }
+  stopAudio()
 }
 
 export const isEmpty = (): boolean => !audio?.src
@@ -582,7 +808,10 @@ export const setMediaDeviceId = async (mediaDeviceId: string): Promise<void> => 
 }
 
 export const setVolume = (volume: number) => {
-  if (audio) audio.volume = volume
+  targetVolume = volume
+  // 渐变中或暂停时不直接改动音量，避免打断渐变/破坏下次渐入
+  if (!audio || fadeTimer != null || audio.paused) return
+  audio.volume = volume
 }
 
 export const getDuration = () => {

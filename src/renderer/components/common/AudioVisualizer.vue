@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { ref, onBeforeUnmount, onMounted } from '@common/utils/vueTools'
+import { ref, watch, onBeforeUnmount, onMounted } from '@common/utils/vueTools'
 import { getAnalyser } from '@renderer/plugins/player'
 import { isPlay } from '@renderer/store/player/state'
 // import { appSetting } from '@renderer/store/setting'
@@ -41,7 +41,14 @@ const getBarWidth = (canvasWidth) => {
       : barWidth
 }
 export default {
-  setup() {
+  props: {
+    // 播放详情页取到封面主色时传进来，频谱条跟着背景一起变色
+    color: {
+      type: String,
+      default: '',
+    },
+  },
+  setup(props) {
     const dom_canvas = ref(null)
     const analyser = getAnalyser()
 
@@ -64,8 +71,16 @@ export default {
 
     // const theme = useRefGetter('theme')
     // const setting = useRefGetter('setting')
-    let themeColor = getComputedStyle(document.documentElement).getPropertyValue(
-      '--color-primary-light-200-alpha-800'
+    let themeColor =
+      props.color ||
+      getComputedStyle(document.documentElement).getPropertyValue(
+        '--color-primary-light-200-alpha-800'
+      )
+    watch(
+      () => props.color,
+      (color) => {
+        if (color) themeColor = color
+      }
     )
     // watch(theme, theme => {
     //   themeColor = themes[theme || 'green']

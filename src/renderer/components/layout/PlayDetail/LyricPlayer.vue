@@ -260,13 +260,13 @@ export default {
   }
   :global {
     .font-lrc {
-      color: var(--color-450);
+      color: var(--artwork-font-weak, var(--color-450));
     }
     .line-content {
       line-height: 1.2;
       padding: calc(var(--playDetail-lrc-font-size, 16px) / 2) 1px;
       overflow-wrap: break-word;
-      color: var(--color-450);
+      color: var(--artwork-font-weak, var(--color-450));
       transition: @transition-normal;
       transition-property: padding;
 
@@ -282,7 +282,7 @@ export default {
       }
       &.line-mode.active .font-lrc,
       &.font-mode.played .font-lrc {
-        color: var(--color-primary-dark-200);
+        color: var(--artwork-accent, var(--color-primary-dark-200));
       }
       &.font-mode .extended .font-lrc {
         transition: @transition-slow;
@@ -295,11 +295,11 @@ export default {
           transition-property: font-size;
           font-size: 1em;
           background-repeat: no-repeat;
-          background-color: var(--color-450);
+          background-color: var(--artwork-font-weak, var(--color-450));
           background-image: -webkit-linear-gradient(
             top,
-            var(--color-primary-dark-200),
-            var(--color-primary-dark-200)
+            var(--artwork-accent, var(--color-primary-dark-200)),
+            var(--artwork-accent, var(--color-primary-dark-200))
           );
           -webkit-text-fill-color: transparent;
           -webkit-background-clip: text;
@@ -344,7 +344,7 @@ export default {
   pointer-events: none;
   // opacity: .5;
   .line {
-    border-top: 2px dotted var(--color-primary-dark-100);
+    border-top: 2px dotted var(--artwork-accent, var(--color-primary-dark-100));
     opacity: 0.15;
     margin-right: 30px;
     -webkit-mask-image: linear-gradient(90deg, transparent 0%, transparent 15%, #fff 100%);
@@ -355,7 +355,7 @@ export default {
     top: -14px;
     line-height: 1.2;
     font-size: 12px;
-    color: var(--color-primary-dark-100);
+    color: var(--artwork-accent, var(--color-primary-dark-100));
     opacity: 0.7;
   }
   .skipBtn {
@@ -388,7 +388,7 @@ export default {
   width: 100%;
   font-size: var(--playDetail-lrc-font-size, 16px);
   z-index: 10;
-  color: var(--color-400);
+  color: var(--artwork-font-weak, var(--color-400));
 
   .lyricSelectline {
     padding: calc(var(--playDetail-lrc-font-size, 16px) / 2) 1px;
@@ -401,7 +401,7 @@ export default {
     font-size: 14px;
   }
   .lrcActive {
-    color: var(--color-primary);
+    color: var(--artwork-accent, var(--color-primary));
   }
 }
 

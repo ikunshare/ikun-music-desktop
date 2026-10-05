@@ -21,6 +21,25 @@
     </button>
     <button
       type="button"
+      :class="[$style.btn, $style.max]"
+      :aria-label="isMaximized ? $t('unmax') : $t('max')"
+      ignore-tip
+      :title="isMaximized ? $t('unmax') : $t('max')"
+      @click="toggleMaximizeWindow"
+    >
+      <svg
+        version="1.1"
+        xmlns="http://www.w3.org/2000/svg"
+        xlink="http://www.w3.org/1999/xlink"
+        height="60%"
+        viewBox="0 0 24 24"
+        space="preserve"
+      >
+        <use :xlink:href="isMaximized ? '#icon-window-restore-2' : '#icon-window-maximize-2'" />
+      </svg>
+    </button>
+    <button
+      type="button"
       :class="[$style.btn, $style.close]"
       :aria-label="$t('close')"
       ignore-tip
@@ -42,10 +61,10 @@
 </template>
 
 <script setup>
-import { minWindow, closeWindow } from '@renderer/utils/ipc'
+import { closeWindow, minWindow, toggleMaximizeWindow } from '@renderer/utils/ipc'
 import { onMounted, onBeforeUnmount, ref, useCssModule } from '@common/utils/vueTools'
 // import { getRandom } from '../../utils'
-import { isFullscreen } from '@renderer/store'
+import { isFullscreen, isMaximized } from '@renderer/store'
 
 const dom_btns = ref()
 
@@ -89,7 +108,7 @@ onBeforeUnmount(() => {
   display: flex;
   align-self: flex-start;
   -webkit-app-region: no-drag;
-  height: 30px;
+  height: 32px;
 
   .btn {
     display: flex;
@@ -97,21 +116,22 @@ onBeforeUnmount(() => {
     justify-content: center;
     position: relative;
     width: 46px;
-    height: 30px;
+    height: 32px;
     background: none;
     border: none;
     outline: none;
     padding: 1px;
     cursor: pointer;
-    color: var(--color-font-label);
-    transition: background-color 0.2s ease-in-out;
+    color: var(--color-text-primary);
+    transition: background-color 0.1s ease-in-out;
     &.hover {
       &.min,
       &.max {
-        background-color: var(--color-button-background-hover);
+        background-color: var(--color-caption-btn-hover);
       }
       &.close {
-        background-color: var(--color-btn-close);
+        background-color: var(--color-caption-btn-close-hover);
+        color: #ffffff;
       }
     }
   }

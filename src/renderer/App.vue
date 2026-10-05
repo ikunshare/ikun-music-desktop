@@ -97,27 +97,9 @@ body {
 }
 .disableTransparent {
   background-color: var(--color-content-background);
-
-  #body {
-    border: 1px solid var(--color-primary-light-500);
-  }
-
-  #right {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-  }
-
-  // #view { // 偏移5px距离解决非透明模式下右侧滚动条无法拖动的问题
-  //   margin-right: 5Px;
-  // }
 }
 .fullscreen {
   background-color: var(--color-content-background);
-
-  #right {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-  }
 }
 
 #container {
@@ -138,10 +120,8 @@ body {
   transition: background-color @transition-normal;
   background-color: var(--color-main-background);
 
-  border-top-left-radius: @radius-border;
-  border-bottom-left-radius: @radius-border;
+  // WinUI3 没有内嵌面板的圆角与投影，内容区与导航区共用一个平面
   overflow: hidden;
-  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.1);
 }
 #toolbar,
 #player {

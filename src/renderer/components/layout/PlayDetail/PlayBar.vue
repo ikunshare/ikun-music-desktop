@@ -101,6 +101,8 @@ const { nowPlayTimeStr, maxPlayTimeStr, progress, isActiveTransition, handleTran
   flex-flow: column nowrap;
   padding: 13px 13px 13px 30px;
   overflow: hidden;
+  // 取到封面主色时时间和状态文字跟着背景走
+  color: var(--artwork-font, var(--color-font));
 }
 
 .progressContainer {
@@ -143,7 +145,7 @@ const { nowPlayTimeStr, maxPlayTimeStr, progress, isActiveTransition, handleTran
   justify-content: flex-end;
   align-items: center;
   padding: 0 25px;
-  color: var(--color-button-font);
+  color: var(--artwork-font, var(--color-button-font));
 }
 .playBtn {
   height: 40%;

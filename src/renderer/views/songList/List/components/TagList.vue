@@ -212,7 +212,7 @@ onBeforeUnmount(() => {
   left: 8px;
   margin-top: 12px;
   border-radius: 4px;
-  background-color: var(--color-content-background);
+  background-color: var(--color-card-background);
   opacity: 0;
   transform: scale(0.95, 0.8);
   transform-origin: 0 0 0;
@@ -233,7 +233,7 @@ onBeforeUnmount(() => {
     height: 0;
     border-left: 8px solid transparent;
     border-right: 8px solid transparent;
-    border-bottom: 8px solid var(--color-content-background);
+    border-bottom: 8px solid var(--color-card-background);
   }
 }
 .list {

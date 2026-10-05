@@ -112,7 +112,8 @@ export default {
   overflow: hidden;
   transition: @transition-normal;
   transition-property: background-color;
-  background-color: var(--color-primary-light-100-alpha-800);
+  // 播放详情页取到封面主色时，进度条跟着背景一起变色（var 只在那个容器里定义）
+  background-color: var(--artwork-accent-a800, var(--color-primary-light-100-alpha-800));
   // background-color: #f5f5f5;
   position: relative;
   border-radius: 40px;
@@ -134,16 +135,16 @@ export default {
   transform-origin: 0;
 }
 .progressBar1 {
-  background-color: var(--color-primary-light-100-alpha-600);
+  background-color: var(--artwork-accent-a600, var(--color-primary-light-100-alpha-600));
 }
 
 .progressBar2 {
-  background-color: var(--color-primary-light-100-alpha-400);
+  background-color: var(--artwork-accent-a400, var(--color-primary-light-100-alpha-400));
   will-change: transform;
 }
 
 .progressBar3 {
-  background-color: var(--color-primary-light-100-alpha-200);
+  background-color: var(--artwork-accent-a200, var(--color-primary-light-100-alpha-200));
   box-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
   opacity: 0.5;
 }
